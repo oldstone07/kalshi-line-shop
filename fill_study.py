@@ -36,6 +36,10 @@ CACHE_VERSION = 3   # v3 adds the gate features (drift_12h, vol_24h) to every or
 # board's own snapshots have enough of them, use the median best-bid size on the Week 6 board
 # (all 28 sides, 0-4 days before kickoff, measured 15 Oct 2026: p25 46k, median 69k, p75 312k).
 QUEUE_FALLBACK = 69_000
+# Totals: median queue at the bid on the book's line, both sides, all 12 matched Week 6 games (15 Oct):
+# 170k contracts - while a typical totals market trades ~8k in its whole life. So a totals limit
+# realistically fills only when the price trades through it.
+QUEUE_FALLBACK_TOTALS = 170_000
 
 ts = lambda s: datetime.fromisoformat(s.replace("Z", "+00:00"))
 def jget(path):
@@ -114,13 +118,15 @@ def nfl_schedule():
         out[(r["gameday"], canon(r["away_team"]), canon(r["home_team"]))] = {
             "week": int(r["week"]), "kickoff": kick.astimezone(timezone.utc),
             "ml": {canon(r["away_team"]): ml(r["away_moneyline"]), canon(r["home_team"]): ml(r["home_moneyline"])},
+            "total": float(r["total_line"]) if r.get("total_line") not in (None, "", "NA") else None,
+            "ou": {"over": ml(r.get("over_odds", "")), "under": ml(r.get("under_odds", ""))},
         }
     return out
 
-def settled_markets():
+def settled_markets(series="KXNFLGAME"):
     ms, cursor = [], None
     for _ in range(20):
-        d = jget(f"/markets?series_ticker=KXNFLGAME&status=settled&limit=1000" + (f"&cursor={cursor}" if cursor else ""))
+        d = jget(f"/markets?series_ticker={series}&status=settled&limit=1000" + (f"&cursor={cursor}" if cursor else ""))
         ms += d.get("markets", [])
         cursor = d.get("cursor")
         if not cursor:
@@ -137,7 +143,10 @@ def event_key(ev, codes):
     away = next((c for c in codes if pair.startswith(c) and pair[len(c):] in codes), None)
     return (date, canon(away), canon(pair[len(away):])) if away else None
 
-def trades_between(ticker, t_from, t_to):
+def trades_between(ticker, t_from, t_to, side="yes"):
+    """[(time, price, taker_side, count)] seen from `side`. For side "no" (an Under is a No bid) the
+    price is the No price and taker_side is flipped, so "no" always means "someone sold into the bids
+    on our side" and fills()/queue_fill() work unchanged."""
     out, cursor = [], None
     for _ in range(200):
         q = {"ticker": ticker, "limit": 1000, "min_ts": int(t_from.timestamp()), "max_ts": int(t_to.timestamp())}
@@ -145,15 +154,20 @@ def trades_between(ticker, t_from, t_to):
             q["cursor"] = cursor
         d = jget("/markets/trades?" + urllib.parse.urlencode(q))
         for t in d.get("trades", []):
-            out.append((ts(t["created_time"]), float(t["yes_price_dollars"]), t["taker_side"], float(t.get("count_fp") or 0)))
+            n = float(t.get("count_fp") or 0)
+            if side == "no":
+                out.append((ts(t["created_time"]), float(t["no_price_dollars"]), "no" if t["taker_side"] == "yes" else "yes", n))
+            else:
+                out.append((ts(t["created_time"]), float(t["yes_price_dollars"]), t["taker_side"], n))
         cursor = d.get("cursor")
         if not cursor:
             break
     out.sort()
     return out
 
-def candles(ticker, t_from, t_to):
-    d = jget(f"/series/KXNFLGAME/markets/{ticker}/candlesticks?start_ts={int(t_from.timestamp())}"
+def candles(ticker, t_from, t_to, series="KXNFLGAME", side="yes"):
+    """Hourly (end, bid, ask, volume) for `side`. A No bid is 1 - the Yes ask, and vice versa."""
+    d = jget(f"/series/{series}/markets/{ticker}/candlesticks?start_ts={int(t_from.timestamp())}"
              f"&end_ts={int(t_to.timestamp())}&period_interval=60")
     out = []
     for c in d.get("candlesticks", []):
@@ -161,15 +175,17 @@ def candles(ticker, t_from, t_to):
         a = c.get("yes_ask", {}).get("close_dollars")
         if b is None or a is None:
             continue
-        out.append((datetime.fromtimestamp(c["end_period_ts"], timezone.utc), float(b), float(a),
+        b, a = (1 - float(a), 1 - float(b)) if side == "no" else (float(b), float(a))
+        out.append((datetime.fromtimestamp(c["end_period_ts"], timezone.utc), round(b, 4), round(a, 4),
                     float(c.get("volume_fp") or 0)))
     return out
 
 # ---------------------------------------------------------------- replay one market
 
-def replay(ticker, team, game, result):
-    """Simulated orders for one team market. Cached forever once the game has settled."""
-    path = os.path.join(CACHE, ticker + ".json")
+def replay(ticker, team, game, result, series="KXNFLGAME", side="yes", book="ml"):
+    """Simulated orders for one market side. Cached forever once the game has settled.
+    Moneyline: buy Yes on the team. Totals: Over = buy Yes on the strike, Under = buy No."""
+    path = os.path.join(CACHE, ticker + ("-NO" if side == "no" else "") + ".json")
     kick = game["kickoff"]
     deadline = kick - timedelta(minutes=CANCEL_MIN)
     start = kick - timedelta(hours=LOOKBACK_H)
@@ -178,16 +194,16 @@ def replay(ticker, team, game, result):
         if c.get("v") == CACHE_VERSION:
             return c
         if c.get("v") == 2:   # fills are already known; only the gate features need candles (1 call)
-            cs = candles(ticker, start - timedelta(hours=24), kick)
+            cs = candles(ticker, start - timedelta(hours=24), kick, series, side)
             for o in c["orders"]:
                 t = ts(o["t"])
                 o["drift"], o["vol24"] = drift_12h(cs, t), round(vol_24h(cs, t))
             c["v"] = CACHE_VERSION
             json.dump(c, open(path, "w"))
             return c
-    cs = candles(ticker, start - timedelta(hours=24), kick)
+    cs = candles(ticker, start - timedelta(hours=24), kick, series, side)
     close = next(((b + a) / 2 for t, b, a, _ in reversed(cs) if t <= kick and 0 < b < a < 1), None)
-    tr = trades_between(ticker, start, deadline)
+    tr = trades_between(ticker, start, deadline, side)
     tr3 = [(t, yp, side) for t, yp, side, _ in tr]
     orders = []
     for t, b, a, _ in cs:
@@ -201,7 +217,8 @@ def replay(ticker, team, game, result):
                        "drift": drift_12h(cs, t), "vol24": round(vol_24h(cs, t)),
                        "fill_c": fc.isoformat() if fc else None, "fill_o": fo.isoformat() if fo else None})
     out = {"v": CACHE_VERSION, "ticker": ticker, "team": team, "week": game["week"], "kickoff": kick.isoformat(),
-           "won": result == "yes", "p_close": close, "book": game["ml"].get(team), "orders": orders,
+           "won": result == side, "p_close": close, "orders": orders, "kind": "ml" if series == "KXNFLGAME" else "total",
+           "side": side, "book": game["ml"].get(team) if book == "ml" else game["ou"].get(book),
            "n_trades": len(tr)}
     os.makedirs(CACHE, exist_ok=True)
     json.dump(out, open(path, "w"))
@@ -264,7 +281,7 @@ def flatten(markets, queue):
         for o in m["orders"]:
             flat.append({
                 "game": m["ticker"].rsplit("-", 1)[0], "week": m["week"], "h": o["h"], "bid": o["bid"],
-                "fav": o["bid"] >= 0.5, "won": m["won"],
+                "fav": o["bid"] >= 0.5, "won": m["won"], "side": m.get("side", "yes"),
                 "fill_c": bool(o["fill_c"]), "fill_o": bool(o["fill_o"]),
                 "fill_q": bool(o["fill_c"]) or o.get("vol_at", 0) > queue,
                 "drift": o.get("drift"), "vol24": o.get("vol24"),
@@ -365,7 +382,7 @@ def board_snapshots(sched, settled_by_ticker):
 def main():
     sched = nfl_schedule()
     events = settled_markets()
-    jobs = []
+    jobs, tjobs, bodies = [], [], {}
     for ev, ms in sorted(events.items()):
         codes = [m["ticker"].rsplit("-", 1)[1] for m in ms]
         k = event_key(ev, codes)
@@ -373,6 +390,18 @@ def main():
         if not game or len(ms) != 2:   # preseason isn't in nflverse, so it drops out here
             continue
         jobs += [(m["ticker"], canon(m["ticker"].rsplit("-", 1)[1]), game, m.get("result")) for m in ms]
+        bodies[ev.split("-", 1)[1]] = game
+    # Totals: the strike at the consensus closing total (the board only compares at the book's exact line;
+    # a whole-number total has no Kalshi strike and is skipped, as on the board).
+    for ev, ms in sorted(settled_markets("KXNFLTOTAL").items()):
+        game = bodies.get(ev.split("-", 1)[1])
+        if not game or game.get("total") is None:
+            continue
+        m = next((m for m in ms if m.get("floor_strike") is not None and abs(float(m["floor_strike"]) - game["total"]) < 1e-6), None)
+        if not m:
+            continue
+        tjobs += [(m["ticker"], "over", game, m.get("result"), "KXNFLTOTAL", "yes", "over"),
+                  (m["ticker"], "under", game, m.get("result"), "KXNFLTOTAL", "no", "under")]
 
     def run(job):
         try:
@@ -382,6 +411,7 @@ def main():
     # 4 at a time keeps well under Kalshi's public read limit; only uncached markets hit the API.
     with ThreadPoolExecutor(4) as pool:
         markets = [m for m in pool.map(run, jobs) if m]
+        tmarkets = [m for m in pool.map(run, tjobs) if m]
     snaps_q = []
     for f in glob.glob(os.path.join(HERE, "snapshots", "*.jsonl")):
         for line in open(f):
@@ -389,7 +419,7 @@ def main():
                 r = json.loads(line)
             except ValueError:
                 continue
-            if r.get("bid_size") and (ts(r["kickoff"]) - ts(r["t"])).total_seconds() < LOOKBACK_H * 3600:
+            if r.get("bid_size") and not r.get("side") and (ts(r["kickoff"]) - ts(r["t"])).total_seconds() < LOOKBACK_H * 3600:
                 snaps_q.append(r["bid_size"])
     snaps_q.sort()
     queue = snaps_q[len(snaps_q) // 2] if len(snaps_q) >= 200 else QUEUE_FALLBACK
@@ -412,12 +442,32 @@ def main():
         "board": board_snapshots(sched, {m["ticker"]: m for m in markets}),
         "gates": grade_gates(flat),
     }
+    if tmarkets:
+        tflat = flatten(tmarkets, QUEUE_FALLBACK_TOTALS)
+        tg = grouped(tflat)
+        sub = lambda f: summarise([o for o in tflat if f(o)], grouped([o for o in tflat if f(o)]))
+        out["totals"] = {
+            "method": {"queue": QUEUE_FALLBACK_TOTALS, "queue_source": "Week 6 board, 15 Oct (totals)",
+                       "book": "nflverse consensus total, at its exact Kalshi strike"},
+            "weeks": sorted({m["week"] for m in tmarkets}),
+            "all": summarise(tflat, tg),
+            "by_when": [{"label": l, **sub(f)} for l, f in hours],
+            "by_side": [{"label": "Overs", **sub(lambda o: o["side"] == "yes")},
+                        {"label": "Unders", **sub(lambda o: o["side"] == "no")}],
+            "by_week": [{"label": f"Week {w}", **sub(lambda o, w=w: o["week"] == w)} for w in sorted({o["week"] for o in tflat})],
+            "gates": grade_gates(tflat),
+        }
     with open(os.path.join(HERE, "fills.json"), "w") as f:
         json.dump(out, f, indent=1)
     a = out["all"]
     print(f"{a['n_games']} games, {a['n_orders']} orders. fill {a['conservative']['fill_rate']} / {a['queue']['fill_rate']} / {a['optimistic']['fill_rate']}%, "
           f"EV if filled {a['conservative']['ev_if_filled']} / {a['queue']['ev_if_filled']} / {a['optimistic']['ev_if_filled']}, all-filled {a['ev_if_all_filled']}, "
           f"tap {a['ev_tap']}, book {a['ev_book']}")
+    if "totals" in out:
+        a = out["totals"]["all"]
+        print(f"TOTALS {a['n_games']} games, {a['n_orders']} orders. fill {a['conservative']['fill_rate']} / {a['queue']['fill_rate']} / {a['optimistic']['fill_rate']}%, "
+              f"EV if filled {a['conservative']['ev_if_filled']} / {a['queue']['ev_if_filled']} / {a['optimistic']['ev_if_filled']}, all-filled {a['ev_if_all_filled']}, "
+              f"tap {a['ev_tap']}, book {a['ev_book']}")
 
 if __name__ == "__main__":
     main()
