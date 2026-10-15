@@ -79,6 +79,21 @@ button:hover{border-color:var(--accent)}
 .seg button{border:0;border-radius:0;padding:8px 16px;color:var(--muted)}
 .seg button+button{border-left:1px solid var(--line)}
 .seg button[aria-pressed="true"]{background:var(--accent);color:var(--surface)}
+.fc table{min-width:0}
+.fc td,.fc th{white-space:normal}
+.fc td.num{white-space:nowrap}
+.fc .lead{font-size:1.02rem;max-width:70ch}
+.fc .neg{color:var(--warn)} .fc .pos{color:var(--good)}
+.fc .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.fc h3{font:700 1.1rem var(--display);margin:0 0 4px}
+@media (max-width:680px){
+  .fc table, .fc tbody, .fc tr, .fc td{display:revert}
+  .fc thead{display:table-header-group}
+  .fc tbody tr{display:table-row;padding:0}
+  .fc td,.fc th{padding:6px 6px;text-align:right}
+  .fc td:first-child,.fc th:first-child{text-align:left}
+  .fc td[data-k]::before{content:none}
+}
 .gnote{padding:8px 14px;border-bottom:1px solid var(--line);font-size:.85rem;color:var(--muted);background:var(--bg)}
 @media (prefers-reduced-motion:no-preference){.verdict,.chip{transition:background .2s,color .2s}}
 
@@ -124,6 +139,15 @@ button:hover{border-color:var(--accent)}
     </div>
     <div id="notes" class="note"></div>
     <div id="games" class="games"></div>
+  </section>
+
+  <section class="panel fc" aria-labelledby="fc-h" id="fc" hidden>
+    <h2 id="fc-h">Fill check: does the limit edge hold?</h2>
+    <p class="lead" id="fc-lead"></p>
+    <div id="fc-main"></div>
+    <div class="grid2" id="fc-splits"></div>
+    <div id="fc-board"></div>
+    <p class="note" id="fc-method"></p>
   </section>
 
   <section class="panel" aria-labelledby="calc-h">
@@ -320,7 +344,54 @@ document.addEventListener("visibilitychange", () => { if (!document.hidden) load
 setInterval(tickAge, 30000);
 setInterval(() => { render(); }, 60000);     // drop games as they kick off
 setInterval(load, 5 * 60000);
-calc(); load();
+// ---- fill check (fills.json, rebuilt by fill_study.py) ----
+const sgn = x => x == null ? "—" : (x > 0 ? "+" : x < 0 ? "−" : "") + "$" + Math.abs(x).toFixed(2);
+const cls = x => x == null ? "" : x > 0.005 ? "pos" : x < -0.005 ? "neg" : "";
+const pct = x => x == null ? "—" : x.toFixed(0) + "%";
+function fcRows(a, q){
+  const r = (label, fill, ev, per, sub) =>
+    `<tr><td>${label}${sub ? `<span class="sub">${sub}</span>` : ""}</td><td class="num">${fill}</td><td class="num ${cls(ev)}">${sgn(ev)}</td><td class="num ${cls(per)}">${sgn(per)}</td></tr>`;
+  return `<table><thead><tr><th>If you…</th><th>Filled</th><th>Worth per $100 bet</th><th>Per order posted</th></tr></thead><tbody>
+    ${r("Post a limit at the bid", pct(a.queue.fill_rate), a.queue.ev_if_filled, a.queue.ev_per_order, `behind a typical queue (${Math.round(q/1000)}k contracts ahead)`)}
+    ${r("…if you were first in line", pct(a.optimistic.fill_rate), a.optimistic.ev_if_filled, a.optimistic.ev_per_order, "best case")}
+    ${r("…only certain fills", pct(a.conservative.fill_rate), a.conservative.ev_if_filled, a.conservative.ev_per_order, "price traded through yours")}
+    ${r("What the board assumes", "100%", a.ev_if_all_filled, a.ev_if_all_filled, "every limit order fills")}
+    ${r("Tap buy instead", "100%", a.ev_tap, a.ev_tap, "ask + taker fee")}
+    ${r("Bet the book", "100%", a.ev_book, a.ev_book, "nflverse consensus line")}
+  </tbody></table>`;
+}
+function fcSplit(title, rows){
+  return `<div><h3>${title}</h3><table><thead><tr><th></th><th>Filled</th><th>Worth if filled</th><th>Board assumes</th></tr></thead><tbody>${
+    rows.filter(x => x.n_orders).map(x => `<tr><td>${esc(x.label)}<span class="sub">${x.n_games} games</span></td><td class="num">${pct(x.queue.fill_rate)}</td><td class="num ${cls(x.queue.ev_if_filled)}">${sgn(x.queue.ev_if_filled)}</td><td class="num ${cls(x.ev_if_all_filled)}">${sgn(x.ev_if_all_filled)}</td></tr>`).join("")
+  }</tbody></table></div>`;
+}
+async function loadFills(){
+  let F;
+  try { const r = await fetch("fills.json?t=" + Date.now(), {cache: "no-store"}); if (!r.ok) return; F = await r.json(); } catch(e){ return; }
+  const a = F.all; if (!a || !a.n_orders) return;
+  const q = F.method.queue;
+  const gap = a.queue.ev_if_filled != null && a.ev_if_all_filled != null ? a.queue.ev_if_filled - a.ev_if_all_filled : null;
+  const weeks = F.weeks.length ? `Weeks ${F.weeks[0]}–${F.weeks[F.weeks.length-1]}` : "";
+  $("fc-lead").innerHTML = `Replaying ${a.n_orders.toLocaleString()} limit orders the board would have suggested across ${a.n_games} settled games (${weeks}), judged against Kalshi's own price at kickoff. ` +
+    (gap == null ? "" : (gap < -0.5
+      ? `Orders that actually filled were worth <b class="${cls(a.queue.ev_if_filled)}">${sgn(a.queue.ev_if_filled)}</b> per $100, not the ${sgn(a.ev_if_all_filled)} the board assumes. The gap is who chose to sell to you: you mostly get filled just before the price moves against you. `
+      : `Orders that filled held their value: <b class="${cls(a.queue.ev_if_filled)}">${sgn(a.queue.ev_if_filled)}</b> per $100, close to the ${sgn(a.ev_if_all_filled)} the board assumes. `) +
+     (a.ev_book == null ? "" : a.queue.ev_if_filled > Math.max(a.ev_book, a.ev_tap)
+      ? `Even so, a filled limit still beats betting the book (${sgn(a.ev_book)}) and tapping buy (${sgn(a.ev_tap)}). The limit order wins, just by less than the board shows.`
+      : `That's no better than betting the book (${sgn(a.ev_book)}) or tapping buy (${sgn(a.ev_tap)}).`));
+  $("fc-main").innerHTML = fcRows(a, q);
+  $("fc-splits").innerHTML = fcSplit("By when you post", F.by_when) + fcSplit("Favourites vs underdogs", F.by_side);
+  const b = F.board;
+  $("fc-board").innerHTML = b ? `<p class="note"><b>From this board's own snapshots</b> (real queue, real FD/DK): ${b.n_orders} orders across ${b.n_games} games, ${pct(b.fill_rate)} filled, worth ${sgn(b.ev_if_filled)} per $100 if filled, against ${sgn(b.claimed_vs_book)} the board showed vs your book.</p>`
+    : `<p class="note">The board started logging its own snapshots on 15 Oct (real queue size and the actual FD/DK price). Those results appear here once Week 6 settles.</p>`;
+  const ci = a.queue.ev_if_filled_ci;
+  $("fc-method").textContent = `How: a buy at the bid, posted every ${F.method.step_h} h from ${F.method.lookback_h} h before kickoff and cancelled ${F.method.cancel_min} min before. Filled = a seller traded through your price, or enough sold at it to clear ${Math.round(q).toLocaleString()} contracts ahead of you (${F.method.queue_source}). Worth = profit per $100 if Kalshi's mid at kickoff is the true probability.` +
+    (ci ? ` 95% range for "worth if filled", resampling whole games: ${sgn(ci[0])} to ${sgn(ci[1])}.` : "") +
+    ` Small sample; updated every Tuesday. Rebuilt ${new Date(F.updated).toLocaleDateString()}.`;
+  $("fc").hidden = false;
+}
+
+calc(); load(); loadFills();
 </script>
 </body>
 </html>

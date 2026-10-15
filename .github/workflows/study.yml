@@ -1,0 +1,38 @@
+name: Fill check
+
+# Rebuild fills.json once the week's games have settled: Tue 14:00 UTC (10 AM ET), after MNF.
+# Settled markets are cached in study_cache/, so only the new week hits Kalshi.
+on:
+  schedule:
+    - cron: "0 14 * * 2"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fill-check
+  cancel-in-progress: false
+
+jobs:
+  study:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Tests
+        run: python test_math.py
+      - name: Replay limit orders
+        run: python fill_study.py
+      - name: Commit fills.json
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add fills.json study_cache/
+          git diff --cached --quiet && exit 0
+          git commit -m "fill check: $(date -u +%Y-%m-%d)"
+          git pull --rebase -X theirs origin main || true
+          git push

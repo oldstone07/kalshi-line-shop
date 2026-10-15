@@ -150,6 +150,7 @@ def kalshi():
         for m in ms:
             c = m["ticker"].rsplit("-", 1)[1]
             teams[canon(c)] = {"bid": _f(m, "yes_bid_dollars"), "ask": _f(m, "yes_ask_dollars"),
+                               "bid_size": _f(m, "yes_bid_size_fp"), "ask_size": _f(m, "yes_ask_size_fp"),
                                "volume": _f(m, "volume_fp"), "ticker": m["ticker"]}
         out[(date, canon(away), canon(home))] = teams
         bodies[(date, canon(away), canon(home))] = body
@@ -234,7 +235,8 @@ def team_block(code, side, k, books, pair=("away", "home")):
         t["fair_pct"], t["fair_am"] = round(fp * 100, 1), prob_to_am(fp)
     if k:
         bid, ask = k["bid"], k["ask"]
-        t.update(bid_c=round(bid * 100), ask_c=round(ask * 100), volume=round(k["volume"]), ticker=k["ticker"])
+        t.update(bid_c=round(bid * 100), ask_c=round(ask * 100), volume=round(k["volume"]), ticker=k["ticker"],
+                 bid_size=round(k.get("bid_size", 0)))
         if 0 < bid < 1:
             t["limit_am"] = prob_to_am(bid)
         if 0 < ask < 1:
@@ -350,10 +352,31 @@ def build(now=None):
         "books_source": source, "totals_source": tot_source, "sharp_updated": sharp_at, "notes": notes, "games": out_games,
     }
 
+def snapshot(data, folder):
+    """Append this run's moneyline board to snapshots/<season>-w<week>.jsonl, so fill_study.py can later
+    replay exactly what the board advised, with the real queue at the bid and the real FD/DK price."""
+    if not data.get("week"):
+        return
+    os.makedirs(folder, exist_ok=True)
+    path = os.path.join(folder, f'{data["season"]}-w{data["week"]:02d}.jsonl')
+    with open(path, "a") as f:
+        for g in data["games"]:
+            for side in ("away", "home"):
+                t = g[side]
+                if not t.get("ticker"):
+                    continue
+                f.write(json.dumps({"t": data["updated"], "ticker": t["ticker"], "kickoff": g["kickoff"],
+                                    "bid": t["bid_c"] / 100, "ask": t["ask_c"] / 100, "bid_size": t.get("bid_size"),
+                                    "best": t.get("best"), "best_book": t.get("best_book"),
+                                    "vs_book": t.get("vs_book")}) + "\n")
+
 if __name__ == "__main__":
-    out = sys.argv[1] if len(sys.argv) > 1 else os.path.join(os.path.dirname(os.path.abspath(__file__)), "lines.json")
+    here = os.path.dirname(os.path.abspath(__file__))
+    out = sys.argv[1] if len(sys.argv) > 1 else os.path.join(here, "lines.json")
     data = build()
     with open(out, "w") as f:
         json.dump(data, f, indent=1)
+    if len(sys.argv) <= 1:
+        snapshot(data, os.path.join(here, "snapshots"))
     print(f"week {data['week']}: {len(data['games'])} games, books={data['books_source']}, "
           f"kalshi={sum(g['kalshi'] for g in data['games'])}; notes: {data['notes'] or 'none'}")

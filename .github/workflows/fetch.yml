@@ -34,11 +34,11 @@ jobs:
         env:
           SHARPAPI_KEY: ${{ secrets.SHARPAPI_KEY }}
         run: python fetch_lines.py
-      - name: Commit lines.json
+      - name: Commit lines.json and snapshot
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add lines.json
+          git add lines.json snapshots/
           git diff --cached --quiet && exit 0
           git commit -m "lines: $(date -u +%Y-%m-%dT%H:%MZ)"
           git pull --rebase -X theirs origin main || true

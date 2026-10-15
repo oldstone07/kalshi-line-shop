@@ -111,5 +111,49 @@ class Totals(unittest.TestCase):
         self.assertEqual(t["over"]["best_book"], "Consensus")
 
 
+class FillCheck(unittest.TestCase):
+    from datetime import datetime as _dt, timedelta as _td, timezone as _tz
+    T0 = _dt(2026, 10, 11, 12, tzinfo=_tz.utc)
+
+    def at(self, minutes):
+        return self.T0 + self._td(minutes=minutes)
+
+    def test_clv(self):
+        from fill_study import clv, book_clv
+        self.assertAlmostEqual(clv(0.60, 0.56), (0.60 / 0.56 - 1) * 100)
+        self.assertAlmostEqual(clv(0.56, 0.56), 0.0)
+        # +100 at a true 50% is break-even; -110 at 50% loses the vig
+        self.assertAlmostEqual(book_clv(0.5, 100), 0.0)
+        self.assertAlmostEqual(book_clv(0.5, -110), (0.5 * (100 + 10000 / 110) / 100 - 1) * 100)
+
+    def test_fill_bounds(self):
+        from fill_study import fills
+        dl = self.at(600)
+        tr = [(self.at(-5), 0.50, "no"),     # before we posted: ignored
+              (self.at(10), 0.57, "yes"),    # buyer lifting the ask: never fills a bid
+              (self.at(20), 0.56, "no"),     # seller at our price: optimistic fill
+              (self.at(30), 0.55, "no")]     # seller below our price: certain fill
+        c, o = fills(0.56, tr, self.T0, dl)
+        self.assertEqual(o, self.at(20))
+        self.assertEqual(c, self.at(30))
+
+    def test_no_fill_after_deadline(self):
+        from fill_study import fills
+        c, o = fills(0.56, [(self.at(100), 0.50, "no")], self.T0, self.at(90))
+        self.assertIsNone(c)
+        self.assertIsNone(o)
+
+    def test_queue(self):
+        from fill_study import vol_at_price, queue_fill
+        dl = self.at(600)
+        tr = [(self.at(10), 0.56, "no", 400.0), (self.at(20), 0.56, "no", 700.0),
+              (self.at(25), 0.57, "no", 5000.0),   # above our price: sellers hit higher bids first
+              (self.at(30), 0.55, "no", 1.0)]
+        self.assertEqual(vol_at_price(0.56, tr, self.T0, dl), 1100.0)
+        self.assertEqual(queue_fill(0.56, 1000, tr, self.T0, dl), self.at(20))   # 1100 > 1000 ahead
+        self.assertEqual(queue_fill(0.56, 5000, tr, self.T0, dl), self.at(30))   # only the trade-through fills
+        self.assertIsNone(queue_fill(0.56, 5000, tr[:3], self.T0, dl))
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
