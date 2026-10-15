@@ -94,6 +94,20 @@ button:hover{border-color:var(--accent)}
   .fc td:first-child,.fc th:first-child{text-align:left}
   .fc td[data-k]::before{content:none}
 }
+.chip.book{background:var(--chip);color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.chip.late{background:var(--chip);color:var(--muted)}
+.unp{font:600 .68rem var(--body);text-transform:uppercase;letter-spacing:.06em;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:0 4px;margin-left:4px}
+tr.has-gates{cursor:pointer}
+tr.has-gates:hover td{background:color-mix(in srgb, var(--chip) 45%, transparent)}
+.why{font:600 .76rem var(--body);color:var(--accent);margin-left:6px;white-space:nowrap}
+tr.gd td{background:var(--bg);text-align:left;white-space:normal;padding:10px 14px}
+tr.gd[hidden]{display:none}
+.glist{display:grid;gap:6px;margin:0;padding:0;list-style:none}
+.glist li{display:grid;grid-template-columns:1.4rem 1fr auto;gap:8px;align-items:baseline}
+.glist .ic{font-weight:700;text-align:center}
+.glist .ic.pos,.glist .v.pos{color:var(--good)} .glist .ic.neg,.glist .v.neg{color:var(--warn)}
+.glist .v{font:600 .85rem var(--mono)}
+.gsum{margin-top:8px;font-size:.85rem;color:var(--muted)}
 .gnote{padding:8px 14px;border-bottom:1px solid var(--line);font-size:.85rem;color:var(--muted);background:var(--bg)}
 @media (prefers-reduced-motion:no-preference){.verdict,.chip{transition:background .2s,color .2s}}
 
@@ -109,6 +123,9 @@ button:hover{border-color:var(--accent)}
   td.team{grid-column:1/-1;display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:1.05rem}
   td.team .sub{display:inline}
   td[data-k]::before{content:attr(data-k);display:block;font:600 .68rem var(--body);text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:1px}
+  tbody tr.gd{display:block;padding:0}
+  tbody tr.gd[hidden]{display:none}
+  tr.gd td{display:block;padding:10px 14px}
   td.vs{grid-column:1/-1;order:9}
   td.never{grid-column:span 2}
 }
@@ -146,6 +163,7 @@ button:hover{border-color:var(--accent)}
     <p class="lead" id="fc-lead"></p>
     <div id="fc-main"></div>
     <div class="grid2" id="fc-splits"></div>
+    <div id="fc-gates"></div>
     <div id="fc-board"></div>
     <p class="note" id="fc-method"></p>
   </section>
@@ -177,7 +195,8 @@ button:hover{border-color:var(--accent)}
       <p><b>FanDuel / DraftKings</b> are the live moneylines. The better of the two is in bold; that's the one everything below compares against. The small line under each team is the no-vig fair price.</p>
       <p><b>Set limit at</b> is the price to enter on Kalshi's limit order screen. It's the current bid, so your order waits until someone sells to you.</p>
       <p><b>That's like</b> turns that Kalshi price into normal odds so you can compare. The small line underneath is what you'd get if you just tapped buy instead, fee included.</p>
-      <p><b>Vs your book</b> is how much more (or less) you'd win on Kalshi with a limit order, for every $100 you bet, compared with the better sportsbook.</p>
+      <p><b>Verdict</b> comes from gates measured on this season's real Kalshi fills (see Fill check below). <b>Post now</b>: post the limit at the bid. <b>Wait</b>: the price is falling, or kickoff is more than 2 days off, and orders posted then filled at worse moments. <b>Bet the book</b>: the book's price is worth more than a realistic Kalshi limit. <b>Too late</b>: inside 90 minutes, cancel unfilled limits. Tap a row to see each gate and its measured dollar effect.</p>
+      <p><b>≈ per $100 if filled</b> is the realistic value of the limit order, judged by Kalshi's price at kickoff: this season's average fill, adjusted by each gate that has held up. It is usually a little negative. Every way of betting a game costs something; the board shows the cheapest.</p>
       <p><b>Never pay more than</b> is your ceiling. At any Kalshi price above it, the sportsbook pays better, so skip Kalshi.</p>
       <p><b>Totals</b> compare the same line only. On Kalshi, Over is <i>Yes</i> on "Over 40.5 points" and Under is <i>No</i> on that same market. If Kalshi has no market at the book's exact number, the card says so and shows no comparison, because a 39.5 over is a different bet from a 38.5 over. A book posting a different line is shown with its line and left out of the comparison.</p>
     </div>
@@ -246,28 +265,47 @@ function bookCell(t, b, label){
   const cls = v === t.best ? "best" : "notbest";
   return `<td class="num ${cls}" data-k="${label}">${fmtAm(v)}</td>`;
 }
-function teamRow(t, books, noKalshi){
+const VERDICT = {post: ["good", "Post now"], wait: ["warn", "Wait"], book: ["book", "Bet the book"], late: ["late", "Too late"]};
+let ROWID = 0;
+function gateList(t){
+  const items = t.gates.map(g => {
+    if (g.name === "soft"){
+      return `<li><span class="ic ${g.holding ? "pos" : ""}">${g.holding ? "✓" : "–"}</span><span>${esc(g.label)}<span class="unp">unproven</span>${g.detail ? `<span class="sub">${esc(g.detail)}</span>` : ""}</span><span class="v"></span></li>`;
+    }
+    const e = g.effect, c = e > 0 ? "pos" : e < 0 ? "neg" : "";
+    const ic = e > 0 ? "✓" : e < 0 ? "✗" : "–";
+    const off = g.status !== "holding" ? " (gate not holding this season)" : g.bucket && !g.holding ? " (no measured effect)" : "";
+    return `<li><span class="ic ${c}">${ic}</span><span>${esc(g.label)}${off}${g.detail ? `<span class="sub">${esc(g.detail)}</span>` : ""}</span><span class="v ${c}">${e ? sgn(e) : ""}</span></li>`;
+  }).join("");
+  const later = t.worth_later != null && t.worth_later !== t.worth ? ` Wait until under 24 h and it's about ${sgn(t.worth_later)}.` : "";
+  return `<ul class="glist">${items}</ul>
+    <p class="gsum">${esc(t.why)} A limit here is realistically worth about <b>${sgn(t.worth)}</b> per $100 if it fills, against <b>${sgn(t.book_now)}</b> for the book's price.${later}${t.fill_chance != null ? ` Orders posted at this distance from kickoff filled about ${Math.round(t.fill_chance)}% of the time.` : ""}</p>`;
+}
+function teamRow(t, books, noKalshi, cols){
   let vs = '<span class="chip">No Kalshi price</span>';
   if (noKalshi) vs = `<span class="chip">${esc(noKalshi)}</span>`;
   else if (t.best == null) vs = '<span class="chip warn">No book line</span>';
-  else if (t.vs_book != null) vs = t.beats
-      ? `<span class="chip good">+${money(t.vs_book)} per $100</span>`
-      : `<span class="chip warn">Book pays ${money(-t.vs_book)} more</span>`;
+  else if (t.verdict){
+    const [c, l] = VERDICT[t.verdict];
+    vs = `<span class="chip ${c}">${l}</span><span class="why">why ▾</span><span class="sub">≈ ${sgn(t.worth)} per $100 if filled</span>`;
+  }
+  else if (t.vs_book != null) vs = `<span class="chip">${t.vs_book > 0 ? "+" : "−"}${money(Math.abs(t.vs_book))} best case</span><span class="sub">not fill-checked yet</span>`;
   const fair = t.fair_am != null ? `<span class="sub">fair ${fmtAm(t.fair_am)} · ${t.fair_pct}%</span>` : "";
   const limit = t.limit_am != null ? `<b>${t.bid_c}¢</b>` : "—";
   const like = t.limit_am != null ? fmtAm(t.limit_am) : "—";
   const tap = t.tap_am != null ? `<span class="sub">tap buy: ${fmtAm(t.tap_am)} at ${t.ask_c}¢</span>` : "";
-  return `<tr>
+  const id = t.gates ? "gd" + (++ROWID) : null;
+  return `<tr${id ? ` class="has-gates" data-gd="${id}" tabindex="0" aria-expanded="false"` : ""}>
     <td class="team">${esc(t.name)}${fair}</td>
     ${books.map(([b,l]) => bookCell(t, b, l)).join("")}
     <td class="num limit" data-k="Set limit at">${limit}</td>
     <td class="num" data-k="That's like">${like}${tap}</td>
     <td class="vs">${vs}</td>
     <td class="num never" data-k="Never pay more than">${t.never_pay != null ? t.never_pay + "¢" : "—"}</td>
-  </tr>`;
+  </tr>${id ? `<tr class="gd" id="${id}" hidden><td colspan="${cols}">${gateList(t)}</td></tr>` : ""}`;
 }
 const bookCols = src => src === "consensus" ? [["Consensus","Consensus"]] : [["FD","FanDuel"],["DK","DraftKings"]];
-const colHead = (first, books) => `<thead><tr><th>${first}</th>${books.map(b => `<th>${b[1]}</th>`).join("")}<th>Set limit at</th><th>That's like</th><th>Vs your book</th><th>Never pay more than</th></tr></thead>`;
+const colHead = (first, books) => `<thead><tr><th>${first}</th>${books.map(b => `<th>${b[1]}</th>`).join("")}<th>Set limit at</th><th>That's like</th><th>${first === "Team" ? "Verdict" : "Vs your book"}</th><th>Never pay more than</th></tr></thead>`;
 function totalCard(g, consAll){
   const t = g.total;
   const head = `<div class="ghead"><span class="matchup">${esc(g.away.name)} at ${esc(g.home.name)}</span><span class="when">${esc(g.when)} ET${t && t.source === "consensus" && !consAll ? " · consensus line" : ""}</span></div>`;
@@ -306,7 +344,7 @@ function render(){
       <div class="ghead"><span class="matchup">${esc(g.away.name)} at ${esc(g.home.name)}</span><span class="when">${esc(g.when)} ET${g.source === "consensus" && !cons ? " · consensus line" : ""}</span></div>
       <table>
         ${colHead("Team", books)}
-        <tbody>${teamRow(g.away, books)}${teamRow(g.home, books)}</tbody>
+        <tbody>${teamRow(g.away, books, null, books.length + 5)}${teamRow(g.home, books, null, books.length + 5)}</tbody>
       </table>
     </article>`;
   }).join("");
@@ -335,6 +373,17 @@ async function load(){
   render(); tickAge();
 }
 $("reload").addEventListener("click", load);
+function toggleGates(tr){
+  const d = document.getElementById(tr.dataset.gd);
+  if (!d) return;
+  d.hidden = !d.hidden;
+  tr.setAttribute("aria-expanded", String(!d.hidden));
+}
+$("games").addEventListener("click", e => { const tr = e.target.closest("tr.has-gates"); if (tr) toggleGates(tr); });
+$("games").addEventListener("keydown", e => {
+  if (e.key !== "Enter" && e.key !== " ") return;
+  const tr = e.target.closest("tr.has-gates"); if (tr){ e.preventDefault(); toggleGates(tr); }
+});
 document.querySelectorAll(".seg button").forEach(b => b.addEventListener("click", () => {
   MODE = b.dataset.mode;
   try { localStorage.setItem(MODE_KEY, MODE); } catch(e){}
@@ -381,6 +430,22 @@ async function loadFills(){
       : `That's no better than betting the book (${sgn(a.ev_book)}) or tapping buy (${sgn(a.ev_tap)}).`));
   $("fc-main").innerHTML = fcRows(a, q);
   $("fc-splits").innerHTML = fcSplit("By when you post", F.by_when) + fcSplit("Favourites vs underdogs", F.by_side);
+  const G = F.gates;
+  if (G){
+    const NAMES = {direction: "Price direction (12 h)", timing: "Time to kickoff", activity: "Market activity (24 h)"};
+    const LBL = {fell: "falling", flat: "steady", rose: "rising", far: "2+ days", mid: "1–2 days", near: "under 24 h",
+                 quiet: `quiet (<${Math.round(G.vol_cuts[0]/1000)}k)`, busy: `busy (${Math.round(G.vol_cuts[1]/1000)}k+)`};
+    const half = w => w.length > 1 ? `Wks ${w[0]}–${w[w.length-1]}` : `Wk ${w[0]}`;
+    const rows = ["direction","timing","activity"].map(n => {
+      const g = G[n]; if (!g) return "";
+      return Object.entries(g.buckets).map(([b, c], i) => `<tr><td>${i ? "" : `<b>${NAMES[n]}</b><span class="sub">${g.status}</span>`}</td><td>${n === "activity" && b === "mid" ? "normal" : LBL[b] || b}</td>
+        <td class="num ${cls(c.early)}">${sgn(c.early)}</td><td class="num ${cls(c.late)}">${sgn(c.late)}</td><td class="num ${cls(c.effect)}"><b>${c.effect ? sgn(c.effect) : "—"}</b></td></tr>`).join("");
+    }).join("");
+    $("fc-gates").innerHTML = `<h3>Gate track record</h3>
+      <p class="note">Each gate is re-graded every Tuesday. Its effect only counts if it points the same way in the earlier and the later weeks, and the board uses the smaller of the two, so a fading pattern shrinks and one that flips is dropped.</p>
+      <table><thead><tr><th>Gate</th><th>When</th><th>${half(G.split.early)}</th><th>${half(G.split.late)}</th><th>Used</th></tr></thead><tbody>${rows}</tbody></table>
+      <p class="note">"Book is soft" is unproven: it needs the board's own FD/DK snapshots, which started 15 Oct.</p>`;
+  }
   const b = F.board;
   $("fc-board").innerHTML = b ? `<p class="note"><b>From this board's own snapshots</b> (real queue, real FD/DK): ${b.n_orders} orders across ${b.n_games} games, ${pct(b.fill_rate)} filled, worth ${sgn(b.ev_if_filled)} per $100 if filled, against ${sgn(b.claimed_vs_book)} the board showed vs your book.</p>`
     : `<p class="note">The board started logging its own snapshots on 15 Oct (real queue size and the actual FD/DK price). Those results appear here once Week 6 settles.</p>`;

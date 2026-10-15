@@ -24,14 +24,14 @@ from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone, timedelta
 from zoneinfo import ZoneInfo
 
-from fetch_lines import get, canon, profit_book, profit_price, tap_cost, NFLVERSE
+from fetch_lines import get, canon, profit_book, profit_price, tap_cost, NFLVERSE, drift_12h, vol_24h, gate_buckets
 
 ET = ZoneInfo("America/New_York")
 B = "https://api.elections.kalshi.com/trade-api/v2"
 HERE = os.path.dirname(os.path.abspath(__file__))
 CACHE = os.path.join(HERE, "study_cache")
 LOOKBACK_H, STEP_H, CANCEL_MIN = 96, 3, 90
-CACHE_VERSION = 2
+CACHE_VERSION = 3   # v3 adds the gate features (drift_12h, vol_24h) to every order
 # Queue ahead of a new order at the best bid. Historical queue sizes aren't published, so until the
 # board's own snapshots have enough of them, use the median best-bid size on the Week 6 board
 # (all 28 sides, 0-4 days before kickoff, measured 15 Oct 2026: p25 46k, median 69k, p75 312k).
@@ -161,7 +161,8 @@ def candles(ticker, t_from, t_to):
         a = c.get("yes_ask", {}).get("close_dollars")
         if b is None or a is None:
             continue
-        out.append((datetime.fromtimestamp(c["end_period_ts"], timezone.utc), float(b), float(a)))
+        out.append((datetime.fromtimestamp(c["end_period_ts"], timezone.utc), float(b), float(a),
+                    float(c.get("volume_fp") or 0)))
     return out
 
 # ---------------------------------------------------------------- replay one market
@@ -169,26 +170,35 @@ def candles(ticker, t_from, t_to):
 def replay(ticker, team, game, result):
     """Simulated orders for one team market. Cached forever once the game has settled."""
     path = os.path.join(CACHE, ticker + ".json")
+    kick = game["kickoff"]
+    deadline = kick - timedelta(minutes=CANCEL_MIN)
+    start = kick - timedelta(hours=LOOKBACK_H)
     if os.path.exists(path):
         c = json.load(open(path))
         if c.get("v") == CACHE_VERSION:
             return c
-    kick = game["kickoff"]
-    deadline = kick - timedelta(minutes=CANCEL_MIN)
-    start = kick - timedelta(hours=LOOKBACK_H)
-    cs = candles(ticker, start, kick)
-    close = next(((b + a) / 2 for t, b, a in reversed(cs) if t <= kick and 0 < b < a < 1), None)
+        if c.get("v") == 2:   # fills are already known; only the gate features need candles (1 call)
+            cs = candles(ticker, start - timedelta(hours=24), kick)
+            for o in c["orders"]:
+                t = ts(o["t"])
+                o["drift"], o["vol24"] = drift_12h(cs, t), round(vol_24h(cs, t))
+            c["v"] = CACHE_VERSION
+            json.dump(c, open(path, "w"))
+            return c
+    cs = candles(ticker, start - timedelta(hours=24), kick)
+    close = next(((b + a) / 2 for t, b, a, _ in reversed(cs) if t <= kick and 0 < b < a < 1), None)
     tr = trades_between(ticker, start, deadline)
     tr3 = [(t, yp, side) for t, yp, side, _ in tr]
     orders = []
-    for t, b, a in cs:
-        if t > deadline - timedelta(minutes=30) or not (0 < b < 1) or not (0 < a < 1):
+    for t, b, a, _ in cs:
+        if t < start or t > deadline - timedelta(minutes=30) or not (0 < b < 1) or not (0 < a < 1):
             continue
         h = int((kick - t).total_seconds() // 3600)
         if h % STEP_H:   # one order every 3 h (kickoffs at :15 or :25 aren't on the hour)
             continue
         fc, fo = fills(b, tr3, t, deadline)
         orders.append({"t": t.isoformat(), "h": h, "bid": b, "ask": a, "vol_at": round(vol_at_price(b, tr, t, deadline), 2),
+                       "drift": drift_12h(cs, t), "vol24": round(vol_24h(cs, t)),
                        "fill_c": fc.isoformat() if fc else None, "fill_o": fo.isoformat() if fo else None})
     out = {"v": CACHE_VERSION, "ticker": ticker, "team": team, "week": game["week"], "kickoff": kick.isoformat(),
            "won": result == "yes", "p_close": close, "book": game["ml"].get(team), "orders": orders,
@@ -257,10 +267,55 @@ def flatten(markets, queue):
                 "fav": o["bid"] >= 0.5, "won": m["won"],
                 "fill_c": bool(o["fill_c"]), "fill_o": bool(o["fill_o"]),
                 "fill_q": bool(o["fill_c"]) or o.get("vol_at", 0) > queue,
+                "drift": o.get("drift"), "vol24": o.get("vol24"),
                 "clv_limit": clv(p, o["bid"]), "clv_tap": clv(p, tap_cost(o["ask"])),
                 "clv_book": book_clv(p, m["book"]) if m["book"] is not None else None,
             })
     return flat
+
+MIN_FILLS = 15   # below this many filled orders in a half, a bucket is "not enough data", effect 0
+
+def grade_gates(flat):
+    """Re-grade every gate on the season so far. Weeks split into an earlier and a later half; a bucket's
+    effect = its worth-if-filled minus that half's average. It counts only if both halves agree in sign,
+    and then at the SMALLER of the two sizes - so a pattern that fades shrinks, and one that flips is dropped."""
+    weeks = sorted({o["week"] for o in flat})
+    if len(weeks) < 2:
+        return None
+    early, late = set(weeks[:(len(weeks) + 1) // 2]), set(weeks[(len(weeks) + 1) // 2:])
+    vols = sorted(o["vol24"] for o in flat if o.get("vol24") is not None)
+    cuts = [vols[len(vols) // 3], vols[2 * len(vols) // 3]] if vols else None
+    for o in flat:
+        o["_b"] = gate_buckets(o.get("drift"), o["h"], o.get("vol24"), cuts)
+    worth = lambda os_: mean(o["clv_limit"] for o in os_ if o["fill_q"])
+    nfill = lambda os_: sum(1 for o in os_ if o["fill_q"])
+    halves = {"early": [o for o in flat if o["week"] in early], "late": [o for o in flat if o["week"] in late]}
+    base_half = {h: worth(os_) for h, os_ in halves.items()}
+    out = {"base": round(worth(flat), 2), "vol_cuts": cuts,
+           "split": {"early": sorted(early), "late": sorted(late)}}
+    for name, order in (("direction", ("fell", "flat", "rose")), ("timing", ("far", "mid", "near")),
+                        ("activity", ("quiet", "mid", "busy"))):
+        buckets = {}
+        for b in order:
+            cell = {"n_games": len({o["game"] for o in flat if o["_b"][name] == b})}
+            effs = []
+            for h, os_ in halves.items():
+                sub = [o for o in os_ if o["_b"][name] == b]
+                if nfill(sub) >= MIN_FILLS:
+                    cell[h] = round(worth(sub) - base_half[h], 2)
+                    effs.append(cell[h])
+                else:
+                    cell[h] = None
+            sub_all = [o for o in flat if o["_b"][name] == b]
+            cell["fill_rate"] = round(100 * nfill(sub_all) / len(sub_all), 1) if sub_all else None
+            agree = len(effs) == 2 and (effs[0] > 0) == (effs[1] > 0)
+            cell["effect"] = round((1 if effs[0] > 0 else -1) * min(abs(effs[0]), abs(effs[1])), 2) if agree else 0.0
+            buckets[b] = cell
+        holding = any(c["effect"] for c in buckets.values())
+        out[name] = {"status": "holding" if holding else "not holding", "buckets": buckets}
+    for o in flat:
+        o.pop("_b", None)
+    return out
 
 def grouped(flat):
     g = {}
@@ -355,6 +410,7 @@ def main():
         "by_week": [{"label": f"Week {w}", **summarise([o for o in flat if o["week"] == w], grouped([o for o in flat if o["week"] == w]))}
                     for w in sorted({o["week"] for o in flat})],
         "board": board_snapshots(sched, {m["ticker"]: m for m in markets}),
+        "gates": grade_gates(flat),
     }
     with open(os.path.join(HERE, "fills.json"), "w") as f:
         json.dump(out, f, indent=1)

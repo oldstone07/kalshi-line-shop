@@ -63,6 +63,92 @@ def fair_probs(a_away, a_home):
 def vs_book(bid, best_book):
     return profit_price(bid) - profit_book(best_book)
 
+# ---------------------------------------------------------------- gate features
+# Shared by the live board and fill_study.py, so a gate means exactly the same thing in both.
+# candles: [(end_time, bid, ask, volume)] hourly, oldest first.
+
+def drift_12h(candles, t):
+    """Bid change in cents over the 12 h before t (None if there's no candle ~12 h back)."""
+    now = [c for c in candles if c[0] <= t]
+    back = [c for c in candles if c[0] <= t - timedelta(hours=12)]
+    if not now or not back or (t - timedelta(hours=12) - back[-1][0]) > timedelta(hours=2):
+        return None
+    if not (0 < now[-1][1] < 1 and 0 < back[-1][1] < 1):
+        return None
+    return round((now[-1][1] - back[-1][1]) * 100)
+
+def vol_24h(candles, t):
+    """Contracts traded in the 24 h before t."""
+    return sum(c[3] for c in candles if t - timedelta(hours=24) < c[0] <= t)
+
+def gate_buckets(drift, hours, vol24, vol_cuts):
+    """Which bucket of each gate a moment falls in. vol_cuts = the study's activity tertiles."""
+    return {
+        "direction": None if drift is None else "fell" if drift < 0 else "flat" if drift == 0 else "rose",
+        "timing": "far" if hours > 48 else "mid" if hours > 24 else "near",
+        "activity": None if (vol24 is None or not vol_cuts) else
+                    "quiet" if vol24 < vol_cuts[0] else "mid" if vol24 < vol_cuts[1] else "busy",
+    }
+
+GATE_LABELS = {
+    "direction": {"fell": "Price falling", "flat": "Price steady", "rose": "Price rising"},
+    "timing": {"far": "2+ days to kickoff", "mid": "1-2 days to kickoff", "near": "Under 24 h to kickoff"},
+    "activity": {"quiet": "Quiet market", "mid": "Normal activity", "busy": "Busy market"},
+}
+
+def gate_verdict(bid, ask, best, hours, drift, vol24, grades):
+    """The row's gates, realistic worth and verdict. grades = fills.json "gates" (weekly study).
+    Worth is per $100 if a limit at the bid fills, judged by the price at kickoff:
+    the study's average, plus each gate's effect where that effect held in both halves of the season."""
+    if not grades or not (0 < bid < 1) or not (0 < ask < 1):
+        return {}
+    mid = (bid + ask) / 2
+    book_now = round((mid * (100 + profit_book(best)) / 100 - 1) * 100, 2) if best is not None else None
+    buckets = gate_buckets(drift, hours, vol24, grades.get("vol_cuts"))
+    gates, worth = [], grades["base"]
+    for name in ("direction", "timing", "activity"):
+        b = buckets[name]
+        g = grades.get(name, {})
+        cell = (g.get("buckets") or {}).get(b) if b else None
+        eff = cell["effect"] if cell else 0.0
+        worth += eff
+        detail = {"direction": None if drift is None else f"{drift:+d}¢ in 12 h",
+                  "timing": f"{hours:.0f} h out", "activity": None if vol24 is None else f"{vol24/1000:.0f}k traded in 24 h"}[name]
+        gates.append({"name": name, "bucket": b, "label": GATE_LABELS[name].get(b, "Unknown"), "detail": detail,
+                      "effect": round(eff, 2), "holding": bool(cell and cell.get("effect")),
+                      "status": g.get("status", "untested")})
+    worth = round(worth, 2)
+    # Best realistic limit = posting now, or waiting until under 24 h (the timing gate's best bucket).
+    tb = (grades.get("timing") or {}).get("buckets") or {}
+    t_now = next((g["effect"] for g in gates if g["name"] == "timing"), 0.0)
+    worth_later = round(worth - t_now + (tb.get("near") or {}).get("effect", 0.0), 2) if hours > 24 else worth
+    soft = book_now is not None and book_now > 0
+    book_better = book_now is not None and book_now > max(worth, worth_later)
+    gates.append({"name": "soft", "bucket": "soft" if soft else "no", "status": "unproven",
+                  "label": "Book pays more than Kalshi's fair price" if soft else "Book isn't soft",
+                  "detail": None if book_now is None else f"book worth {book_now:+.2f} per $100 at Kalshi's mid",
+                  "effect": None, "holding": soft})
+    if hours < CANCEL_H:
+        v, why = "late", "Too late for a limit: cancel unfilled orders before inactives."
+    elif book_better:
+        v = "book"
+        why = ("The book is paying more than Kalshi's fair price right now." if soft else
+               "A realistic limit fill is worth less than simply taking the book's price.") + \
+              " Rests on the unproven book gate."
+    else:
+        waits = [g for g in gates[:2] if g["effect"] < 0]
+        if waits:
+            v = "wait"
+            why = {"direction": "Price is falling: fills now tend to come just before it drops further.",
+                   "timing": "Far from kickoff: orders posted this early fill at worse moments."}[waits[0]["name"]]
+        else:
+            v, why = "post", "Gates are clear: post the limit at the bid."
+    tcell = ((grades.get("timing") or {}).get("buckets") or {}).get(buckets["timing"]) or {}
+    return {"gates": gates, "worth": worth, "worth_later": worth_later, "book_now": book_now, "verdict": v, "why": why,
+            "fill_chance": tcell.get("fill_rate")}
+
+CANCEL_H = 1.5
+
 # ---------------------------------------------------------------- team codes
 # Canonical = nflverse codes. Everything else is mapped onto them.
 ALIASES = {"JAC": "JAX", "LAR": "LA", "LVR": "LV", "WSH": "WAS", "LA": "LA"}
@@ -155,6 +241,25 @@ def kalshi():
         out[(date, canon(away), canon(home))] = teams
         bodies[(date, canon(away), canon(home))] = body
     return out, bodies
+
+def kalshi_candles(ticker, hours=26):
+    """Hourly (end, bid, ask, volume) for the last `hours`, for the direction and activity gates."""
+    end = int(time.time())
+    d = json.loads(get(f"https://api.elections.kalshi.com/trade-api/v2/series/KXNFLGAME/markets/{ticker}/candlesticks"
+                       f"?start_ts={end - hours * 3600}&end_ts={end}&period_interval=60"))
+    out = []
+    for c in d.get("candlesticks", []):
+        b, a = c.get("yes_bid", {}).get("close_dollars"), c.get("yes_ask", {}).get("close_dollars")
+        if b is not None and a is not None:
+            out.append((datetime.fromtimestamp(c["end_period_ts"], timezone.utc), float(b), float(a), float(c.get("volume_fp") or 0)))
+    return out
+
+def load_grades():
+    try:
+        with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "fills.json")) as f:
+            return json.load(f).get("gates")
+    except (OSError, ValueError):
+        return None
 
 def kalshi_totals():
     """{event body: {strike: {"over": {bid, ask, ...}, "under": {...}}}}. Over = Yes, Under = No."""
@@ -292,6 +397,20 @@ def total_block(book_lines, ladder, cons=None):
         out["nearest"] = [x for x in (max(below) if below else None, min(above) if above else None) if x is not None]
     return out
 
+def gated(t, k, g, now, grades):
+    """Attach live gates to a moneyline row. A candles failure just leaves those gates unknown."""
+    if not k or not grades:
+        return t
+    hours = (g["kickoff"] - now).total_seconds() / 3600
+    drift = vol24 = None
+    try:
+        cs = kalshi_candles(k["ticker"])
+        drift, vol24 = drift_12h(cs, now), round(vol_24h(cs, now))
+    except Exception:  # noqa: BLE001
+        pass
+    t.update(gate_verdict(k["bid"], k["ask"], t.get("best"), hours, drift, vol24, grades))
+    return t
+
 def build(now=None):
     now = now or datetime.now(timezone.utc)
     notes = []
@@ -326,6 +445,7 @@ def build(now=None):
         except Exception as e:  # noqa: BLE001
             notes.append(f"SharpAPI totals unreachable ({e}); totals use the nflverse consensus line.")
 
+    grades = load_grades()
     out_games = []
     for g in games:
         key3 = (g["gameday"], g["away"], g["home"])
@@ -340,8 +460,8 @@ def build(now=None):
             "id": f'{g["away"]}-{g["home"]}', "kickoff": g["kickoff"].astimezone(timezone.utc).isoformat(),
             "when": g["kickoff"].strftime("%a %-I:%M %p"), "source": game_source,
             "kalshi": bool(k),
-            "away": team_block(g["away"], "away", k.get(g["away"]), books),
-            "home": team_block(g["home"], "home", k.get(g["home"]), books),
+            "away": gated(team_block(g["away"], "away", k.get(g["away"]), books), k.get(g["away"]), g, now, grades),
+            "home": gated(team_block(g["home"], "home", k.get(g["home"]), books), k.get(g["home"]), g, now, grades),
             "total": total_block(stot.get(key3, {}), ktot.get(kbodies.get(key3), {}), g["cons_total"]),
         })
     missing_k = [g["id"] for g in out_games if not g["kalshi"]]

@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-15T19:59:17+00:00",
+ "updated": "2026-10-15T20:30:25+00:00",
  "method": {
   "lookback_h": 96,
   "step_h": 3,
@@ -472,5 +472,101 @@
    "ev_book": -4.05
   }
  ],
- "board": null
+ "board": null,
+ "gates": {
+  "base": -1.06,
+  "vol_cuts": [
+   23897,
+   63933
+  ],
+  "split": {
+   "early": [
+    1,
+    2,
+    3
+   ],
+   "late": [
+    4,
+    5
+   ]
+  },
+  "direction": {
+   "status": "holding",
+   "buckets": {
+    "fell": {
+     "n_games": 72,
+     "early": -1.9,
+     "late": -0.16,
+     "fill_rate": 45.3,
+     "effect": -0.16
+    },
+    "flat": {
+     "n_games": 79,
+     "early": 0.14,
+     "late": -0.02,
+     "fill_rate": 36.3,
+     "effect": 0.0
+    },
+    "rose": {
+     "n_games": 71,
+     "early": 1.45,
+     "late": 0.24,
+     "fill_rate": 47.3,
+     "effect": 0.24
+    }
+   }
+  },
+  "timing": {
+   "status": "holding",
+   "buckets": {
+    "far": {
+     "n_games": 79,
+     "early": -0.3,
+     "late": -0.24,
+     "fill_rate": 46.4,
+     "effect": -0.24
+    },
+    "mid": {
+     "n_games": 79,
+     "early": 0.26,
+     "late": 0.3,
+     "fill_rate": 38.0,
+     "effect": 0.26
+    },
+    "near": {
+     "n_games": 79,
+     "early": 0.63,
+     "late": 0.52,
+     "fill_rate": 23.7,
+     "effect": 0.52
+    }
+   }
+  },
+  "activity": {
+   "status": "holding",
+   "buckets": {
+    "quiet": {
+     "n_games": 69,
+     "early": -2.0,
+     "late": -0.64,
+     "fill_rate": 39.2,
+     "effect": -0.64
+    },
+    "mid": {
+     "n_games": 79,
+     "early": 0.03,
+     "late": 0.3,
+     "fill_rate": 37.1,
+     "effect": 0.03
+    },
+    "busy": {
+     "n_games": 79,
+     "early": 1.34,
+     "late": 0.64,
+     "fill_rate": 39.2,
+     "effect": 0.64
+    }
+   }
+  }
+ }
 }
