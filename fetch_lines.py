@@ -2,8 +2,9 @@
 do all the math, write lines.json for index.html.
 
 Sources
-  Kalshi     public markets API, no key (KXNFLGAME series, one market per team)
-  FD + DK    SharpAPI free tier, key in env SHARPAPI_KEY; one call for the whole league
+  Kalshi     public markets API, no key (KXNFLGAME: one market per team;
+             KXNFLTOTAL: a ladder of "Over X.5" markets per game, Under = buy No)
+  FD + DK    SharpAPI free tier, key in env SHARPAPI_KEY; one call each for moneylines and main totals
   Schedule   nflverse games.csv (week, kickoff, codes); also the consensus-line fallback
 
 Stdlib only, so the Actions job needs no pip install.
@@ -14,8 +15,11 @@ from datetime import datetime, timezone, timedelta
 from zoneinfo import ZoneInfo
 
 ET = ZoneInfo("America/New_York")
-KALSHI = "https://api.elections.kalshi.com/trade-api/v2/markets?series_ticker=KXNFLGAME&status=open&limit=1000"
+KALSHI_BASE = "https://api.elections.kalshi.com/trade-api/v2/markets?status=open&limit=1000&series_ticker="
 SHARP = "https://api.sharpapi.io/api/v1/odds?league=nfl&market=moneyline&limit=200"
+# market=total alone also returns team totals, halves and every alternate line (600+ rows, past the
+# 500 offset cap). total_points + is_main_line is one page with each book's single main total.
+SHARP_TOTAL = "https://api.sharpapi.io/api/v1/odds?league=nfl&market=total_points&is_main_line=true&limit=200"
 NFLVERSE = "https://raw.githubusercontent.com/nflverse/nfldata/master/data/games.csv"
 
 # ---------------------------------------------------------------- odds math
@@ -100,26 +104,35 @@ def schedule(now):
         if kick <= now:
             continue
         ml = lambda v: int(float(v)) if v not in ("", "NA") else None
+        tl = float(r["total_line"]) if r.get("total_line") not in (None, "", "NA") else None
         games.append({
             "week": int(r["week"]), "game_type": r["game_type"], "gameday": r["gameday"],
             "kickoff": kick, "away": canon(r["away_team"]), "home": canon(r["home_team"]),
             "cons": {"away": ml(r["away_moneyline"]), "home": ml(r["home_moneyline"])},
+            "cons_total": {"line": tl, "over": ml(r.get("over_odds", "")), "under": ml(r.get("under_odds", ""))},
         })
     if not games:
         return season, None, []
     week = min(g["week"] for g in games)
     return season, week, sorted((g for g in games if g["week"] == week), key=lambda g: (g["kickoff"], g["away"]))
 
-def kalshi():
-    """{(gameday, away, home): {team: {bid, ask, volume, ticker}}}"""
+def kalshi_markets(series):
     markets, cursor = [], None
     for _ in range(10):
-        d = json.loads(get(KALSHI + (f"&cursor={cursor}" if cursor else "")))
+        d = json.loads(get(KALSHI_BASE + series + (f"&cursor={cursor}" if cursor else "")))
         markets += d.get("markets", [])
         cursor = d.get("cursor")
         if not cursor:
             break
-    by_event = {}
+    return markets
+
+_f = lambda m, k: float(m[k]) if m.get(k) not in (None, "") else 0.0
+
+def kalshi():
+    """({(gameday, away, home): {team: {bid, ask, volume, ticker}}}, {(gameday, away, home): event body})
+    The body ("26OCT18HOUJAC") is shared by every Kalshi series for that game, so totals key off it."""
+    markets = kalshi_markets("KXNFLGAME")
+    by_event, bodies = {}, {}
     for m in markets:
         by_event.setdefault(m["event_ticker"], []).append(m)
     out = {}
@@ -136,39 +149,74 @@ def kalshi():
         teams = {}
         for m in ms:
             c = m["ticker"].rsplit("-", 1)[1]
-            f = lambda k: float(m[k]) if m.get(k) not in (None, "") else 0.0
-            teams[canon(c)] = {"bid": f("yes_bid_dollars"), "ask": f("yes_ask_dollars"),
-                               "volume": f("volume_fp"), "ticker": m["ticker"]}
+            teams[canon(c)] = {"bid": _f(m, "yes_bid_dollars"), "ask": _f(m, "yes_ask_dollars"),
+                               "volume": _f(m, "volume_fp"), "ticker": m["ticker"]}
         out[(date, canon(away), canon(home))] = teams
+        bodies[(date, canon(away), canon(home))] = body
+    return out, bodies
+
+def kalshi_totals():
+    """{event body: {strike: {"over": {bid, ask, ...}, "under": {...}}}}. Over = Yes, Under = No."""
+    out = {}
+    for m in kalshi_markets("KXNFLTOTAL"):
+        if m.get("strike_type") != "greater" or m.get("floor_strike") is None:
+            continue
+        body = m["event_ticker"].split("-", 1)[1]
+        vol = _f(m, "volume_fp")
+        out.setdefault(body, {})[float(m["floor_strike"])] = {
+            "over": {"bid": _f(m, "yes_bid_dollars"), "ask": _f(m, "yes_ask_dollars"), "volume": vol, "ticker": m["ticker"]},
+            "under": {"bid": _f(m, "no_bid_dollars"), "ask": _f(m, "no_ask_dollars"), "volume": vol, "ticker": m["ticker"]},
+        }
     return out
 
-def sharp(key):
-    """{(gameday, away, home): {"FD": {"away": a, "home": a}, "DK": {...}}}"""
-    d = json.loads(get(SHARP, {"X-API-Key": key}))
+def sharp_rows(url, key):
+    d = json.loads(get(url, {"X-API-Key": key}))
     rows = d.get("data", [])
     if (d.get("pagination") or {}).get("has_more"):
-        d2 = json.loads(get(SHARP + "&offset=200", {"X-API-Key": key}))
+        d2 = json.loads(get(url + "&offset=200", {"X-API-Key": key}))
         rows += d2.get("data", [])
-    out, seen = {}, set()
+    seen = set()
     for r in rows:
         if r.get("id") in seen or r.get("is_live") or r.get("is_active") is False \
                 or r.get("is_main_line") is False or r.get("is_stale_pregame_price"):
             continue
         seen.add(r.get("id"))
         book = {"fanduel": "FD", "draftkings": "DK"}.get(r.get("sportsbook"))
-        side = r.get("team_side") or r.get("selection_type")
-        if not book or side not in ("away", "home"):
+        if not book:
             continue
         # FanDuel stamps kickoff a minute after DraftKings, so match on the ET date, not the time.
         start = datetime.strptime(r["event_start_time"].replace("Z", "+00:00")[:16] + "+00:00",
                                   "%Y-%m-%dT%H:%M%z").astimezone(ET).date().isoformat()
         k = (start, canon(r["away"]["abbreviation"]), canon(r["home"]["abbreviation"]))
-        out.setdefault(k, {}).setdefault(book, {})[side] = int(r["odds_american"])
-    return out, d.get("updated_at")
+        yield k, book, r
+    return d.get("updated_at")
+
+def sharp(key):
+    """{(gameday, away, home): {"FD": {"away": a, "home": a}, "DK": {...}}}"""
+    out, gen = {}, sharp_rows(SHARP, key)
+    try:
+        while True:
+            k, book, r = next(gen)
+            side = r.get("team_side") or r.get("selection_type")
+            if side in ("away", "home"):
+                out.setdefault(k, {}).setdefault(book, {})[side] = int(r["odds_american"])
+    except StopIteration as stop:
+        return out, stop.value
+
+def sharp_totals(key):
+    """{(gameday, away, home): {"FD": {line: {"over": a, "under": a}}, "DK": {...}}}"""
+    out = {}
+    for k, book, r in sharp_rows(SHARP_TOTAL, key):
+        side = r.get("selection_type")
+        if r.get("market_type") != "total_points" or side not in ("over", "under") or r.get("line") is None:
+            continue
+        out.setdefault(k, {}).setdefault(book, {}).setdefault(float(r["line"]), {})[side] = int(r["odds_american"])
+    return out
 
 # ---------------------------------------------------------------- assembly
 
-def team_block(code, side, k, books, other_books):
+def team_block(code, side, k, books, pair=("away", "home")):
+    """One row of the board. books = {"FD": {side_a: odds, side_b: odds}, ...}; pair names the two sides."""
     t = {"code": code, "name": NAMES.get(code, code)}
     for b in ("FD", "DK", "Consensus"):
         if b in books:
@@ -178,8 +226,9 @@ def team_block(code, side, k, books, other_books):
     best = prices.get(best_book)
     t["best_book"], t["best"] = best_book, best
     # Fair odds: average of each book's devigged probability where that book has both sides.
-    fairs = [fair_probs(v["away"], v["home"])[0 if side == "away" else 1]
-             for v in books.values() if v.get("away") is not None and v.get("home") is not None]
+    a, h = pair
+    fairs = [fair_probs(v[a], v[h])[0 if side == a else 1]
+             for v in books.values() if v.get(a) is not None and v.get(h) is not None]
     if fairs:
         fp = sum(fairs) / len(fairs)
         t["fair_pct"], t["fair_am"] = round(fp * 100, 1), prob_to_am(fp)
@@ -199,15 +248,62 @@ def team_block(code, side, k, books, other_books):
         t["never_pay"] = never_pay_cents(best)
     return t
 
+def pick_total_line(book_lines, ladder):
+    """book_lines = {"FD": {line: {...}}, ...}. Prefer a line Kalshi has a strike at; among those, the one
+    the most books post, then the most-traded Kalshi strike. Returns (line, matched)."""
+    count = {}
+    for lines in book_lines.values():
+        for L in lines:
+            count[L] = count.get(L, 0) + 1
+    if not count:
+        return None, False
+    on_k = [L for L in count if L in ladder]
+    if on_k:
+        return max(on_k, key=lambda L: (count[L], ladder[L]["over"]["volume"])), True
+    return max(count, key=lambda L: (count[L], -L)), False
+
+def total_block(book_lines, ladder, cons=None):
+    """Over/Under rows for one game. Only books posting the chosen line are compared; a book on a
+    different line is shown with its own line and left out of "best". No Kalshi strike at the line
+    means no Kalshi math at all - a 39.5 over is a different bet from a 38.5 over."""
+    source = "sharpapi"
+    if not book_lines and cons and cons.get("line") is not None and cons.get("over") is not None:
+        book_lines, source = {"Consensus": {cons["line"]: {"over": cons["over"], "under": cons["under"]}}}, "consensus"
+    line, matched = pick_total_line(book_lines, ladder)
+    if line is None:
+        return None
+    at_line = {b: lines[line] for b, lines in book_lines.items() if line in lines}
+    off_line = {b: next(iter(lines.items())) for b, lines in book_lines.items() if line not in lines}
+    kl = ladder.get(line) if matched else None
+    rows = {}
+    for side in ("over", "under"):
+        t = team_block(side.title(), side, kl[side] if kl else None, at_line, ("over", "under"))
+        for b, (L, odds) in off_line.items():
+            t[b], t[b + "_line"] = odds.get(side), L
+        if not matched:
+            t.pop("never_pay", None)  # a ceiling for a Kalshi market that doesn't exist
+        rows[side] = t
+    out = {"line": line, "matched": matched, "source": source, "over": rows["over"], "under": rows["under"]}
+    if not matched and ladder:
+        below = [s for s in ladder if s < line]
+        above = [s for s in ladder if s > line]
+        out["nearest"] = [x for x in (max(below) if below else None, min(above) if above else None) if x is not None]
+    return out
+
 def build(now=None):
     now = now or datetime.now(timezone.utc)
     notes = []
     season, week, games = schedule(now.astimezone(ET))
     try:
-        kmap = kalshi()
+        kmap, kbodies = kalshi()
     except Exception as e:  # noqa: BLE001
-        kmap = {}
+        kmap, kbodies = {}, {}
         notes.append(f"Kalshi unreachable: {e}")
+    try:
+        ktot = kalshi_totals()
+    except Exception as e:  # noqa: BLE001
+        ktot = {}
+        notes.append(f"Kalshi totals unreachable: {e}")
     key = os.environ.get("SHARPAPI_KEY", "").strip()
     smap, sharp_at, source = {}, None, "consensus"
     if key:
@@ -220,6 +316,13 @@ def build(now=None):
             notes.append(f"SharpAPI unreachable ({e}); using the nflverse consensus line.")
     else:
         notes.append("No SHARPAPI_KEY set; using the nflverse consensus line.")
+    stot, tot_source = {}, "consensus"
+    if key:
+        try:
+            stot = sharp_totals(key)
+            tot_source = "sharpapi" if stot else "consensus"
+        except Exception as e:  # noqa: BLE001
+            notes.append(f"SharpAPI totals unreachable ({e}); totals use the nflverse consensus line.")
 
     out_games = []
     for g in games:
@@ -235,15 +338,16 @@ def build(now=None):
             "id": f'{g["away"]}-{g["home"]}', "kickoff": g["kickoff"].astimezone(timezone.utc).isoformat(),
             "when": g["kickoff"].strftime("%a %-I:%M %p"), "source": game_source,
             "kalshi": bool(k),
-            "away": team_block(g["away"], "away", k.get(g["away"]), books, None),
-            "home": team_block(g["home"], "home", k.get(g["home"]), books, None),
+            "away": team_block(g["away"], "away", k.get(g["away"]), books),
+            "home": team_block(g["home"], "home", k.get(g["home"]), books),
+            "total": total_block(stot.get(key3, {}), ktot.get(kbodies.get(key3), {}), g["cons_total"]),
         })
     missing_k = [g["id"] for g in out_games if not g["kalshi"]]
     if kmap and missing_k:
         notes.append("No open Kalshi market for: " + ", ".join(missing_k))
     return {
         "updated": now.isoformat(timespec="seconds"), "season": season, "week": week,
-        "books_source": source, "sharp_updated": sharp_at, "notes": notes, "games": out_games,
+        "books_source": source, "totals_source": tot_source, "sharp_updated": sharp_at, "notes": notes, "games": out_games,
     }
 
 if __name__ == "__main__":

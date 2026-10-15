@@ -75,6 +75,11 @@ td.team{font-weight:600}
 button{font:600 .9rem var(--body);color:var(--accent);background:transparent;border:1px solid var(--line);border-radius:6px;padding:7px 12px;cursor:pointer}
 button:hover{border-color:var(--accent)}
 .empty{padding:18px;text-align:center}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--surface)}
+.seg button{border:0;border-radius:0;padding:8px 16px;color:var(--muted)}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--surface)}
+.gnote{padding:8px 14px;border-bottom:1px solid var(--line);font-size:.85rem;color:var(--muted);background:var(--bg)}
 @media (prefers-reduced-motion:no-preference){.verdict,.chip{transition:background .2s,color .2s}}
 
 /* Phone: no sideways scrolling. Each team row becomes a small labelled grid. */
@@ -109,7 +114,13 @@ button:hover{border-color:var(--accent)}
   <section class="games" aria-labelledby="games-h">
     <div class="rowtools">
       <h2 id="games-h">This week's games</h2>
-      <button id="reload" type="button">Refresh</button>
+      <div class="rowtools">
+        <div class="seg" role="group" aria-label="Bet type">
+          <button type="button" data-mode="ml" aria-pressed="true">Moneyline</button>
+          <button type="button" data-mode="tot" aria-pressed="false">Totals</button>
+        </div>
+        <button id="reload" type="button">Refresh</button>
+      </div>
     </div>
     <div id="notes" class="note"></div>
     <div id="games" class="games"></div>
@@ -144,6 +155,7 @@ button:hover{border-color:var(--accent)}
       <p><b>That's like</b> turns that Kalshi price into normal odds so you can compare. The small line underneath is what you'd get if you just tapped buy instead, fee included.</p>
       <p><b>Vs your book</b> is how much more (or less) you'd win on Kalshi with a limit order, for every $100 you bet, compared with the better sportsbook.</p>
       <p><b>Never pay more than</b> is your ceiling. At any Kalshi price above it, the sportsbook pays better, so skip Kalshi.</p>
+      <p><b>Totals</b> compare the same line only. On Kalshi, Over is <i>Yes</i> on "Over 40.5 points" and Under is <i>No</i> on that same market. If Kalshi has no market at the book's exact number, the card says so and shows no comparison, because a 39.5 over is a different bet from a 38.5 over. A book posting a different line is shown with its line and left out of the comparison.</p>
     </div>
     <p class="note">Prices move. Check the live price in the Kalshi app before you place an order, cancel unfilled orders before inactives (about 90 minutes before kickoff), and assume no maker fee unless Kalshi shows one on the order screen. This page compares prices; it doesn't predict winners.</p>
   </section>
@@ -198,15 +210,22 @@ function calc(){
 let DATA = null;
 const CACHE_KEY = "lineshop-last";
 
+const MODE_KEY = "lineshop-mode";
+let MODE = "ml";
+try { if (localStorage.getItem(MODE_KEY) === "tot") MODE = "tot"; } catch(e){}
+
 function bookCell(t, b, label){
   const v = t[b];
   if (v == null) return `<td class="num notbest" data-k="${label}">—</td>`;
+  const other = t[b + "_line"];   // this book posts a different total: shown, not compared
+  if (other != null) return `<td class="num notbest" data-k="${label}">${fmtAm(v)}<span class="sub">at ${other}</span></td>`;
   const cls = v === t.best ? "best" : "notbest";
   return `<td class="num ${cls}" data-k="${label}">${fmtAm(v)}</td>`;
 }
-function teamRow(t, books){
+function teamRow(t, books, noKalshi){
   let vs = '<span class="chip">No Kalshi price</span>';
-  if (t.best == null) vs = '<span class="chip warn">No book line</span>';
+  if (noKalshi) vs = `<span class="chip">${esc(noKalshi)}</span>`;
+  else if (t.best == null) vs = '<span class="chip warn">No book line</span>';
   else if (t.vs_book != null) vs = t.beats
       ? `<span class="chip good">+${money(t.vs_book)} per $100</span>`
       : `<span class="chip warn">Book pays ${money(-t.vs_book)} more</span>`;
@@ -223,12 +242,31 @@ function teamRow(t, books){
     <td class="num never" data-k="Never pay more than">${t.never_pay != null ? t.never_pay + "¢" : "—"}</td>
   </tr>`;
 }
+const bookCols = src => src === "consensus" ? [["Consensus","Consensus"]] : [["FD","FanDuel"],["DK","DraftKings"]];
+const colHead = (first, books) => `<thead><tr><th>${first}</th>${books.map(b => `<th>${b[1]}</th>`).join("")}<th>Set limit at</th><th>That's like</th><th>Vs your book</th><th>Never pay more than</th></tr></thead>`;
+function totalCard(g, consAll){
+  const t = g.total;
+  const head = `<div class="ghead"><span class="matchup">${esc(g.away.name)} at ${esc(g.home.name)}</span><span class="when">${esc(g.when)} ET${t && t.source === "consensus" && !consAll ? " · consensus line" : ""}</span></div>`;
+  if (!t) return `<article class="game">${head}<div class="empty muted">No total posted yet.</div></article>`;
+  const books = bookCols(t.source);
+  let note = "", nok = null;
+  if (!t.matched){
+    nok = `No Kalshi market at ${t.line}`;
+    const near = (t.nearest || []).join(" / ");
+    note = `<div class="gnote">Kalshi has no ${t.line} market${near ? `. Nearest: ${near}` : ""}. Those are different bets, so they aren't compared.</div>`;
+  }
+  return `<article class="game">${head}${note}
+    <table>${colHead("Total " + t.line, books)}
+      <tbody>${teamRow({...t.over, name: "Over " + t.line}, books, nok)}${teamRow({...t.under, name: "Under " + t.line}, books, nok)}</tbody>
+    </table></article>`;
+}
 function render(){
   if (!DATA) return;
   const now = Date.now();
-  $("eyebrow").textContent = `NFL ${DATA.week ? "Week " + DATA.week : ""} · moneylines`;
+  document.querySelectorAll(".seg button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.mode === MODE)));
+  $("eyebrow").textContent = `NFL ${DATA.week ? "Week " + DATA.week : ""} · ${MODE === "tot" ? "totals" : "moneylines"}`;
   const live = DATA.games.filter(g => Date.parse(g.kickoff) > now);
-  const cons = DATA.books_source !== "sharpapi";
+  const cons = (MODE === "tot" ? (DATA.totals_source || "consensus") : DATA.books_source) !== "sharpapi";
   $("srcnote").textContent = cons
     ? "Books: nflverse consensus line (FanDuel/DraftKings unavailable this run)."
     : "Books: FanDuel + DraftKings via SharpAPI. Kalshi: live bid/ask.";
@@ -237,12 +275,13 @@ function render(){
     $("games").innerHTML = `<div class="game empty muted">No upcoming games on the board right now.</div>`;
     return;
   }
+  if (MODE === "tot"){ $("games").innerHTML = live.map(g => totalCard(g, cons)).join(""); return; }
   $("games").innerHTML = live.map(g => {
-    const books = g.source === "consensus" ? [["Consensus","Consensus"]] : [["FD","FanDuel"],["DK","DraftKings"]];
+    const books = bookCols(g.source);
     return `<article class="game">
       <div class="ghead"><span class="matchup">${esc(g.away.name)} at ${esc(g.home.name)}</span><span class="when">${esc(g.when)} ET${g.source === "consensus" && !cons ? " · consensus line" : ""}</span></div>
       <table>
-        <thead><tr><th>Team</th>${books.map(b => `<th>${b[1]}</th>`).join("")}<th>Set limit at</th><th>That's like</th><th>Vs your book</th><th>Never pay more than</th></tr></thead>
+        ${colHead("Team", books)}
         <tbody>${teamRow(g.away, books)}${teamRow(g.home, books)}</tbody>
       </table>
     </article>`;
@@ -272,6 +311,11 @@ async function load(){
   render(); tickAge();
 }
 $("reload").addEventListener("click", load);
+document.querySelectorAll(".seg button").forEach(b => b.addEventListener("click", () => {
+  MODE = b.dataset.mode;
+  try { localStorage.setItem(MODE_KEY, MODE); } catch(e){}
+  render();
+}));
 document.addEventListener("visibilitychange", () => { if (!document.hidden) load(); });
 setInterval(tickAge, 30000);
 setInterval(() => { render(); }, 60000);     // drop games as they kick off
