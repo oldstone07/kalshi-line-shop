@@ -1,0 +1,45 @@
+name: Fetch lines
+
+# GitHub cron is UTC. Targets (ET): every 30 min Thu-Mon, every 3 h Tue-Wed.
+# Lines are written for EDT (UTC-4); after the November clock change they run an hour early, which is harmless.
+on:
+  schedule:
+    - cron: "*/30 4-23 * * 4"     # Thu from 00:00 ET
+    - cron: "*/30 * * * 5,6,0,1"  # Fri, Sat, Sun, Mon
+    - cron: "*/30 0-3 * * 2"      # Mon evening ET (MNF), which is early Tue UTC
+    - cron: "0 4-22/3 * * 2"      # Tue, every 3 h
+    - cron: "0 */3 * * 3"         # Wed, every 3 h
+    - cron: "0 0-3/3 * * 4"       # Wed evening ET
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fetch-lines
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Math tests
+        run: python test_math.py
+      - name: Fetch
+        env:
+          SHARPAPI_KEY: ${{ secrets.SHARPAPI_KEY }}
+        run: python fetch_lines.py
+      - name: Commit lines.json
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add lines.json
+          git diff --cached --quiet && exit 0
+          git commit -m "lines: $(date -u +%Y-%m-%dT%H:%MZ)"
+          git pull --rebase -X theirs origin main || true
+          git push
