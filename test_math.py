@@ -227,5 +227,37 @@ class Gates(unittest.TestCase):
         self.assertEqual(g["timing"]["buckets"]["far"]["effect"], 0.0)
 
 
+class UnderSide(unittest.TestCase):
+    """An Under is a resting No bid. It fills when someone BUYS Yes (sells No) at or through our No price."""
+    def test_trade_flip(self):
+        from fill_study import trade_row, fills
+        from datetime import timedelta
+        base = {"created_time": "2026-10-11T12:30:00Z", "count_fp": "5"}
+        buy_yes = trade_row({**base, "taker_side": "yes", "yes_price_dollars": "0.49", "no_price_dollars": "0.51"}, "no")
+        buy_no = trade_row({**base, "taker_side": "no", "yes_price_dollars": "0.49", "no_price_dollars": "0.51"}, "no")
+        self.assertEqual(buy_yes[1:], (0.51, "no", 5.0))   # a Yes buyer hits our No bid at 51c
+        self.assertEqual(buy_no[1:], (0.51, "yes", 5.0))   # a No buyer lifts No asks: never fills our bid
+        t0 = buy_yes[0] - timedelta(minutes=5)
+        c, o = fills(0.52, [buy_yes[:3]], t0, t0 + timedelta(hours=1))
+        self.assertIsNotNone(c)                            # 51c < our 52c No bid: traded through, certainly filled
+        self.assertIsNone(fills(0.52, [buy_no[:3]], t0, t0 + timedelta(hours=1))[1])
+        # the Yes view of the same trade is unchanged
+        self.assertEqual(trade_row({**base, "taker_side": "no", "yes_price_dollars": "0.49", "no_price_dollars": "0.51"})[1:],
+                         (0.49, "no", 5.0))
+
+    def test_total_verdict_uses_its_own_grades(self):
+        from fetch_lines import gate_verdict
+        g = {"base": -3.0, "vol_cuts": [1000, 5000],
+             "direction": {"status": "holding", "buckets": {"flat": {"effect": 0.0}}},
+             "timing": {"status": "holding", "buckets": {"near": {"effect": 0.0, "fill_rate": 10}}},
+             "activity": {"status": "holding", "buckets": {"quiet": {"effect": 0.0}}}}
+        # Under at a 49/50 No book vs the book's -110 (worth -5.5 at the 49.5c mid)
+        v = gate_verdict(0.49, 0.50, -110, 10, 0, 500, g)
+        self.assertAlmostEqual(v["book_now"], round((0.495 * (100 + 10000 / 110) / 100 - 1) * 100, 2))
+        self.assertEqual(v["verdict"], "post")             # -3.0 still beats the book's -5.5
+        g["base"] = -6.0
+        self.assertEqual(gate_verdict(0.49, 0.50, -110, 10, 0, 500, g)["verdict"], "book")
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

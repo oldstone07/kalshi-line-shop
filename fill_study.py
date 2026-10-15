@@ -143,6 +143,14 @@ def event_key(ev, codes):
     away = next((c for c in codes if pair.startswith(c) and pair[len(c):] in codes), None)
     return (date, canon(away), canon(pair[len(away):])) if away else None
 
+def trade_row(t, side="yes"):
+    """One Kalshi trade as (time, price, taker_side, count) seen from `side`: for "no" (an Under is a
+    No bid) the price is the No price and taker_side flips, so "no" always means "sold into our bids"."""
+    n = float(t.get("count_fp") or 0)
+    if side == "no":
+        return (ts(t["created_time"]), float(t["no_price_dollars"]), "no" if t["taker_side"] == "yes" else "yes", n)
+    return (ts(t["created_time"]), float(t["yes_price_dollars"]), t["taker_side"], n)
+
 def trades_between(ticker, t_from, t_to, side="yes"):
     """[(time, price, taker_side, count)] seen from `side`. For side "no" (an Under is a No bid) the
     price is the No price and taker_side is flipped, so "no" always means "someone sold into the bids
@@ -154,11 +162,7 @@ def trades_between(ticker, t_from, t_to, side="yes"):
             q["cursor"] = cursor
         d = jget("/markets/trades?" + urllib.parse.urlencode(q))
         for t in d.get("trades", []):
-            n = float(t.get("count_fp") or 0)
-            if side == "no":
-                out.append((ts(t["created_time"]), float(t["no_price_dollars"]), "no" if t["taker_side"] == "yes" else "yes", n))
-            else:
-                out.append((ts(t["created_time"]), float(t["yes_price_dollars"]), t["taker_side"], n))
+            out.append(trade_row(t, side))
         cursor = d.get("cursor")
         if not cursor:
             break

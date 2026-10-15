@@ -242,24 +242,29 @@ def kalshi():
         bodies[(date, canon(away), canon(home))] = body
     return out, bodies
 
-def kalshi_candles(ticker, hours=26):
-    """Hourly (end, bid, ask, volume) for the last `hours`, for the direction and activity gates."""
+def kalshi_candles(ticker, hours=26, series="KXNFLGAME", side="yes"):
+    """Hourly (end, bid, ask, volume) for the last `hours`, for the direction and activity gates.
+    side "no" (a totals Under) flips to the No book: No bid = 1 - Yes ask."""
     end = int(time.time())
-    d = json.loads(get(f"https://api.elections.kalshi.com/trade-api/v2/series/KXNFLGAME/markets/{ticker}/candlesticks"
+    d = json.loads(get(f"https://api.elections.kalshi.com/trade-api/v2/series/{series}/markets/{ticker}/candlesticks"
                        f"?start_ts={end - hours * 3600}&end_ts={end}&period_interval=60"))
     out = []
     for c in d.get("candlesticks", []):
         b, a = c.get("yes_bid", {}).get("close_dollars"), c.get("yes_ask", {}).get("close_dollars")
         if b is not None and a is not None:
-            out.append((datetime.fromtimestamp(c["end_period_ts"], timezone.utc), float(b), float(a), float(c.get("volume_fp") or 0)))
+            b, a = (1 - float(a), 1 - float(b)) if side == "no" else (float(b), float(a))
+            out.append((datetime.fromtimestamp(c["end_period_ts"], timezone.utc), round(b, 4), round(a, 4),
+                        float(c.get("volume_fp") or 0)))
     return out
 
 def load_grades():
+    """Gate grades from the weekly study: {"ml": ..., "totals": ...}. Totals are graded on their own."""
     try:
         with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "fills.json")) as f:
-            return json.load(f).get("gates")
+            d = json.load(f)
+        return {"ml": d.get("gates"), "totals": (d.get("totals") or {}).get("gates")}
     except (OSError, ValueError):
-        return None
+        return {"ml": None, "totals": None}
 
 def kalshi_totals():
     """{event body: {strike: {"over": {bid, ask, ...}, "under": {...}}}}. Over = Yes, Under = No."""
@@ -397,19 +402,28 @@ def total_block(book_lines, ladder, cons=None):
         out["nearest"] = [x for x in (max(below) if below else None, min(above) if above else None) if x is not None]
     return out
 
-def gated(t, k, g, now, grades):
-    """Attach live gates to a moneyline row. A candles failure just leaves those gates unknown."""
+def gated(t, k, g, now, grades, series="KXNFLGAME", side="yes"):
+    """Attach live gates to a row. A candles failure just leaves those gates unknown."""
     if not k or not grades:
         return t
     hours = (g["kickoff"] - now).total_seconds() / 3600
     drift = vol24 = None
     try:
-        cs = kalshi_candles(k["ticker"])
+        cs = kalshi_candles(k["ticker"], series=series, side=side)
         drift, vol24 = drift_12h(cs, now), round(vol_24h(cs, now))
     except Exception:  # noqa: BLE001
         pass
     t.update(gate_verdict(k["bid"], k["ask"], t.get("best"), hours, drift, vol24, grades))
     return t
+
+def gated_total(tot, ladder, g, now, grades):
+    """Gates for a totals card, on the strike the board compares at. Over = Yes, Under = No."""
+    if not tot or not tot.get("matched"):
+        return tot
+    kl = ladder.get(tot["line"]) or {}
+    for side, yn in (("over", "yes"), ("under", "no")):
+        gated(tot[side], kl.get(side), g, now, grades, "KXNFLTOTAL", yn)
+    return tot
 
 def build(now=None):
     now = now or datetime.now(timezone.utc)
@@ -460,9 +474,10 @@ def build(now=None):
             "id": f'{g["away"]}-{g["home"]}', "kickoff": g["kickoff"].astimezone(timezone.utc).isoformat(),
             "when": g["kickoff"].strftime("%a %-I:%M %p"), "source": game_source,
             "kalshi": bool(k),
-            "away": gated(team_block(g["away"], "away", k.get(g["away"]), books), k.get(g["away"]), g, now, grades),
-            "home": gated(team_block(g["home"], "home", k.get(g["home"]), books), k.get(g["home"]), g, now, grades),
-            "total": total_block(stot.get(key3, {}), ktot.get(kbodies.get(key3), {}), g["cons_total"]),
+            "away": gated(team_block(g["away"], "away", k.get(g["away"]), books), k.get(g["away"]), g, now, grades["ml"]),
+            "home": gated(team_block(g["home"], "home", k.get(g["home"]), books), k.get(g["home"]), g, now, grades["ml"]),
+            "total": gated_total(total_block(stot.get(key3, {}), ktot.get(kbodies.get(key3), {}), g["cons_total"]),
+                                 ktot.get(kbodies.get(key3), {}), g, now, grades["totals"]),
         })
     missing_k = [g["id"] for g in out_games if not g["kalshi"]]
     if kmap and missing_k:
@@ -488,7 +503,16 @@ def snapshot(data, folder):
                 f.write(json.dumps({"t": data["updated"], "ticker": t["ticker"], "kickoff": g["kickoff"],
                                     "bid": t["bid_c"] / 100, "ask": t["ask_c"] / 100, "bid_size": t.get("bid_size"),
                                     "best": t.get("best"), "best_book": t.get("best_book"),
-                                    "vs_book": t.get("vs_book")}) + "\n")
+                                    "vs_book": t.get("vs_book"), "verdict": t.get("verdict")}) + "\n")
+            tot = g.get("total") or {}
+            for side in ("over", "under"):
+                t = tot.get(side) or {}
+                if not tot.get("matched") or not t.get("ticker"):
+                    continue
+                f.write(json.dumps({"t": data["updated"], "ticker": t["ticker"], "side": side, "line": tot["line"],
+                                    "kickoff": g["kickoff"], "bid": t["bid_c"] / 100, "ask": t["ask_c"] / 100,
+                                    "best": t.get("best"), "best_book": t.get("best_book"),
+                                    "vs_book": t.get("vs_book"), "verdict": t.get("verdict")}) + "\n")
 
 if __name__ == "__main__":
     here = os.path.dirname(os.path.abspath(__file__))
