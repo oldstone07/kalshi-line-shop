@@ -1,10 +1,10 @@
 {
- "updated": "2026-10-15T20:34:05+00:00",
+ "updated": "2026-10-15T21:02:53+00:00",
  "season": 2026,
  "week": 6,
  "books_source": "sharpapi",
  "totals_source": "sharpapi",
- "sharp_updated": "2026-10-15T20:34:05.766366531Z",
+ "sharp_updated": "2026-10-15T21:02:52.54723696Z",
  "notes": [],
  "games": [
   {
@@ -16,23 +16,23 @@
    "away": {
     "code": "SEA",
     "name": "Seahawks",
-    "FD": -142,
+    "FD": -138,
     "DK": -142,
-    "best_book": "DK",
-    "best": -142,
-    "fair_pct": 56.3,
-    "fair_am": -129,
+    "best_book": "FD",
+    "best": -138,
+    "fair_pct": 56.1,
+    "fair_am": -128,
     "bid_c": 56,
     "ask_c": 57,
-    "volume": 2490065,
+    "volume": 2689828,
     "ticker": "KXNFLGAME-26OCT15SEADEN-SEA",
-    "bid_size": 603372,
+    "bid_size": 572749,
     "limit_am": -127,
     "tap_am": -142,
-    "tap_vs_book": -0.11,
-    "vs_book": 8.15,
+    "tap_vs_book": -2.15,
+    "vs_book": 6.11,
     "beats": true,
-    "never_pay": 58,
+    "never_pay": 57,
     "gates": [
      {
       "name": "direction",
@@ -47,7 +47,7 @@
       "name": "timing",
       "bucket": "near",
       "label": "Under 24 h to kickoff",
-      "detail": "4 h out",
+      "detail": "3 h out",
       "effect": 0.52,
       "holding": true,
       "status": "holding"
@@ -56,7 +56,7 @@
       "name": "activity",
       "bucket": "busy",
       "label": "Busy market",
-      "detail": "1655k traded in 24 h",
+      "detail": "2067k traded in 24 h",
       "effect": 0.64,
       "holding": true,
       "status": "holding"
@@ -66,14 +66,14 @@
       "bucket": "no",
       "status": "unproven",
       "label": "Book isn't soft",
-      "detail": "book worth -3.71 per $100 at Kalshi's mid",
+      "detail": "book worth -2.56 per $100 at Kalshi's mid",
       "effect": null,
       "holding": false
      }
     ],
     "worth": 0.1,
     "worth_later": 0.1,
-    "book_now": -3.71,
+    "book_now": -2.56,
     "verdict": "post",
     "why": "Gates are clear: post the limit at the bid.",
     "fill_chance": 23.7
@@ -81,17 +81,17 @@
    "home": {
     "code": "DEN",
     "name": "Broncos",
-    "FD": 120,
+    "FD": 118,
     "DK": 120,
     "best_book": "DK",
     "best": 120,
-    "fair_pct": 43.7,
-    "fair_am": 129,
+    "fair_pct": 43.9,
+    "fair_am": 128,
     "bid_c": 43,
     "ask_c": 44,
-    "volume": 1634738,
+    "volume": 1778864,
     "ticker": "KXNFLGAME-26OCT15SEADEN-DEN",
-    "bid_size": 461429,
+    "bid_size": 428958,
     "limit_am": 133,
     "tap_am": 119,
     "tap_vs_book": -1.3,
@@ -112,7 +112,7 @@
       "name": "timing",
       "bucket": "near",
       "label": "Under 24 h to kickoff",
-      "detail": "4 h out",
+      "detail": "3 h out",
       "effect": 0.52,
       "holding": true,
       "status": "holding"
@@ -121,7 +121,7 @@
       "name": "activity",
       "bucket": "busy",
       "label": "Busy market",
-      "detail": "1016k traded in 24 h",
+      "detail": "1226k traded in 24 h",
       "effect": 0.64,
       "holding": true,
       "status": "holding"
@@ -158,7 +158,7 @@
      "fair_am": -102,
      "bid_c": 50,
      "ask_c": 51,
-     "volume": 261545,
+     "volume": 294594,
      "ticker": "KXNFLTOTAL-26OCT15SEADEN-41",
      "bid_size": 0,
      "limit_am": -100,
@@ -166,7 +166,51 @@
      "tap_vs_book": -1.33,
      "vs_book": 9.09,
      "beats": true,
-     "never_pay": 52
+     "never_pay": 52,
+     "gates": [
+      {
+       "name": "direction",
+       "bucket": "flat",
+       "label": "Price steady",
+       "detail": "+0\u00a2 in 12 h",
+       "effect": 0.0,
+       "holding": false,
+       "status": "holding"
+      },
+      {
+       "name": "timing",
+       "bucket": "near",
+       "label": "Under 24 h to kickoff",
+       "detail": "3 h out",
+       "effect": 0.0,
+       "holding": false,
+       "status": "not holding"
+      },
+      {
+       "name": "activity",
+       "bucket": "busy",
+       "label": "Busy market",
+       "detail": "228k traded in 24 h",
+       "effect": 0.72,
+       "holding": true,
+       "status": "holding"
+      },
+      {
+       "name": "soft",
+       "bucket": "no",
+       "status": "unproven",
+       "label": "Book isn't soft",
+       "detail": "book worth -3.59 per $100 at Kalshi's mid",
+       "effect": null,
+       "holding": false
+      }
+     ],
+     "worth": -0.97,
+     "worth_later": -0.97,
+     "book_now": -3.59,
+     "verdict": "post",
+     "why": "Gates are clear: post the limit at the bid.",
+     "fill_chance": 32.3
     },
     "under": {
      "code": "Under",
@@ -179,7 +223,7 @@
      "fair_am": 102,
      "bid_c": 49,
      "ask_c": 50,
-     "volume": 261545,
+     "volume": 294594,
      "ticker": "KXNFLTOTAL-26OCT15SEADEN-41",
      "bid_size": 0,
      "limit_am": 104,
@@ -187,7 +231,51 @@
      "tap_vs_book": -2.0,
      "vs_book": 8.84,
      "beats": true,
-     "never_pay": 51
+     "never_pay": 51,
+     "gates": [
+      {
+       "name": "direction",
+       "bucket": "flat",
+       "label": "Price steady",
+       "detail": "+0\u00a2 in 12 h",
+       "effect": 0.0,
+       "holding": false,
+       "status": "holding"
+      },
+      {
+       "name": "timing",
+       "bucket": "near",
+       "label": "Under 24 h to kickoff",
+       "detail": "3 h out",
+       "effect": 0.0,
+       "holding": false,
+       "status": "not holding"
+      },
+      {
+       "name": "activity",
+       "bucket": "busy",
+       "label": "Busy market",
+       "detail": "228k traded in 24 h",
+       "effect": 0.72,
+       "holding": true,
+       "status": "holding"
+      },
+      {
+       "name": "soft",
+       "bucket": "no",
+       "status": "unproven",
+       "label": "Book isn't soft",
+       "detail": "book worth -3.36 per $100 at Kalshi's mid",
+       "effect": null,
+       "holding": false
+      }
+     ],
+     "worth": -0.97,
+     "worth_later": -0.97,
+     "book_now": -3.36,
+     "verdict": "post",
+     "why": "Gates are clear: post the limit at the bid.",
+     "fill_chance": 32.3
     }
    }
   },
@@ -208,9 +296,9 @@
     "fair_am": 129,
     "bid_c": 43,
     "ask_c": 44,
-    "volume": 101791,
+    "volume": 102798,
     "ticker": "KXNFLGAME-26OCT18HOUJAC-HOU",
-    "bid_size": 240663,
+    "bid_size": 240666,
     "limit_am": 133,
     "tap_am": 119,
     "tap_vs_book": -1.3,
@@ -231,7 +319,7 @@
       "name": "timing",
       "bucket": "far",
       "label": "2+ days to kickoff",
-      "detail": "65 h out",
+      "detail": "64 h out",
       "effect": -0.24,
       "holding": true,
       "status": "holding"
@@ -240,7 +328,7 @@
       "name": "activity",
       "bucket": "mid",
       "label": "Normal activity",
-      "detail": "41k traded in 24 h",
+      "detail": "27k traded in 24 h",
       "effect": 0.03,
       "holding": true,
       "status": "holding"
@@ -273,9 +361,9 @@
     "fair_am": -129,
     "bid_c": 56,
     "ask_c": 57,
-    "volume": 120102,
+    "volume": 120863,
     "ticker": "KXNFLGAME-26OCT18HOUJAC-JAC",
-    "bid_size": 388367,
+    "bid_size": 395102,
     "limit_am": -127,
     "tap_am": -142,
     "tap_vs_book": -0.11,
@@ -296,7 +384,7 @@
       "name": "timing",
       "bucket": "far",
       "label": "2+ days to kickoff",
-      "detail": "65 h out",
+      "detail": "64 h out",
       "effect": -0.24,
       "holding": true,
       "status": "holding"
@@ -305,7 +393,7 @@
       "name": "activity",
       "bucket": "quiet",
       "label": "Quiet market",
-      "detail": "23k traded in 24 h",
+      "detail": "24k traded in 24 h",
       "effect": -0.64,
       "holding": true,
       "status": "holding"
@@ -342,7 +430,7 @@
      "fair_am": -100,
      "bid_c": 49,
      "ask_c": 50,
-     "volume": 18849,
+     "volume": 18908,
      "ticker": "KXNFLTOTAL-26OCT18HOUJAC-43",
      "bid_size": 0,
      "limit_am": 104,
@@ -350,7 +438,51 @@
      "tap_vs_book": 0.64,
      "vs_book": 11.49,
      "beats": true,
-     "never_pay": 51
+     "never_pay": 51,
+     "gates": [
+      {
+       "name": "direction",
+       "bucket": "flat",
+       "label": "Price steady",
+       "detail": "+0\u00a2 in 12 h",
+       "effect": 0.0,
+       "holding": false,
+       "status": "holding"
+      },
+      {
+       "name": "timing",
+       "bucket": "far",
+       "label": "2+ days to kickoff",
+       "detail": "64 h out",
+       "effect": 0.0,
+       "holding": false,
+       "status": "not holding"
+      },
+      {
+       "name": "activity",
+       "bucket": "busy",
+       "label": "Busy market",
+       "detail": "8k traded in 24 h",
+       "effect": 0.72,
+       "holding": true,
+       "status": "holding"
+      },
+      {
+       "name": "soft",
+       "bucket": "no",
+       "status": "unproven",
+       "label": "Book isn't soft",
+       "detail": "book worth -4.67 per $100 at Kalshi's mid",
+       "effect": null,
+       "holding": false
+      }
+     ],
+     "worth": -0.97,
+     "worth_later": -0.97,
+     "book_now": -4.67,
+     "verdict": "post",
+     "why": "Gates are clear: post the limit at the bid.",
+     "fill_chance": 58.4
     },
     "under": {
      "code": "Under",
@@ -363,7 +495,7 @@
      "fair_am": -100,
      "bid_c": 50,
      "ask_c": 51,
-     "volume": 18849,
+     "volume": 18908,
      "ticker": "KXNFLTOTAL-26OCT18HOUJAC-43",
      "bid_size": 0,
      "limit_am": -100,
@@ -371,7 +503,51 @@
      "tap_vs_book": -3.02,
      "vs_book": 7.41,
      "beats": true,
-     "never_pay": 51
+     "never_pay": 51,
+     "gates": [
+      {
+       "name": "direction",
+       "bucket": "flat",
+       "label": "Price steady",
+       "detail": "+0\u00a2 in 12 h",
+       "effect": 0.0,
+       "holding": false,
+       "status": "holding"
+      },
+      {
+       "name": "timing",
+       "bucket": "far",
+       "label": "2+ days to kickoff",
+       "detail": "64 h out",
+       "effect": 0.0,
+       "holding": false,
+       "status": "not holding"
+      },
+      {
+       "name": "activity",
+       "bucket": "busy",
+       "label": "Busy market",
+       "detail": "8k traded in 24 h",
+       "effect": 0.72,
+       "holding": true,
+       "status": "holding"
+      },
+      {
+       "name": "soft",
+       "bucket": "no",
+       "status": "unproven",
+       "label": "Book isn't soft",
+       "detail": "book worth -2.74 per $100 at Kalshi's mid",
+       "effect": null,
+       "holding": false
+      }
+     ],
+     "worth": -0.97,
+     "worth_later": -0.97,
+     "book_now": -2.74,
+     "verdict": "post",
+     "why": "Gates are clear: post the limit at the bid.",
+     "fill_chance": 58.4
     }
    }
   },
@@ -384,22 +560,23 @@
    "away": {
     "code": "BAL",
     "name": "Ravens",
-    "FD": -215,
-    "best_book": "FD",
-    "best": -215,
-    "fair_pct": 65.6,
-    "fair_am": -191,
+    "FD": -205,
+    "DK": -205,
+    "best_book": "DK",
+    "best": -205,
+    "fair_pct": 64.6,
+    "fair_am": -182,
     "bid_c": 66,
     "ask_c": 67,
-    "volume": 206345,
+    "volume": 206659,
     "ticker": "KXNFLGAME-26OCT18BALCLE-BAL",
-    "bid_size": 313370,
+    "bid_size": 308773,
     "limit_am": -194,
     "tap_am": -218,
-    "tap_vs_book": -0.63,
-    "vs_book": 5.0,
+    "tap_vs_book": -2.9,
+    "vs_book": 2.73,
     "beats": true,
-    "never_pay": 68,
+    "never_pay": 67,
     "gates": [
      {
       "name": "direction",
@@ -423,7 +600,7 @@
       "name": "activity",
       "bucket": "busy",
       "label": "Busy market",
-      "detail": "72k traded in 24 h",
+      "detail": "73k traded in 24 h",
       "effect": 0.64,
       "holding": true,
       "status": "holding"
@@ -433,14 +610,14 @@
       "bucket": "no",
       "status": "unproven",
       "label": "Book isn't soft",
-      "detail": "book worth -2.57 per $100 at Kalshi's mid",
+      "detail": "book worth -1.06 per $100 at Kalshi's mid",
       "effect": null,
       "holding": false
      }
     ],
     "worth": -0.82,
     "worth_later": -0.06,
-    "book_now": -2.57,
+    "book_now": -1.06,
     "verdict": "wait",
     "why": "Price is falling: fills now tend to come just before it drops further.",
     "fill_chance": 46.4
@@ -448,22 +625,23 @@
    "home": {
     "code": "CLE",
     "name": "Browns",
-    "FD": 180,
+    "FD": 172,
+    "DK": 170,
     "best_book": "FD",
-    "best": 180,
-    "fair_pct": 34.4,
-    "fair_am": 191,
+    "best": 172,
+    "fair_pct": 35.4,
+    "fair_am": 182,
     "bid_c": 32,
     "ask_c": 33,
-    "volume": 109577,
+    "volume": 110448,
     "ticker": "KXNFLGAME-26OCT18BALCLE-CLE",
-    "bid_size": 119974,
+    "bid_size": 145453,
     "limit_am": 213,
     "tap_am": 189,
-    "tap_vs_book": 9.45,
-    "vs_book": 32.5,
+    "tap_vs_book": 17.45,
+    "vs_book": 40.5,
     "beats": true,
-    "never_pay": 35,
+    "never_pay": 36,
     "gates": [
      {
       "name": "direction",
@@ -487,7 +665,7 @@
       "name": "activity",
       "bucket": "mid",
       "label": "Normal activity",
-      "detail": "29k traded in 24 h",
+      "detail": "30k traded in 24 h",
       "effect": 0.03,
       "holding": true,
       "status": "holding"
@@ -497,14 +675,14 @@
       "bucket": "no",
       "status": "unproven",
       "label": "Book isn't soft",
-      "detail": "book worth -9.00 per $100 at Kalshi's mid",
+      "detail": "book worth -11.60 per $100 at Kalshi's mid",
       "effect": null,
       "holding": false
      }
     ],
     "worth": -1.27,
     "worth_later": -0.51,
-    "book_now": -9.0,
+    "book_now": -11.6,
     "verdict": "wait",
     "why": "Far from kickoff: orders posted this early fill at worse moments.",
     "fill_chance": 46.4
@@ -522,17 +700,61 @@
      "best": -104,
      "fair_pct": 48.3,
      "fair_am": 107,
-     "bid_c": 47,
-     "ask_c": 48,
+     "bid_c": 46,
+     "ask_c": 47,
      "volume": 108464,
      "ticker": "KXNFLTOTAL-26OCT18BALCLE-42",
      "bid_size": 0,
-     "limit_am": 113,
-     "tap_am": 101,
-     "tap_vs_book": 4.86,
-     "vs_book": 16.61,
+     "limit_am": 117,
+     "tap_am": 105,
+     "tap_vs_book": 9.0,
+     "vs_book": 21.24,
      "beats": true,
-     "never_pay": 50
+     "never_pay": 50,
+     "gates": [
+      {
+       "name": "direction",
+       "bucket": "fell",
+       "label": "Price falling",
+       "detail": "-7\u00a2 in 12 h",
+       "effect": -0.45,
+       "holding": true,
+       "status": "holding"
+      },
+      {
+       "name": "timing",
+       "bucket": "far",
+       "label": "2+ days to kickoff",
+       "detail": "68 h out",
+       "effect": 0.0,
+       "holding": false,
+       "status": "not holding"
+      },
+      {
+       "name": "activity",
+       "bucket": "mid",
+       "label": "Normal activity",
+       "detail": "2k traded in 24 h",
+       "effect": 0.67,
+       "holding": true,
+       "status": "holding"
+      },
+      {
+       "name": "soft",
+       "bucket": "no",
+       "status": "unproven",
+       "label": "Book isn't soft",
+       "detail": "book worth -8.79 per $100 at Kalshi's mid",
+       "effect": null,
+       "holding": false
+      }
+     ],
+     "worth": -1.47,
+     "worth_later": -1.47,
+     "book_now": -8.79,
+     "verdict": "wait",
+     "why": "Price is falling: fills now tend to come just before it drops further.",
+     "fill_chance": 58.4
     },
     "under": {
      "code": "Under",
@@ -543,17 +765,61 @@
      "best": -115,
      "fair_pct": 51.7,
      "fair_am": -107,
-     "bid_c": 52,
-     "ask_c": 53,
+     "bid_c": 53,
+     "ask_c": 54,
      "volume": 108464,
      "ticker": "KXNFLTOTAL-26OCT18BALCLE-42",
      "bid_size": 0,
-     "limit_am": -108,
-     "tap_am": -121,
-     "tap_vs_book": -4.29,
-     "vs_book": 5.35,
+     "limit_am": -113,
+     "tap_am": -126,
+     "tap_vs_book": -7.55,
+     "vs_book": 1.72,
      "beats": true,
-     "never_pay": 53
+     "never_pay": 53,
+     "gates": [
+      {
+       "name": "direction",
+       "bucket": "rose",
+       "label": "Price rising",
+       "detail": "+7\u00a2 in 12 h",
+       "effect": 0.54,
+       "holding": true,
+       "status": "holding"
+      },
+      {
+       "name": "timing",
+       "bucket": "far",
+       "label": "2+ days to kickoff",
+       "detail": "68 h out",
+       "effect": 0.0,
+       "holding": false,
+       "status": "not holding"
+      },
+      {
+       "name": "activity",
+       "bucket": "mid",
+       "label": "Normal activity",
+       "detail": "2k traded in 24 h",
+       "effect": 0.67,
+       "holding": true,
+       "status": "holding"
+      },
+      {
+       "name": "soft",
+       "bucket": "soft",
+       "status": "unproven",
+       "label": "Book pays more than Kalshi's fair price",
+       "detail": "book worth +0.02 per $100 at Kalshi's mid",
+       "effect": null,
+       "holding": true
+      }
+     ],
+     "worth": -0.48,
+     "worth_later": -0.48,
+     "book_now": 0.02,
+     "verdict": "book",
+     "why": "The book is paying more than Kalshi's fair price right now. Rests on the unproven book gate.",
+     "fill_chance": 58.4
     }
    }
   },
@@ -574,9 +840,9 @@
     "fair_am": -161,
     "bid_c": 63,
     "ask_c": 64,
-    "volume": 940460,
+    "volume": 942658,
     "ticker": "KXNFLGAME-26OCT18CARPHI-CAR",
-    "bid_size": 114723,
+    "bid_size": 112214,
     "limit_am": -170,
     "tap_am": -191,
     "tap_vs_book": -3.15,
@@ -606,7 +872,7 @@
       "name": "activity",
       "bucket": "busy",
       "label": "Busy market",
-      "detail": "872k traded in 24 h",
+      "detail": "865k traded in 24 h",
       "effect": 0.64,
       "holding": true,
       "status": "holding"
@@ -639,9 +905,9 @@
     "fair_am": 161,
     "bid_c": 36,
     "ask_c": 37,
-    "volume": 751867,
+    "volume": 757020,
     "ticker": "KXNFLGAME-26OCT18CARPHI-PHI",
-    "bid_size": 311576,
+    "bid_size": 311400,
     "limit_am": 178,
     "tap_am": 159,
     "tap_vs_book": 6.85,
@@ -671,7 +937,7 @@
       "name": "activity",
       "bucket": "busy",
       "label": "Busy market",
-      "detail": "702k traded in 24 h",
+      "detail": "709k traded in 24 h",
       "effect": 0.64,
       "holding": true,
       "status": "holding"
@@ -740,7 +1006,7 @@
     "fair_am": -108,
     "bid_c": 51,
     "ask_c": 52,
-    "volume": 60883,
+    "volume": 61089,
     "ticker": "KXNFLGAME-26OCT18CHIATL-CHI",
     "bid_size": 53816,
     "limit_am": -104,
@@ -749,71 +1015,6 @@
     "vs_book": 9.12,
     "beats": true,
     "never_pay": 53,
-    "gates": [
-     {
-      "name": "direction",
-      "bucket": "flat",
-      "label": "Price steady",
-      "detail": "+0\u00a2 in 12 h",
-      "effect": 0.0,
-      "holding": false,
-      "status": "holding"
-     },
-     {
-      "name": "timing",
-      "bucket": "far",
-      "label": "2+ days to kickoff",
-      "detail": "68 h out",
-      "effect": -0.24,
-      "holding": true,
-      "status": "holding"
-     },
-     {
-      "name": "activity",
-      "bucket": "quiet",
-      "label": "Quiet market",
-      "detail": "17k traded in 24 h",
-      "effect": -0.64,
-      "holding": true,
-      "status": "holding"
-     },
-     {
-      "name": "soft",
-      "bucket": "no",
-      "status": "unproven",
-      "label": "Book isn't soft",
-      "detail": "book worth -3.72 per $100 at Kalshi's mid",
-      "effect": null,
-      "holding": false
-     }
-    ],
-    "worth": -1.94,
-    "worth_later": -1.18,
-    "book_now": -3.72,
-    "verdict": "wait",
-    "why": "Far from kickoff: orders posted this early fill at worse moments.",
-    "fill_chance": 46.4
-   },
-   "home": {
-    "code": "ATL",
-    "name": "Falcons",
-    "FD": 104,
-    "DK": -105,
-    "best_book": "FD",
-    "best": 104,
-    "fair_pct": 48.0,
-    "fair_am": 108,
-    "bid_c": 48,
-    "ask_c": 49,
-    "volume": 149416,
-    "ticker": "KXNFLGAME-26OCT18CHIATL-ATL",
-    "bid_size": 465690,
-    "limit_am": 108,
-    "tap_am": -103,
-    "tap_vs_book": -6.95,
-    "vs_book": 4.33,
-    "beats": true,
-    "never_pay": 49,
     "gates": [
      {
       "name": "direction",
@@ -847,6 +1048,71 @@
       "bucket": "no",
       "status": "unproven",
       "label": "Book isn't soft",
+      "detail": "book worth -3.72 per $100 at Kalshi's mid",
+      "effect": null,
+      "holding": false
+     }
+    ],
+    "worth": -1.94,
+    "worth_later": -1.18,
+    "book_now": -3.72,
+    "verdict": "wait",
+    "why": "Far from kickoff: orders posted this early fill at worse moments.",
+    "fill_chance": 46.4
+   },
+   "home": {
+    "code": "ATL",
+    "name": "Falcons",
+    "FD": 104,
+    "DK": -105,
+    "best_book": "FD",
+    "best": 104,
+    "fair_pct": 48.0,
+    "fair_am": 108,
+    "bid_c": 48,
+    "ask_c": 49,
+    "volume": 149575,
+    "ticker": "KXNFLGAME-26OCT18CHIATL-ATL",
+    "bid_size": 465691,
+    "limit_am": 108,
+    "tap_am": -103,
+    "tap_vs_book": -6.95,
+    "vs_book": 4.33,
+    "beats": true,
+    "never_pay": 49,
+    "gates": [
+     {
+      "name": "direction",
+      "bucket": "flat",
+      "label": "Price steady",
+      "detail": "+0\u00a2 in 12 h",
+      "effect": 0.0,
+      "holding": false,
+      "status": "holding"
+     },
+     {
+      "name": "timing",
+      "bucket": "far",
+      "label": "2+ days to kickoff",
+      "detail": "68 h out",
+      "effect": -0.24,
+      "holding": true,
+      "status": "holding"
+     },
+     {
+      "name": "activity",
+      "bucket": "quiet",
+      "label": "Quiet market",
+      "detail": "19k traded in 24 h",
+      "effect": -0.64,
+      "holding": true,
+      "status": "holding"
+     },
+     {
+      "name": "soft",
+      "bucket": "no",
+      "status": "unproven",
+      "label": "Book isn't soft",
       "detail": "book worth -1.06 per $100 at Kalshi's mid",
       "effect": null,
       "holding": false
@@ -866,22 +1132,22 @@
     "over": {
      "code": "Over",
      "name": "Over",
-     "FD": -105,
-     "DK": -108,
+     "FD": -110,
+     "DK": -112,
      "best_book": "FD",
-     "best": -105,
-     "fair_pct": 49.2,
-     "fair_am": 103
+     "best": -110,
+     "fair_pct": 50.2,
+     "fair_am": -101
     },
     "under": {
      "code": "Under",
      "name": "Under",
-     "FD": -115,
-     "DK": -112,
+     "FD": -110,
+     "DK": -108,
      "best_book": "DK",
-     "best": -112,
-     "fair_pct": 50.8,
-     "fair_am": -103
+     "best": -108,
+     "fair_pct": 49.8,
+     "fair_am": 101
     },
     "nearest": [
      50.5,
@@ -906,7 +1172,7 @@
     "fair_am": -103,
     "bid_c": 51,
     "ask_c": 52,
-    "volume": 37484,
+    "volume": 37543,
     "ticker": "KXNFLGAME-26OCT18NONYG-NO",
     "bid_size": 2089,
     "limit_am": -104,
@@ -971,9 +1237,9 @@
     "fair_am": 103,
     "bid_c": 48,
     "ask_c": 49,
-    "volume": 165915,
+    "volume": 166941,
     "ticker": "KXNFLGAME-26OCT18NONYG-NYG",
-    "bid_size": 478018,
+    "bid_size": 478017,
     "limit_am": 108,
     "tap_am": -103,
     "tap_vs_book": 0.89,
@@ -1040,7 +1306,7 @@
      "fair_am": -101,
      "bid_c": 51,
      "ask_c": 52,
-     "volume": 6123,
+     "volume": 6495,
      "ticker": "KXNFLTOTAL-26OCT18NONYG-46",
      "bid_size": 0,
      "limit_am": -104,
@@ -1048,7 +1314,51 @@
      "tap_vs_book": -4.85,
      "vs_book": 5.17,
      "beats": true,
-     "never_pay": 52
+     "never_pay": 52,
+     "gates": [
+      {
+       "name": "direction",
+       "bucket": "flat",
+       "label": "Price steady",
+       "detail": "+0\u00a2 in 12 h",
+       "effect": 0.0,
+       "holding": false,
+       "status": "holding"
+      },
+      {
+       "name": "timing",
+       "bucket": "far",
+       "label": "2+ days to kickoff",
+       "detail": "68 h out",
+       "effect": 0.0,
+       "holding": false,
+       "status": "not holding"
+      },
+      {
+       "name": "activity",
+       "bucket": "mid",
+       "label": "Normal activity",
+       "detail": "1k traded in 24 h",
+       "effect": 0.67,
+       "holding": true,
+       "status": "holding"
+      },
+      {
+       "name": "soft",
+       "bucket": "no",
+       "status": "unproven",
+       "label": "Book isn't soft",
+       "detail": "book worth -1.68 per $100 at Kalshi's mid",
+       "effect": null,
+       "holding": false
+      }
+     ],
+     "worth": -1.02,
+     "worth_later": -1.02,
+     "book_now": -1.68,
+     "verdict": "post",
+     "why": "Gates are clear: post the limit at the bid.",
+     "fill_chance": 58.4
     },
     "under": {
      "code": "Under",
@@ -1061,7 +1371,7 @@
      "fair_am": 101,
      "bid_c": 48,
      "ask_c": 49,
-     "volume": 6123,
+     "volume": 6495,
      "ticker": "KXNFLTOTAL-26OCT18NONYG-46",
      "bid_size": 0,
      "limit_am": 108,
@@ -1069,7 +1379,51 @@
      "tap_vs_book": 4.45,
      "vs_book": 15.74,
      "beats": true,
-     "never_pay": 51
+     "never_pay": 51,
+     "gates": [
+      {
+       "name": "direction",
+       "bucket": "rose",
+       "label": "Price rising",
+       "detail": "+1\u00a2 in 12 h",
+       "effect": 0.54,
+       "holding": true,
+       "status": "holding"
+      },
+      {
+       "name": "timing",
+       "bucket": "far",
+       "label": "2+ days to kickoff",
+       "detail": "68 h out",
+       "effect": 0.0,
+       "holding": false,
+       "status": "not holding"
+      },
+      {
+       "name": "activity",
+       "bucket": "mid",
+       "label": "Normal activity",
+       "detail": "1k traded in 24 h",
+       "effect": 0.67,
+       "holding": true,
+       "status": "holding"
+      },
+      {
+       "name": "soft",
+       "bucket": "no",
+       "status": "unproven",
+       "label": "Book isn't soft",
+       "detail": "book worth -6.59 per $100 at Kalshi's mid",
+       "effect": null,
+       "holding": false
+      }
+     ],
+     "worth": -0.48,
+     "worth_later": -0.48,
+     "book_now": -6.59,
+     "verdict": "post",
+     "why": "Gates are clear: post the limit at the bid.",
+     "fill_chance": 58.4
     }
    }
   },
@@ -1090,9 +1444,9 @@
     "fair_am": 282,
     "bid_c": 24,
     "ask_c": 25,
-    "volume": 105373,
+    "volume": 105779,
     "ticker": "KXNFLGAME-26OCT18NYJNE-NYJ",
-    "bid_size": 63582,
+    "bid_size": 70048,
     "limit_am": 317,
     "tap_am": 280,
     "tap_vs_book": 5.05,
@@ -1122,7 +1476,7 @@
       "name": "activity",
       "bucket": "quiet",
       "label": "Quiet market",
-      "detail": "17k traded in 24 h",
+      "detail": "16k traded in 24 h",
       "effect": -0.64,
       "holding": true,
       "status": "holding"
@@ -1155,9 +1509,9 @@
     "fair_am": -282,
     "bid_c": 75,
     "ask_c": 76,
-    "volume": 48731,
+    "volume": 49110,
     "ticker": "KXNFLGAME-26OCT18NYJNE-NE",
-    "bid_size": 62743,
+    "bid_size": 62693,
     "limit_am": -300,
     "tap_am": -340,
     "tap_vs_book": -1.36,
@@ -1232,7 +1586,51 @@
      "tap_vs_book": 0.64,
      "vs_book": 11.49,
      "beats": true,
-     "never_pay": 51
+     "never_pay": 51,
+     "gates": [
+      {
+       "name": "direction",
+       "bucket": "flat",
+       "label": "Price steady",
+       "detail": "+0\u00a2 in 12 h",
+       "effect": 0.0,
+       "holding": false,
+       "status": "holding"
+      },
+      {
+       "name": "timing",
+       "bucket": "far",
+       "label": "2+ days to kickoff",
+       "detail": "68 h out",
+       "effect": 0.0,
+       "holding": false,
+       "status": "not holding"
+      },
+      {
+       "name": "activity",
+       "bucket": "quiet",
+       "label": "Quiet market",
+       "detail": "0k traded in 24 h",
+       "effect": -1.0,
+       "holding": true,
+       "status": "holding"
+      },
+      {
+       "name": "soft",
+       "bucket": "no",
+       "status": "unproven",
+       "label": "Book isn't soft",
+       "detail": "book worth -4.67 per $100 at Kalshi's mid",
+       "effect": null,
+       "holding": false
+      }
+     ],
+     "worth": -2.69,
+     "worth_later": -2.69,
+     "book_now": -4.67,
+     "verdict": "post",
+     "why": "Gates are clear: post the limit at the bid.",
+     "fill_chance": 58.4
     },
     "under": {
      "code": "Under",
@@ -1253,7 +1651,51 @@
      "tap_vs_book": -3.02,
      "vs_book": 7.41,
      "beats": true,
-     "never_pay": 51
+     "never_pay": 51,
+     "gates": [
+      {
+       "name": "direction",
+       "bucket": "rose",
+       "label": "Price rising",
+       "detail": "+1\u00a2 in 12 h",
+       "effect": 0.54,
+       "holding": true,
+       "status": "holding"
+      },
+      {
+       "name": "timing",
+       "bucket": "far",
+       "label": "2+ days to kickoff",
+       "detail": "68 h out",
+       "effect": 0.0,
+       "holding": false,
+       "status": "not holding"
+      },
+      {
+       "name": "activity",
+       "bucket": "quiet",
+       "label": "Quiet market",
+       "detail": "0k traded in 24 h",
+       "effect": -1.0,
+       "holding": true,
+       "status": "holding"
+      },
+      {
+       "name": "soft",
+       "bucket": "no",
+       "status": "unproven",
+       "label": "Book isn't soft",
+       "detail": "book worth -2.74 per $100 at Kalshi's mid",
+       "effect": null,
+       "holding": false
+      }
+     ],
+     "worth": -2.15,
+     "worth_later": -2.15,
+     "book_now": -2.74,
+     "verdict": "post",
+     "why": "Gates are clear: post the limit at the bid.",
+     "fill_chance": 58.4
     }
    }
   },
@@ -1274,7 +1716,7 @@
     "fair_am": -131,
     "bid_c": 56,
     "ask_c": 57,
-    "volume": 71231,
+    "volume": 72329,
     "ticker": "KXNFLGAME-26OCT18PITTB-PIT",
     "bid_size": 602,
     "limit_am": -127,
@@ -1306,7 +1748,7 @@
       "name": "activity",
       "bucket": "quiet",
       "label": "Quiet market",
-      "detail": "17k traded in 24 h",
+      "detail": "18k traded in 24 h",
       "effect": -0.64,
       "holding": true,
       "status": "holding"
@@ -1339,9 +1781,9 @@
     "fair_am": 131,
     "bid_c": 43,
     "ask_c": 44,
-    "volume": 21904,
+    "volume": 22067,
     "ticker": "KXNFLGAME-26OCT18PITTB-TB",
-    "bid_size": 71979,
+    "bid_size": 71981,
     "limit_am": 133,
     "tap_am": 119,
     "tap_vs_book": -5.3,
@@ -1416,7 +1858,51 @@
      "tap_vs_book": -2.0,
      "vs_book": 13.1,
      "beats": true,
-     "never_pay": 51
+     "never_pay": 51,
+     "gates": [
+      {
+       "name": "direction",
+       "bucket": "flat",
+       "label": "Price steady",
+       "detail": "+0\u00a2 in 12 h",
+       "effect": 0.0,
+       "holding": false,
+       "status": "holding"
+      },
+      {
+       "name": "timing",
+       "bucket": "far",
+       "label": "2+ days to kickoff",
+       "detail": "68 h out",
+       "effect": 0.0,
+       "holding": false,
+       "status": "not holding"
+      },
+      {
+       "name": "activity",
+       "bucket": "quiet",
+       "label": "Quiet market",
+       "detail": "1k traded in 24 h",
+       "effect": -1.0,
+       "holding": true,
+       "status": "holding"
+      },
+      {
+       "name": "soft",
+       "bucket": "no",
+       "status": "unproven",
+       "label": "Book isn't soft",
+       "detail": "book worth -4.33 per $100 at Kalshi's mid",
+       "effect": null,
+       "holding": false
+      }
+     ],
+     "worth": -2.69,
+     "worth_later": -2.69,
+     "book_now": -4.33,
+     "verdict": "post",
+     "why": "Gates are clear: post the limit at the bid.",
+     "fill_chance": 58.4
     },
     "under": {
      "code": "Under",
@@ -1437,7 +1923,51 @@
      "tap_vs_book": -3.23,
      "vs_book": 10.71,
      "beats": true,
-     "never_pay": 52
+     "never_pay": 52,
+     "gates": [
+      {
+       "name": "direction",
+       "bucket": "flat",
+       "label": "Price steady",
+       "detail": "+0\u00a2 in 12 h",
+       "effect": 0.0,
+       "holding": false,
+       "status": "holding"
+      },
+      {
+       "name": "timing",
+       "bucket": "far",
+       "label": "2+ days to kickoff",
+       "detail": "68 h out",
+       "effect": 0.0,
+       "holding": false,
+       "status": "not holding"
+      },
+      {
+       "name": "activity",
+       "bucket": "quiet",
+       "label": "Quiet market",
+       "detail": "1k traded in 24 h",
+       "effect": -1.0,
+       "holding": true,
+       "status": "holding"
+      },
+      {
+       "name": "soft",
+       "bucket": "no",
+       "status": "unproven",
+       "label": "Book isn't soft",
+       "detail": "book worth -3.46 per $100 at Kalshi's mid",
+       "effect": null,
+       "holding": false
+      }
+     ],
+     "worth": -2.69,
+     "worth_later": -2.69,
+     "book_now": -3.46,
+     "verdict": "post",
+     "why": "Gates are clear: post the limit at the bid.",
+     "fill_chance": 58.4
     }
    }
   },
@@ -1450,17 +1980,17 @@
    "away": {
     "code": "TEN",
     "name": "Titans",
-    "FD": 270,
+    "FD": 265,
     "DK": 270,
     "best_book": "DK",
     "best": 270,
-    "fair_pct": 25.9,
-    "fair_am": 285,
+    "fair_pct": 26.1,
+    "fair_am": 283,
     "bid_c": 25,
     "ask_c": 26,
-    "volume": 77143,
+    "volume": 77180,
     "ticker": "KXNFLGAME-26OCT18TENIND-TEN",
-    "bid_size": 57108,
+    "bid_size": 106914,
     "limit_am": 300,
     "tap_am": 266,
     "tap_vs_book": -4.33,
@@ -1515,23 +2045,23 @@
    "home": {
     "code": "IND",
     "name": "Colts",
-    "FD": -335,
+    "FD": -330,
     "DK": -340,
     "best_book": "FD",
-    "best": -335,
-    "fair_pct": 74.1,
-    "fair_am": -285,
+    "best": -330,
+    "fair_pct": 73.9,
+    "fair_am": -283,
     "bid_c": 74,
     "ask_c": 75,
-    "volume": 209777,
+    "volume": 209843,
     "ticker": "KXNFLGAME-26OCT18TENIND-IND",
-    "bid_size": 40613,
+    "bid_size": 40615,
     "limit_am": -285,
     "tap_am": -322,
-    "tap_vs_book": 1.19,
-    "vs_book": 5.28,
+    "tap_vs_book": 0.74,
+    "vs_book": 4.83,
     "beats": true,
-    "never_pay": 77,
+    "never_pay": 76,
     "gates": [
      {
       "name": "direction",
@@ -1565,14 +2095,14 @@
       "bucket": "no",
       "status": "unproven",
       "label": "Book isn't soft",
-      "detail": "book worth -3.26 per $100 at Kalshi's mid",
+      "detail": "book worth -2.92 per $100 at Kalshi's mid",
       "effect": null,
       "holding": false
      }
     ],
     "worth": -1.94,
     "worth_later": -1.18,
-    "book_now": -3.26,
+    "book_now": -2.92,
     "verdict": "wait",
     "why": "Far from kickoff: orders posted this early fill at worse moments.",
     "fill_chance": 46.4
@@ -1584,28 +2114,72 @@
     "over": {
      "code": "Over",
      "name": "Over",
-     "FD": -108,
+     "FD": -105,
      "DK": -112,
      "best_book": "FD",
-     "best": -108,
+     "best": -105,
      "fair_pct": 49.7,
      "fair_am": 101,
      "bid_c": 51,
      "ask_c": 52,
-     "volume": 2939,
+     "volume": 2942,
      "ticker": "KXNFLTOTAL-26OCT18TENIND-45",
      "bid_size": 0,
      "limit_am": -104,
      "tap_am": -116,
-     "tap_vs_book": -6.54,
-     "vs_book": 3.49,
+     "tap_vs_book": -9.18,
+     "vs_book": 0.84,
      "beats": true,
-     "never_pay": 51
+     "never_pay": 51,
+     "gates": [
+      {
+       "name": "direction",
+       "bucket": "flat",
+       "label": "Price steady",
+       "detail": "+0\u00a2 in 12 h",
+       "effect": 0.0,
+       "holding": false,
+       "status": "holding"
+      },
+      {
+       "name": "timing",
+       "bucket": "far",
+       "label": "2+ days to kickoff",
+       "detail": "68 h out",
+       "effect": 0.0,
+       "holding": false,
+       "status": "not holding"
+      },
+      {
+       "name": "activity",
+       "bucket": "mid",
+       "label": "Normal activity",
+       "detail": "2k traded in 24 h",
+       "effect": 0.67,
+       "holding": true,
+       "status": "holding"
+      },
+      {
+       "name": "soft",
+       "bucket": "soft",
+       "status": "unproven",
+       "label": "Book pays more than Kalshi's fair price",
+       "detail": "book worth +0.55 per $100 at Kalshi's mid",
+       "effect": null,
+       "holding": true
+      }
+     ],
+     "worth": -1.02,
+     "worth_later": -1.02,
+     "book_now": 0.55,
+     "verdict": "book",
+     "why": "The book is paying more than Kalshi's fair price right now. Rests on the unproven book gate.",
+     "fill_chance": 58.4
     },
     "under": {
      "code": "Under",
      "name": "Under",
-     "FD": -118,
+     "FD": -115,
      "DK": -108,
      "best_book": "DK",
      "best": -108,
@@ -1613,7 +2187,7 @@
      "fair_am": -101,
      "bid_c": 48,
      "ask_c": 49,
-     "volume": 2939,
+     "volume": 2942,
      "ticker": "KXNFLTOTAL-26OCT18TENIND-45",
      "bid_size": 0,
      "limit_am": 108,
@@ -1621,7 +2195,51 @@
      "tap_vs_book": 4.45,
      "vs_book": 15.74,
      "beats": true,
-     "never_pay": 51
+     "never_pay": 51,
+     "gates": [
+      {
+       "name": "direction",
+       "bucket": "flat",
+       "label": "Price steady",
+       "detail": "+0\u00a2 in 12 h",
+       "effect": 0.0,
+       "holding": false,
+       "status": "holding"
+      },
+      {
+       "name": "timing",
+       "bucket": "far",
+       "label": "2+ days to kickoff",
+       "detail": "68 h out",
+       "effect": 0.0,
+       "holding": false,
+       "status": "not holding"
+      },
+      {
+       "name": "activity",
+       "bucket": "mid",
+       "label": "Normal activity",
+       "detail": "2k traded in 24 h",
+       "effect": 0.67,
+       "holding": true,
+       "status": "holding"
+      },
+      {
+       "name": "soft",
+       "bucket": "no",
+       "status": "unproven",
+       "label": "Book isn't soft",
+       "detail": "book worth -6.59 per $100 at Kalshi's mid",
+       "effect": null,
+       "holding": false
+      }
+     ],
+     "worth": -1.02,
+     "worth_later": -1.02,
+     "book_now": -6.59,
+     "verdict": "post",
+     "why": "Gates are clear: post the limit at the bid.",
+     "fill_chance": 58.4
     }
    }
   },
@@ -1642,9 +2260,9 @@
     "fair_am": 585,
     "bid_c": 12,
     "ask_c": 13,
-    "volume": 275515,
+    "volume": 275927,
     "ticker": "KXNFLGAME-26OCT18ARILAR-ARI",
-    "bid_size": 106768,
+    "bid_size": 107154,
     "limit_am": 733,
     "tap_am": 625,
     "tap_vs_book": 50.07,
@@ -1665,7 +2283,7 @@
       "name": "timing",
       "bucket": "far",
       "label": "2+ days to kickoff",
-      "detail": "72 h out",
+      "detail": "71 h out",
       "effect": -0.24,
       "holding": true,
       "status": "holding"
@@ -1674,7 +2292,7 @@
       "name": "activity",
       "bucket": "busy",
       "label": "Busy market",
-      "detail": "75k traded in 24 h",
+      "detail": "73k traded in 24 h",
       "effect": 0.64,
       "holding": true,
       "status": "holding"
@@ -1707,9 +2325,9 @@
     "fair_am": -585,
     "bid_c": 87,
     "ask_c": 88,
-    "volume": 46194,
+    "volume": 46310,
     "ticker": "KXNFLGAME-26OCT18ARILAR-LAR",
-    "bid_size": 311865,
+    "bid_size": 311898,
     "limit_am": -669,
     "tap_am": -788,
     "tap_vs_book": -0.3,
@@ -1730,7 +2348,7 @@
       "name": "timing",
       "bucket": "far",
       "label": "2+ days to kickoff",
-      "detail": "72 h out",
+      "detail": "71 h out",
       "effect": -0.24,
       "holding": true,
       "status": "holding"
@@ -1784,7 +2402,51 @@
      "tap_vs_book": 0.29,
      "vs_book": 10.71,
      "beats": true,
-     "never_pay": 52
+     "never_pay": 52,
+     "gates": [
+      {
+       "name": "direction",
+       "bucket": "fell",
+       "label": "Price falling",
+       "detail": "-1\u00a2 in 12 h",
+       "effect": -0.45,
+       "holding": true,
+       "status": "holding"
+      },
+      {
+       "name": "timing",
+       "bucket": "far",
+       "label": "2+ days to kickoff",
+       "detail": "71 h out",
+       "effect": 0.0,
+       "holding": false,
+       "status": "not holding"
+      },
+      {
+       "name": "activity",
+       "bucket": "quiet",
+       "label": "Quiet market",
+       "detail": "1k traded in 24 h",
+       "effect": -1.0,
+       "holding": true,
+       "status": "holding"
+      },
+      {
+       "name": "soft",
+       "bucket": "no",
+       "status": "unproven",
+       "label": "Book isn't soft",
+       "detail": "book worth -4.41 per $100 at Kalshi's mid",
+       "effect": null,
+       "holding": false
+      }
+     ],
+     "worth": -3.14,
+     "worth_later": -3.14,
+     "book_now": -4.41,
+     "verdict": "wait",
+     "why": "Price is falling: fills now tend to come just before it drops further.",
+     "fill_chance": 58.4
     },
     "under": {
      "code": "Under",
@@ -1805,7 +2467,51 @@
      "tap_vs_book": -2.0,
      "vs_book": 8.84,
      "beats": true,
-     "never_pay": 51
+     "never_pay": 51,
+     "gates": [
+      {
+       "name": "direction",
+       "bucket": "rose",
+       "label": "Price rising",
+       "detail": "+1\u00a2 in 12 h",
+       "effect": 0.54,
+       "holding": true,
+       "status": "holding"
+      },
+      {
+       "name": "timing",
+       "bucket": "far",
+       "label": "2+ days to kickoff",
+       "detail": "71 h out",
+       "effect": 0.0,
+       "holding": false,
+       "status": "not holding"
+      },
+      {
+       "name": "activity",
+       "bucket": "quiet",
+       "label": "Quiet market",
+       "detail": "1k traded in 24 h",
+       "effect": -1.0,
+       "holding": true,
+       "status": "holding"
+      },
+      {
+       "name": "soft",
+       "bucket": "no",
+       "status": "unproven",
+       "label": "Book isn't soft",
+       "detail": "book worth -3.36 per $100 at Kalshi's mid",
+       "effect": null,
+       "holding": false
+      }
+     ],
+     "worth": -2.15,
+     "worth_later": -2.15,
+     "book_now": -3.36,
+     "verdict": "post",
+     "why": "Gates are clear: post the limit at the bid.",
+     "fill_chance": 58.4
     }
    }
   },
@@ -1819,22 +2525,22 @@
     "code": "BUF",
     "name": "Bills",
     "FD": -245,
-    "DK": -250,
-    "best_book": "FD",
-    "best": -245,
-    "fair_pct": 68.3,
-    "fair_am": -215,
+    "DK": -218,
+    "best_book": "DK",
+    "best": -218,
+    "fair_pct": 66.9,
+    "fair_am": -202,
     "bid_c": 67,
     "ask_c": 68,
-    "volume": 68584,
+    "volume": 68968,
     "ticker": "KXNFLGAME-26OCT18BUFLV-BUF",
-    "bid_size": 35222,
+    "bid_size": 35323,
     "limit_am": -203,
     "tap_am": -228,
-    "tap_vs_book": 3.02,
-    "vs_book": 8.44,
+    "tap_vs_book": -2.03,
+    "vs_book": 3.38,
     "beats": true,
-    "never_pay": 71,
+    "never_pay": 68,
     "gates": [
      {
       "name": "direction",
@@ -1849,7 +2555,7 @@
       "name": "timing",
       "bucket": "far",
       "label": "2+ days to kickoff",
-      "detail": "72 h out",
+      "detail": "71 h out",
       "effect": -0.24,
       "holding": true,
       "status": "holding"
@@ -1868,14 +2574,14 @@
       "bucket": "no",
       "status": "unproven",
       "label": "Book isn't soft",
-      "detail": "book worth -4.95 per $100 at Kalshi's mid",
+      "detail": "book worth -1.54 per $100 at Kalshi's mid",
       "effect": null,
       "holding": false
      }
     ],
     "worth": -1.94,
     "worth_later": -1.18,
-    "book_now": -4.95,
+    "book_now": -1.54,
     "verdict": "wait",
     "why": "Far from kickoff: orders posted this early fill at worse moments.",
     "fill_chance": 46.4
@@ -1884,22 +2590,22 @@
     "code": "LV",
     "name": "Raiders",
     "FD": 200,
-    "DK": 205,
-    "best_book": "DK",
-    "best": 205,
-    "fair_pct": 31.7,
-    "fair_am": 215,
+    "DK": 180,
+    "best_book": "FD",
+    "best": 200,
+    "fair_pct": 33.1,
+    "fair_am": 202,
     "bid_c": 32,
     "ask_c": 33,
-    "volume": 139004,
+    "volume": 140147,
     "ticker": "KXNFLGAME-26OCT18BUFLV-LV",
-    "bid_size": 84441,
+    "bid_size": 94442,
     "limit_am": 213,
     "tap_am": 189,
-    "tap_vs_book": -15.55,
-    "vs_book": 7.5,
+    "tap_vs_book": -10.55,
+    "vs_book": 12.5,
     "beats": true,
-    "never_pay": 32,
+    "never_pay": 33,
     "gates": [
      {
       "name": "direction",
@@ -1914,7 +2620,7 @@
       "name": "timing",
       "bucket": "far",
       "label": "2+ days to kickoff",
-      "detail": "72 h out",
+      "detail": "71 h out",
       "effect": -0.24,
       "holding": true,
       "status": "holding"
@@ -1923,7 +2629,7 @@
       "name": "activity",
       "bucket": "mid",
       "label": "Normal activity",
-      "detail": "26k traded in 24 h",
+      "detail": "27k traded in 24 h",
       "effect": 0.03,
       "holding": true,
       "status": "holding"
@@ -1933,14 +2639,14 @@
       "bucket": "no",
       "status": "unproven",
       "label": "Book isn't soft",
-      "detail": "book worth -0.88 per $100 at Kalshi's mid",
+      "detail": "book worth -2.50 per $100 at Kalshi's mid",
       "effect": null,
       "holding": false
      }
     ],
     "worth": -1.27,
     "worth_later": -0.51,
-    "book_now": -0.88,
+    "book_now": -2.5,
     "verdict": "wait",
     "why": "Far from kickoff: orders posted this early fill at worse moments.",
     "fill_chance": 46.4
@@ -1960,7 +2666,7 @@
      "fair_am": -100,
      "bid_c": 49,
      "ask_c": 50,
-     "volume": 9811,
+     "volume": 9974,
      "ticker": "KXNFLTOTAL-26OCT18BUFLV-54",
      "bid_size": 0,
      "limit_am": 104,
@@ -1968,7 +2674,51 @@
      "tap_vs_book": 2.33,
      "vs_book": 13.17,
      "beats": true,
-     "never_pay": 52
+     "never_pay": 52,
+     "gates": [
+      {
+       "name": "direction",
+       "bucket": "flat",
+       "label": "Price steady",
+       "detail": "+0\u00a2 in 12 h",
+       "effect": 0.0,
+       "holding": false,
+       "status": "holding"
+      },
+      {
+       "name": "timing",
+       "bucket": "far",
+       "label": "2+ days to kickoff",
+       "detail": "71 h out",
+       "effect": 0.0,
+       "holding": false,
+       "status": "not holding"
+      },
+      {
+       "name": "activity",
+       "bucket": "mid",
+       "label": "Normal activity",
+       "detail": "1k traded in 24 h",
+       "effect": 0.67,
+       "holding": true,
+       "status": "holding"
+      },
+      {
+       "name": "soft",
+       "bucket": "no",
+       "status": "unproven",
+       "label": "Book isn't soft",
+       "detail": "book worth -5.50 per $100 at Kalshi's mid",
+       "effect": null,
+       "holding": false
+      }
+     ],
+     "worth": -1.02,
+     "worth_later": -1.02,
+     "book_now": -5.5,
+     "verdict": "post",
+     "why": "Gates are clear: post the limit at the bid.",
+     "fill_chance": 58.4
     },
     "under": {
      "code": "Under",
@@ -1981,7 +2731,7 @@
      "fair_am": -100,
      "bid_c": 50,
      "ask_c": 51,
-     "volume": 9811,
+     "volume": 9974,
      "ticker": "KXNFLTOTAL-26OCT18BUFLV-54",
      "bid_size": 0,
      "limit_am": -100,
@@ -1989,7 +2739,51 @@
      "tap_vs_book": -1.33,
      "vs_book": 9.09,
      "beats": true,
-     "never_pay": 52
+     "never_pay": 52,
+     "gates": [
+      {
+       "name": "direction",
+       "bucket": "flat",
+       "label": "Price steady",
+       "detail": "+0\u00a2 in 12 h",
+       "effect": 0.0,
+       "holding": false,
+       "status": "holding"
+      },
+      {
+       "name": "timing",
+       "bucket": "far",
+       "label": "2+ days to kickoff",
+       "detail": "71 h out",
+       "effect": 0.0,
+       "holding": false,
+       "status": "not holding"
+      },
+      {
+       "name": "activity",
+       "bucket": "mid",
+       "label": "Normal activity",
+       "detail": "1k traded in 24 h",
+       "effect": 0.67,
+       "holding": true,
+       "status": "holding"
+      },
+      {
+       "name": "soft",
+       "bucket": "no",
+       "status": "unproven",
+       "label": "Book isn't soft",
+       "detail": "book worth -3.59 per $100 at Kalshi's mid",
+       "effect": null,
+       "holding": false
+      }
+     ],
+     "worth": -1.02,
+     "worth_later": -1.02,
+     "book_now": -3.59,
+     "verdict": "post",
+     "why": "Gates are clear: post the limit at the bid.",
+     "fill_chance": 58.4
     }
    }
   },
@@ -2003,22 +2797,21 @@
     "code": "LAC",
     "name": "Chargers",
     "FD": 350,
-    "DK": 370,
-    "best_book": "DK",
-    "best": 370,
-    "fair_pct": 20.9,
-    "fair_am": 379,
+    "best_book": "FD",
+    "best": 350,
+    "fair_pct": 21.4,
+    "fair_am": 368,
     "bid_c": 21,
     "ask_c": 22,
-    "volume": 184732,
+    "volume": 185608,
     "ticker": "KXNFLGAME-26OCT18LACKC-LAC",
-    "bid_size": 68756,
+    "bid_size": 78744,
     "limit_am": 376,
     "tap_am": 331,
-    "tap_vs_book": -38.99,
-    "vs_book": 6.19,
+    "tap_vs_book": -18.99,
+    "vs_book": 26.19,
     "beats": true,
-    "never_pay": 21,
+    "never_pay": 22,
     "gates": [
      {
       "name": "direction",
@@ -2033,7 +2826,7 @@
       "name": "timing",
       "bucket": "far",
       "label": "2+ days to kickoff",
-      "detail": "72 h out",
+      "detail": "71 h out",
       "effect": -0.24,
       "holding": true,
       "status": "holding"
@@ -2042,42 +2835,41 @@
       "name": "activity",
       "bucket": "mid",
       "label": "Normal activity",
-      "detail": "56k traded in 24 h",
+      "detail": "55k traded in 24 h",
       "effect": 0.03,
       "holding": true,
       "status": "holding"
      },
      {
       "name": "soft",
-      "bucket": "soft",
+      "bucket": "no",
       "status": "unproven",
-      "label": "Book pays more than Kalshi's fair price",
-      "detail": "book worth +1.05 per $100 at Kalshi's mid",
+      "label": "Book isn't soft",
+      "detail": "book worth -3.25 per $100 at Kalshi's mid",
       "effect": null,
-      "holding": true
+      "holding": false
      }
     ],
     "worth": -1.27,
     "worth_later": -0.51,
-    "book_now": 1.05,
-    "verdict": "book",
-    "why": "The book is paying more than Kalshi's fair price right now. Rests on the unproven book gate.",
+    "book_now": -3.25,
+    "verdict": "wait",
+    "why": "Far from kickoff: orders posted this early fill at worse moments.",
     "fill_chance": 46.4
    },
    "home": {
     "code": "KC",
     "name": "Chiefs",
     "FD": -450,
-    "DK": -485,
     "best_book": "FD",
     "best": -450,
-    "fair_pct": 79.1,
-    "fair_am": -379,
+    "fair_pct": 78.6,
+    "fair_am": -368,
     "bid_c": 78,
     "ask_c": 79,
-    "volume": 142256,
+    "volume": 142951,
     "ticker": "KXNFLGAME-26OCT18LACKC-KC",
-    "bid_size": 89606,
+    "bid_size": 89579,
     "limit_am": -355,
     "tap_am": -404,
     "tap_vs_book": 2.53,
@@ -2098,7 +2890,7 @@
       "name": "timing",
       "bucket": "far",
       "label": "2+ days to kickoff",
-      "detail": "72 h out",
+      "detail": "71 h out",
       "effect": -0.24,
       "holding": true,
       "status": "holding"
@@ -2107,7 +2899,7 @@
       "name": "activity",
       "bucket": "mid",
       "label": "Normal activity",
-      "detail": "44k traded in 24 h",
+      "detail": "45k traded in 24 h",
       "effect": 0.03,
       "holding": true,
       "status": "holding"
@@ -2130,50 +2922,138 @@
     "fill_chance": 46.4
    },
    "total": {
-    "line": 42.5,
+    "line": 41.5,
     "matched": true,
     "source": "sharpapi",
     "over": {
      "code": "Over",
      "name": "Over",
-     "FD": -108,
-     "DK": -108,
-     "best_book": "DK",
-     "best": -108,
-     "fair_pct": 49.6,
-     "fair_am": 102,
-     "bid_c": 47,
-     "ask_c": 48,
-     "volume": 35585,
-     "ticker": "KXNFLTOTAL-26OCT18LACKC-43",
+     "FD": -115,
+     "DK": -126,
+     "best_book": "FD",
+     "best": -115,
+     "fair_pct": 51.5,
+     "fair_am": -106,
+     "bid_c": 49,
+     "ask_c": 50,
+     "volume": 1542,
+     "ticker": "KXNFLTOTAL-26OCT18LACKC-42",
      "bid_size": 0,
-     "limit_am": 113,
-     "tap_am": 101,
-     "tap_vs_book": 8.42,
-     "vs_book": 20.17,
+     "limit_am": 104,
+     "tap_am": -107,
+     "tap_vs_book": 6.28,
+     "vs_book": 17.13,
      "beats": true,
-     "never_pay": 51
+     "never_pay": 53,
+     "gates": [
+      {
+       "name": "direction",
+       "bucket": "fell",
+       "label": "Price falling",
+       "detail": "-2\u00a2 in 12 h",
+       "effect": -0.45,
+       "holding": true,
+       "status": "holding"
+      },
+      {
+       "name": "timing",
+       "bucket": "far",
+       "label": "2+ days to kickoff",
+       "detail": "71 h out",
+       "effect": 0.0,
+       "holding": false,
+       "status": "not holding"
+      },
+      {
+       "name": "activity",
+       "bucket": "quiet",
+       "label": "Quiet market",
+       "detail": "0k traded in 24 h",
+       "effect": -1.0,
+       "holding": true,
+       "status": "holding"
+      },
+      {
+       "name": "soft",
+       "bucket": "no",
+       "status": "unproven",
+       "label": "Book isn't soft",
+       "detail": "book worth -7.46 per $100 at Kalshi's mid",
+       "effect": null,
+       "holding": false
+      }
+     ],
+     "worth": -3.14,
+     "worth_later": -3.14,
+     "book_now": -7.46,
+     "verdict": "wait",
+     "why": "Price is falling: fills now tend to come just before it drops further.",
+     "fill_chance": 58.4
     },
     "under": {
      "code": "Under",
      "name": "Under",
-     "FD": -112,
-     "DK": -112,
-     "best_book": "DK",
-     "best": -112,
-     "fair_pct": 50.4,
-     "fair_am": -102,
-     "bid_c": 52,
-     "ask_c": 53,
-     "volume": 35585,
-     "ticker": "KXNFLTOTAL-26OCT18LACKC-43",
+     "FD": -105,
+     "DK": -106,
+     "best_book": "FD",
+     "best": -105,
+     "fair_pct": 48.5,
+     "fair_am": 106,
+     "bid_c": 50,
+     "ask_c": 51,
+     "volume": 1542,
+     "ticker": "KXNFLTOTAL-26OCT18LACKC-42",
      "bid_size": 0,
-     "limit_am": -108,
-     "tap_am": -121,
-     "tap_vs_book": -6.62,
-     "vs_book": 3.02,
+     "limit_am": -100,
+     "tap_am": -112,
+     "tap_vs_book": -5.66,
+     "vs_book": 4.76,
      "beats": true,
-     "never_pay": 52
+     "never_pay": 51,
+     "gates": [
+      {
+       "name": "direction",
+       "bucket": "rose",
+       "label": "Price rising",
+       "detail": "+3\u00a2 in 12 h",
+       "effect": 0.54,
+       "holding": true,
+       "status": "holding"
+      },
+      {
+       "name": "timing",
+       "bucket": "far",
+       "label": "2+ days to kickoff",
+       "detail": "71 h out",
+       "effect": 0.0,
+       "holding": false,
+       "status": "not holding"
+      },
+      {
+       "name": "activity",
+       "bucket": "quiet",
+       "label": "Quiet market",
+       "detail": "0k traded in 24 h",
+       "effect": -1.0,
+       "holding": true,
+       "status": "holding"
+      },
+      {
+       "name": "soft",
+       "bucket": "no",
+       "status": "unproven",
+       "label": "Book isn't soft",
+       "detail": "book worth -1.40 per $100 at Kalshi's mid",
+       "effect": null,
+       "holding": false
+      }
+     ],
+     "worth": -2.15,
+     "worth_later": -2.15,
+     "book_now": -1.4,
+     "verdict": "book",
+     "why": "A realistic limit fill is worth less than simply taking the book's price. Rests on the unproven book gate.",
+     "fill_chance": 58.4
     }
    }
   },
@@ -2194,9 +3074,9 @@
     "fair_am": 108,
     "bid_c": 47,
     "ask_c": 48,
-    "volume": 120720,
+    "volume": 123741,
     "ticker": "KXNFLGAME-26OCT18DALGB-DAL",
-    "bid_size": 26100,
+    "bid_size": 26036,
     "limit_am": 113,
     "tap_am": 101,
     "tap_vs_book": 1.02,
@@ -2217,7 +3097,7 @@
       "name": "timing",
       "bucket": "far",
       "label": "2+ days to kickoff",
-      "detail": "76 h out",
+      "detail": "75 h out",
       "effect": -0.24,
       "holding": true,
       "status": "holding"
@@ -2226,7 +3106,7 @@
       "name": "activity",
       "bucket": "mid",
       "label": "Normal activity",
-      "detail": "37k traded in 24 h",
+      "detail": "32k traded in 24 h",
       "effect": 0.03,
       "holding": true,
       "status": "holding"
@@ -2259,9 +3139,9 @@
     "fair_am": -108,
     "bid_c": 52,
     "ask_c": 53,
-    "volume": 153662,
+    "volume": 153928,
     "ticker": "KXNFLGAME-26OCT18DALGB-GB",
-    "bid_size": 364184,
+    "bid_size": 362187,
     "limit_am": -108,
     "tap_am": -121,
     "tap_vs_book": -3.54,
@@ -2282,7 +3162,7 @@
       "name": "timing",
       "bucket": "far",
       "label": "2+ days to kickoff",
-      "detail": "76 h out",
+      "detail": "75 h out",
       "effect": -0.24,
       "holding": true,
       "status": "holding"
@@ -2336,7 +3216,51 @@
      "tap_vs_book": -3.23,
      "vs_book": 6.79,
      "beats": true,
-     "never_pay": 52
+     "never_pay": 52,
+     "gates": [
+      {
+       "name": "direction",
+       "bucket": "flat",
+       "label": "Price steady",
+       "detail": "+0\u00a2 in 12 h",
+       "effect": 0.0,
+       "holding": false,
+       "status": "holding"
+      },
+      {
+       "name": "timing",
+       "bucket": "far",
+       "label": "2+ days to kickoff",
+       "detail": "75 h out",
+       "effect": 0.0,
+       "holding": false,
+       "status": "not holding"
+      },
+      {
+       "name": "activity",
+       "bucket": "mid",
+       "label": "Normal activity",
+       "detail": "2k traded in 24 h",
+       "effect": 0.67,
+       "holding": true,
+       "status": "holding"
+      },
+      {
+       "name": "soft",
+       "bucket": "no",
+       "status": "unproven",
+       "label": "Book isn't soft",
+       "detail": "book worth -2.52 per $100 at Kalshi's mid",
+       "effect": null,
+       "holding": false
+      }
+     ],
+     "worth": -1.02,
+     "worth_later": -1.02,
+     "book_now": -2.52,
+     "verdict": "post",
+     "why": "Gates are clear: post the limit at the bid.",
+     "fill_chance": 58.4
     },
     "under": {
      "code": "Under",
@@ -2357,7 +3281,51 @@
      "tap_vs_book": 3.59,
      "vs_book": 14.88,
      "beats": true,
-     "never_pay": 51
+     "never_pay": 51,
+     "gates": [
+      {
+       "name": "direction",
+       "bucket": "flat",
+       "label": "Price steady",
+       "detail": "+0\u00a2 in 12 h",
+       "effect": 0.0,
+       "holding": false,
+       "status": "holding"
+      },
+      {
+       "name": "timing",
+       "bucket": "far",
+       "label": "2+ days to kickoff",
+       "detail": "75 h out",
+       "effect": 0.0,
+       "holding": false,
+       "status": "not holding"
+      },
+      {
+       "name": "activity",
+       "bucket": "mid",
+       "label": "Normal activity",
+       "detail": "2k traded in 24 h",
+       "effect": 0.67,
+       "holding": true,
+       "status": "holding"
+      },
+      {
+       "name": "soft",
+       "bucket": "no",
+       "status": "unproven",
+       "label": "Book isn't soft",
+       "detail": "book worth -6.17 per $100 at Kalshi's mid",
+       "effect": null,
+       "holding": false
+      }
+     ],
+     "worth": -1.02,
+     "worth_later": -1.02,
+     "book_now": -6.17,
+     "verdict": "post",
+     "why": "Gates are clear: post the limit at the bid.",
+     "fill_chance": 58.4
     }
    }
   },
@@ -2378,9 +3346,9 @@
     "fair_am": 348,
     "bid_c": 22,
     "ask_c": 23,
-    "volume": 70854,
+    "volume": 72135,
     "ticker": "KXNFLGAME-26OCT19WASSF-WAS",
-    "bid_size": 47706,
+    "bid_size": 44708,
     "limit_am": 355,
     "tap_am": 313,
     "tap_vs_book": -17.45,
@@ -2401,7 +3369,7 @@
       "name": "timing",
       "bucket": "far",
       "label": "2+ days to kickoff",
-      "detail": "100 h out",
+      "detail": "99 h out",
       "effect": -0.24,
       "holding": true,
       "status": "holding"
@@ -2410,7 +3378,7 @@
       "name": "activity",
       "bucket": "quiet",
       "label": "Quiet market",
-      "detail": "16k traded in 24 h",
+      "detail": "17k traded in 24 h",
       "effect": -0.64,
       "holding": true,
       "status": "holding"
@@ -2443,9 +3411,9 @@
     "fair_am": -348,
     "bid_c": 77,
     "ask_c": 78,
-    "volume": 112359,
+    "volume": 113067,
     "ticker": "KXNFLGAME-26OCT19WASSF-SF",
-    "bid_size": 67302,
+    "bid_size": 67401,
     "limit_am": -335,
     "tap_am": -381,
     "tap_vs_book": 2.45,
@@ -2466,7 +3434,7 @@
       "name": "timing",
       "bucket": "far",
       "label": "2+ days to kickoff",
-      "detail": "100 h out",
+      "detail": "99 h out",
       "effect": -0.24,
       "holding": true,
       "status": "holding"
@@ -2512,7 +3480,7 @@
      "fair_am": 103,
      "bid_c": 50,
      "ask_c": 51,
-     "volume": 1427,
+     "volume": 1445,
      "ticker": "KXNFLTOTAL-26OCT19WASSF-52",
      "bid_size": 0,
      "limit_am": -100,
@@ -2520,7 +3488,51 @@
      "tap_vs_book": -5.66,
      "vs_book": 4.76,
      "beats": true,
-     "never_pay": 51
+     "never_pay": 51,
+     "gates": [
+      {
+       "name": "direction",
+       "bucket": "rose",
+       "label": "Price rising",
+       "detail": "+5\u00a2 in 12 h",
+       "effect": 0.54,
+       "holding": true,
+       "status": "holding"
+      },
+      {
+       "name": "timing",
+       "bucket": "far",
+       "label": "2+ days to kickoff",
+       "detail": "99 h out",
+       "effect": 0.0,
+       "holding": false,
+       "status": "not holding"
+      },
+      {
+       "name": "activity",
+       "bucket": "mid",
+       "label": "Normal activity",
+       "detail": "1k traded in 24 h",
+       "effect": 0.67,
+       "holding": true,
+       "status": "holding"
+      },
+      {
+       "name": "soft",
+       "bucket": "no",
+       "status": "unproven",
+       "label": "Book isn't soft",
+       "detail": "book worth -1.40 per $100 at Kalshi's mid",
+       "effect": null,
+       "holding": false
+      }
+     ],
+     "worth": -0.48,
+     "worth_later": -0.48,
+     "book_now": -1.4,
+     "verdict": "post",
+     "why": "Gates are clear: post the limit at the bid.",
+     "fill_chance": 58.4
     },
     "under": {
      "code": "Under",
@@ -2533,7 +3545,7 @@
      "fair_am": -103,
      "bid_c": 49,
      "ask_c": 50,
-     "volume": 1427,
+     "volume": 1445,
      "ticker": "KXNFLTOTAL-26OCT19WASSF-52",
      "bid_size": 0,
      "limit_am": 104,
@@ -2541,7 +3553,51 @@
      "tap_vs_book": 3.95,
      "vs_book": 14.8,
      "beats": true,
-     "never_pay": 52
+     "never_pay": 52,
+     "gates": [
+      {
+       "name": "direction",
+       "bucket": "fell",
+       "label": "Price falling",
+       "detail": "-4\u00a2 in 12 h",
+       "effect": -0.45,
+       "holding": true,
+       "status": "holding"
+      },
+      {
+       "name": "timing",
+       "bucket": "far",
+       "label": "2+ days to kickoff",
+       "detail": "99 h out",
+       "effect": 0.0,
+       "holding": false,
+       "status": "not holding"
+      },
+      {
+       "name": "activity",
+       "bucket": "mid",
+       "label": "Normal activity",
+       "detail": "1k traded in 24 h",
+       "effect": 0.67,
+       "holding": true,
+       "status": "holding"
+      },
+      {
+       "name": "soft",
+       "bucket": "no",
+       "status": "unproven",
+       "label": "Book isn't soft",
+       "detail": "book worth -6.30 per $100 at Kalshi's mid",
+       "effect": null,
+       "holding": false
+      }
+     ],
+     "worth": -1.47,
+     "worth_later": -1.47,
+     "book_now": -6.3,
+     "verdict": "wait",
+     "why": "Price is falling: fills now tend to come just before it drops further.",
+     "fill_chance": 58.4
     }
    }
   }
