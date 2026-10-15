@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-15T20:33:36+00:00",
+ "updated": "2026-10-15T21:01:03+00:00",
  "method": {
   "lookback_h": 96,
   "step_h": 3,
@@ -565,6 +565,572 @@
      "late": 0.64,
      "fill_rate": 39.2,
      "effect": 0.64
+    }
+   }
+  }
+ },
+ "totals": {
+  "method": {
+   "queue": 170000,
+   "queue_source": "Week 6 board, 15 Oct (totals)",
+   "book": "nflverse consensus total, at its exact Kalshi strike"
+  },
+  "weeks": [
+   1,
+   2,
+   3,
+   4,
+   5
+  ],
+  "all": {
+   "n_orders": 4720,
+   "n_games": 76,
+   "conservative": {
+    "fill_rate": 47.3,
+    "ev_if_filled": -1.88,
+    "ev_if_filled_ci": [
+     -2.53,
+     -1.3
+    ],
+    "ev_per_order": -0.89,
+    "actual_per_100": -11.15,
+    "n_filled": 2233
+   },
+   "queue": {
+    "fill_rate": 49.1,
+    "ev_if_filled": -1.69,
+    "ev_if_filled_ci": [
+     -2.31,
+     -1.11
+    ],
+    "ev_per_order": -0.83,
+    "actual_per_100": -10.0,
+    "n_filled": 2316
+   },
+   "optimistic": {
+    "fill_rate": 94.9,
+    "ev_if_filled": 0.85,
+    "ev_if_filled_ci": [
+     0.68,
+     1.0
+    ],
+    "ev_per_order": 0.81,
+    "actual_per_100": 0.77,
+    "n_filled": 4478
+   },
+   "ev_if_all_filled": 1.37,
+   "ev_tap": -4.19,
+   "ev_book": -4.5
+  },
+  "by_when": [
+   {
+    "label": "Over 48 h before",
+    "n_orders": 2292,
+    "n_games": 76,
+    "conservative": {
+     "fill_rate": 56.8,
+     "ev_if_filled": -1.9,
+     "ev_if_filled_ci": [
+      -2.63,
+      -1.25
+     ],
+     "ev_per_order": -1.08,
+     "actual_per_100": -7.72,
+     "n_filled": 1301
+    },
+    "queue": {
+     "fill_rate": 58.4,
+     "ev_if_filled": -1.71,
+     "ev_if_filled_ci": [
+      -2.43,
+      -1.07
+     ],
+     "ev_per_order": -1.0,
+     "actual_per_100": -6.56,
+     "n_filled": 1338
+    },
+    "optimistic": {
+     "fill_rate": 92.3,
+     "ev_if_filled": 0.65,
+     "ev_if_filled_ci": [
+      0.28,
+      0.93
+     ],
+     "ev_per_order": 0.6,
+     "actual_per_100": 0.31,
+     "n_filled": 2115
+    },
+    "ev_if_all_filled": 1.53,
+    "ev_tap": -4.16,
+    "ev_book": -4.5
+   },
+   {
+    "label": "12\u201348 h before",
+    "n_orders": 1820,
+    "n_games": 76,
+    "conservative": {
+     "fill_rate": 43.1,
+     "ev_if_filled": -1.74,
+     "ev_if_filled_ci": [
+      -2.36,
+      -1.07
+     ],
+     "ev_per_order": -0.75,
+     "actual_per_100": -15.76,
+     "n_filled": 785
+    },
+    "queue": {
+     "fill_rate": 45.2,
+     "ev_if_filled": -1.54,
+     "ev_if_filled_ci": [
+      -2.16,
+      -0.92
+     ],
+     "ev_per_order": -0.7,
+     "actual_per_100": -14.37,
+     "n_filled": 822
+    },
+    "optimistic": {
+     "fill_rate": 96.9,
+     "ev_if_filled": 1.04,
+     "ev_if_filled_ci": [
+      0.94,
+      1.14
+     ],
+     "ev_per_order": 1.01,
+     "actual_per_100": 1.03,
+     "n_filled": 1763
+    },
+    "ev_if_all_filled": 1.25,
+    "ev_tap": -4.21,
+    "ev_book": -4.5
+   },
+   {
+    "label": "Last 12 h",
+    "n_orders": 608,
+    "n_games": 76,
+    "conservative": {
+     "fill_rate": 24.2,
+     "ev_if_filled": -2.5,
+     "ev_if_filled_ci": [
+      -3.31,
+      -1.69
+     ],
+     "ev_per_order": -0.61,
+     "actual_per_100": -16.84,
+     "n_filled": 147
+    },
+    "queue": {
+     "fill_rate": 25.7,
+     "ev_if_filled": -2.22,
+     "ev_if_filled_ci": [
+      -3.05,
+      -1.43
+     ],
+     "ev_per_order": -0.57,
+     "actual_per_100": -16.43,
+     "n_filled": 156
+    },
+    "optimistic": {
+     "fill_rate": 98.7,
+     "ev_if_filled": 1.01,
+     "ev_if_filled_ci": [
+      0.93,
+      1.08
+     ],
+     "ev_per_order": 1.0,
+     "actual_per_100": 1.62,
+     "n_filled": 600
+    },
+    "ev_if_all_filled": 1.13,
+    "ev_tap": -4.22,
+    "ev_book": -4.5
+   }
+  ],
+  "by_side": [
+   {
+    "label": "Overs",
+    "n_orders": 2360,
+    "n_games": 76,
+    "conservative": {
+     "fill_rate": 45.1,
+     "ev_if_filled": -2.21,
+     "ev_if_filled_ci": [
+      -3.22,
+      -1.18
+     ],
+     "ev_per_order": -1.0,
+     "actual_per_100": -8.7,
+     "n_filled": 1065
+    },
+    "queue": {
+     "fill_rate": 46.9,
+     "ev_if_filled": -1.96,
+     "ev_if_filled_ci": [
+      -3.01,
+      -0.85
+     ],
+     "ev_per_order": -0.92,
+     "actual_per_100": -7.57,
+     "n_filled": 1106
+    },
+    "optimistic": {
+     "fill_rate": 94.5,
+     "ev_if_filled": 0.85,
+     "ev_if_filled_ci": [
+      -0.15,
+      1.86
+     ],
+     "ev_per_order": 0.81,
+     "actual_per_100": 3.27,
+     "n_filled": 2231
+    },
+    "ev_if_all_filled": 1.33,
+    "ev_tap": -4.25,
+    "ev_book": -4.88
+   },
+   {
+    "label": "Unders",
+    "n_orders": 2360,
+    "n_games": 76,
+    "conservative": {
+     "fill_rate": 49.5,
+     "ev_if_filled": -1.59,
+     "ev_if_filled_ci": [
+      -2.63,
+      -0.48
+     ],
+     "ev_per_order": -0.78,
+     "actual_per_100": -13.37,
+     "n_filled": 1168
+    },
+    "queue": {
+     "fill_rate": 51.3,
+     "ev_if_filled": -1.44,
+     "ev_if_filled_ci": [
+      -2.52,
+      -0.39
+     ],
+     "ev_per_order": -0.74,
+     "actual_per_100": -12.22,
+     "n_filled": 1210
+    },
+    "optimistic": {
+     "fill_rate": 95.2,
+     "ev_if_filled": 0.85,
+     "ev_if_filled_ci": [
+      -0.09,
+      1.82
+     ],
+     "ev_per_order": 0.81,
+     "actual_per_100": -1.71,
+     "n_filled": 2247
+    },
+    "ev_if_all_filled": 1.41,
+    "ev_tap": -4.13,
+    "ev_book": -4.12
+   }
+  ],
+  "by_week": [
+   {
+    "label": "Week 1",
+    "n_orders": 936,
+    "n_games": 15,
+    "conservative": {
+     "fill_rate": 40.6,
+     "ev_if_filled": -1.29,
+     "ev_if_filled_ci": [
+      -2.32,
+      -0.29
+     ],
+     "ev_per_order": -0.53,
+     "actual_per_100": 1.01,
+     "n_filled": 380
+    },
+    "queue": {
+     "fill_rate": 44.4,
+     "ev_if_filled": -1.06,
+     "ev_if_filled_ci": [
+      -2.16,
+      -0.05
+     ],
+     "ev_per_order": -0.47,
+     "actual_per_100": 1.43,
+     "n_filled": 416
+    },
+    "optimistic": {
+     "fill_rate": 96.8,
+     "ev_if_filled": 1.03,
+     "ev_if_filled_ci": [
+      0.89,
+      1.17
+     ],
+     "ev_per_order": 0.99,
+     "actual_per_100": 1.44,
+     "n_filled": 906
+    },
+    "ev_if_all_filled": 1.23,
+    "ev_tap": -4.26,
+    "ev_book": -4.51
+   },
+   {
+    "label": "Week 2",
+    "n_orders": 996,
+    "n_games": 16,
+    "conservative": {
+     "fill_rate": 46.4,
+     "ev_if_filled": -1.03,
+     "ev_if_filled_ci": [
+      -2.19,
+      -0.11
+     ],
+     "ev_per_order": -0.48,
+     "actual_per_100": -30.88,
+     "n_filled": 462
+    },
+    "queue": {
+     "fill_rate": 47.4,
+     "ev_if_filled": -0.94,
+     "ev_if_filled_ci": [
+      -2.11,
+      0.0
+     ],
+     "ev_per_order": -0.44,
+     "actual_per_100": -28.92,
+     "n_filled": 472
+    },
+    "optimistic": {
+     "fill_rate": 95.4,
+     "ev_if_filled": 1.01,
+     "ev_if_filled_ci": [
+      0.78,
+      1.23
+     ],
+     "ev_per_order": 0.97,
+     "actual_per_100": -1.24,
+     "n_filled": 950
+    },
+    "ev_if_all_filled": 1.33,
+    "ev_tap": -4.32,
+    "ev_book": -4.52
+   },
+   {
+    "label": "Week 3",
+    "n_orders": 926,
+    "n_games": 15,
+    "conservative": {
+     "fill_rate": 48.1,
+     "ev_if_filled": -2.48,
+     "ev_if_filled_ci": [
+      -3.87,
+      -1.34
+     ],
+     "ev_per_order": -1.19,
+     "actual_per_100": -9.9,
+     "n_filled": 445
+    },
+    "queue": {
+     "fill_rate": 48.1,
+     "ev_if_filled": -2.48,
+     "ev_if_filled_ci": [
+      -3.87,
+      -1.34
+     ],
+     "ev_per_order": -1.19,
+     "actual_per_100": -9.9,
+     "n_filled": 445
+    },
+    "optimistic": {
+     "fill_rate": 93.8,
+     "ev_if_filled": 0.68,
+     "ev_if_filled_ci": [
+      0.11,
+      1.05
+     ],
+     "ev_per_order": 0.64,
+     "actual_per_100": -0.57,
+     "n_filled": 869
+    },
+    "ev_if_all_filled": 1.39,
+    "ev_tap": -4.17,
+    "ev_book": -4.48
+   },
+   {
+    "label": "Week 4",
+    "n_orders": 940,
+    "n_games": 15,
+    "conservative": {
+     "fill_rate": 50.9,
+     "ev_if_filled": -0.83,
+     "ev_if_filled_ci": [
+      -1.42,
+      -0.22
+     ],
+     "ev_per_order": -0.42,
+     "actual_per_100": -3.96,
+     "n_filled": 478
+    },
+    "queue": {
+     "fill_rate": 53.0,
+     "ev_if_filled": -0.69,
+     "ev_if_filled_ci": [
+      -1.32,
+      -0.06
+     ],
+     "ev_per_order": -0.37,
+     "actual_per_100": -5.68,
+     "n_filled": 498
+    },
+    "optimistic": {
+     "fill_rate": 95.5,
+     "ev_if_filled": 0.93,
+     "ev_if_filled_ci": [
+      0.78,
+      1.07
+     ],
+     "ev_per_order": 0.89,
+     "actual_per_100": 1.25,
+     "n_filled": 898
+    },
+    "ev_if_all_filled": 1.23,
+    "ev_tap": -4.21,
+    "ev_book": -4.49
+   },
+   {
+    "label": "Week 5",
+    "n_orders": 922,
+    "n_games": 15,
+    "conservative": {
+     "fill_rate": 50.8,
+     "ev_if_filled": -3.7,
+     "ev_if_filled_ci": [
+      -5.84,
+      -1.63
+     ],
+     "ev_per_order": -1.88,
+     "actual_per_100": -10.05,
+     "n_filled": 468
+    },
+    "queue": {
+     "fill_rate": 52.6,
+     "ev_if_filled": -3.24,
+     "ev_if_filled_ci": [
+      -5.48,
+      -1.41
+     ],
+     "ev_per_order": -1.7,
+     "actual_per_100": -5.9,
+     "n_filled": 485
+    },
+    "optimistic": {
+     "fill_rate": 92.7,
+     "ev_if_filled": 0.59,
+     "ev_if_filled_ci": [
+      -0.15,
+      1.13
+     ],
+     "ev_per_order": 0.54,
+     "actual_per_100": 3.15,
+     "n_filled": 855
+    },
+    "ev_if_all_filled": 1.67,
+    "ev_tap": -3.97,
+    "ev_book": -4.49
+   }
+  ],
+  "gates": {
+   "base": -1.69,
+   "vol_cuts": [
+    929,
+    3777
+   ],
+   "split": {
+    "early": [
+     1,
+     2,
+     3
+    ],
+    "late": [
+     4,
+     5
+    ]
+   },
+   "direction": {
+    "status": "holding",
+    "buckets": {
+     "fell": {
+      "n_games": 76,
+      "early": -0.86,
+      "late": -0.45,
+      "fill_rate": 47.1,
+      "effect": -0.45
+     },
+     "flat": {
+      "n_games": 76,
+      "early": 0.09,
+      "late": -0.1,
+      "fill_rate": 48.6,
+      "effect": 0.0
+     },
+     "rose": {
+      "n_games": 76,
+      "early": 0.54,
+      "late": 0.72,
+      "fill_rate": 52.5,
+      "effect": 0.54
+     }
+    }
+   },
+   "timing": {
+    "status": "not holding",
+    "buckets": {
+     "far": {
+      "n_games": 76,
+      "early": -0.37,
+      "late": 0.43,
+      "fill_rate": 58.4,
+      "effect": 0.0
+     },
+     "mid": {
+      "n_games": 76,
+      "early": 0.62,
+      "late": -0.17,
+      "fill_rate": 48.3,
+      "effect": 0.0
+     },
+     "near": {
+      "n_games": 76,
+      "early": 0.31,
+      "late": -1.29,
+      "fill_rate": 32.3,
+      "effect": 0.0
+     }
+    }
+   },
+   "activity": {
+    "status": "holding",
+    "buckets": {
+     "quiet": {
+      "n_games": 64,
+      "early": -1.29,
+      "late": -1.0,
+      "fill_rate": 56.2,
+      "effect": -1.0
+     },
+     "mid": {
+      "n_games": 70,
+      "early": 0.67,
+      "late": 0.72,
+      "fill_rate": 46.9,
+      "effect": 0.67
+     },
+     "busy": {
+      "n_games": 72,
+      "early": 0.76,
+      "late": 0.72,
+      "fill_rate": 44.1,
+      "effect": 0.72
+     }
     }
    }
   }
