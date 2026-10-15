@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Kalshi Line Shop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: a sportsbook "line board" - one card per game, two team rows each, calculator below.
+   Desktop = v2's table. Phone (<680px) = each team row restacks into a labelled grid. */
+:root{
+  --bg:#eef1f4; --surface:#ffffff; --ink:#14202b; --muted:#5b6876; --line:#d4dbe2;
+  --accent:#1f5f8b; --good:#1d7a4c; --good-bg:#e3f3ea; --warn:#9a5b00; --warn-bg:#fbefd9;
+  --chip:#e6ecf2;
+  --display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
+  --body:"Source Sans 3","Segoe UI",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f161d; --surface:#17212b; --ink:#e7edf3; --muted:#9aa8b6; --line:#2a3744;
+  --accent:#6fb3e0; --good:#5fd197; --good-bg:#16342a; --warn:#f0b35a; --warn-bg:#3a2c14; --chip:#223040;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f161d; --surface:#17212b; --ink:#e7edf3; --muted:#9aa8b6; --line:#2a3744;
+  --accent:#6fb3e0; --good:#5fd197; --good-bg:#16342a; --warn:#f0b35a; --warn-bg:#3a2c14; --chip:#223040;
+  color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.45;-webkit-text-size-adjust:100%}
+.wrap{max-width:980px;margin:0 auto;padding-block:20px 48px;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));
+  display:grid;gap:22px}
+h1,h2{font-family:var(--display);font-weight:700;letter-spacing:.01em;text-wrap:balance;margin:0}
+h1{font-size:2.3rem;line-height:1}
+h2{font-size:1.45rem}
+.eyebrow{font-family:var(--display);text-transform:uppercase;letter-spacing:.12em;color:var(--accent);font-weight:600;font-size:.9rem}
+p{margin:0;max-width:65ch}
+.muted{color:var(--muted)}
+.head{display:grid;gap:8px}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:grid;gap:14px}
+.calc{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;align-items:end}
+label{display:grid;gap:4px;font-size:.85rem;color:var(--muted);font-weight:600}
+input,select{font:500 1rem var(--mono);color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:8px 10px;width:100%}
+input:focus-visible,select:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.result{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.stat{display:grid;gap:2px}
+.stat .k{font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600}
+.stat .v{font:700 1.35rem var(--mono);font-variant-numeric:tabular-nums}
+.verdict{border-radius:8px;padding:10px 12px;font-weight:600}
+.verdict.good{background:var(--good-bg);color:var(--good)}
+.verdict.warn{background:var(--warn-bg);color:var(--warn)}
+.statusbar{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
+.games{display:grid;gap:14px}
+.game{background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.ghead{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px;padding:10px 14px;border-bottom:1px solid var(--line)}
+.ghead .matchup{font-family:var(--display);font-size:1.3rem;font-weight:700}
+.ghead .when{font-size:.85rem;color:var(--muted);align-self:center}
+table{border-collapse:collapse;width:100%}
+th,td{padding:8px 12px;text-align:right;white-space:nowrap}
+th{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600;border-bottom:1px solid var(--line)}
+th:first-child,td:first-child{text-align:left}
+tbody tr+tr td{border-top:1px solid var(--line)}
+td.team{font-weight:600}
+.best{font-weight:700;color:var(--ink)}
+.notbest{color:var(--muted)}
+.sub{display:block;font-size:.74rem;color:var(--muted);font-family:var(--body);font-weight:400}
+.chip{display:inline-block;border-radius:999px;padding:3px 9px;font-size:.8rem;font-weight:600;font-family:var(--body);background:var(--chip);color:var(--muted)}
+.chip.good{background:var(--good-bg);color:var(--good)}
+.chip.warn{background:var(--warn-bg);color:var(--warn)}
+.legend{display:grid;gap:6px;font-size:.92rem}
+.legend b{font-weight:600}
+.note{font-size:.85rem;color:var(--muted)}
+.rowtools{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+button{font:600 .9rem var(--body);color:var(--accent);background:transparent;border:1px solid var(--line);border-radius:6px;padding:7px 12px;cursor:pointer}
+button:hover{border-color:var(--accent)}
+.empty{padding:18px;text-align:center}
+@media (prefers-reduced-motion:no-preference){.verdict,.chip{transition:background .2s,color .2s}}
+
+/* Phone: no sideways scrolling. Each team row becomes a small labelled grid. */
+@media (max-width:680px){
+  h1{font-size:2rem}
+  thead{display:none}
+  table,tbody,tr,td{display:block}
+  tbody tr{display:grid;grid-template-columns:repeat(3,1fr);gap:8px 10px;padding:12px 14px}
+  tbody tr+tr{border-top:1px solid var(--line)}
+  tbody tr+tr td{border-top:0}
+  td{padding:0;text-align:left;white-space:normal}
+  td.team{grid-column:1/-1;display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:1.05rem}
+  td.team .sub{display:inline}
+  td[data-k]::before{content:attr(data-k);display:block;font:600 .68rem var(--body);text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:1px}
+  td.vs{grid-column:1/-1;order:9}
+  td.never{grid-column:span 2}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="head">
+    <div class="eyebrow" id="eyebrow">NFL · moneylines</div>
+    <h1>Kalshi Line Shop</h1>
+    <p class="muted">The same bet, three prices: FanDuel and DraftKings, Kalshi when you just tap buy, and Kalshi when you post a limit order at the bid.</p>
+    <div class="statusbar">
+      <span class="chip" id="age" role="status">Loading…</span>
+      <span class="note" id="srcnote"></span>
+    </div>
+  </header>
+
+  <section class="games" aria-labelledby="games-h">
+    <div class="rowtools">
+      <h2 id="games-h">This week's games</h2>
+      <button id="reload" type="button">Refresh</button>
+    </div>
+    <div id="notes" class="note"></div>
+    <div id="games" class="games"></div>
+  </section>
+
+  <section class="panel" aria-labelledby="calc-h">
+    <h2 id="calc-h">Quick calculator</h2>
+    <p class="note">Works from what you type, even offline. Use it when the Kalshi app shows a different price than the board.</p>
+    <div class="calc">
+      <label for="c-price">Kalshi price (¢)
+        <input id="c-price" inputmode="numeric" value="56">
+      </label>
+      <label for="c-mode">How you buy
+        <select id="c-mode">
+          <option value="limit">Limit order at that price</option>
+          <option value="now">Tap buy at that price (taker fee)</option>
+        </select>
+      </label>
+      <label for="c-book">Sportsbook odds
+        <input id="c-book" value="-142" inputmode="text">
+      </label>
+    </div>
+    <div class="result" id="c-out"></div>
+    <div class="verdict" id="c-verdict" role="status"></div>
+  </section>
+
+  <section class="panel" aria-labelledby="how-h">
+    <h2 id="how-h">How to read it</h2>
+    <div class="legend">
+      <p><b>FanDuel / DraftKings</b> are the live moneylines. The better of the two is in bold; that's the one everything below compares against. The small line under each team is the no-vig fair price.</p>
+      <p><b>Set limit at</b> is the price to enter on Kalshi's limit order screen. It's the current bid, so your order waits until someone sells to you.</p>
+      <p><b>That's like</b> turns that Kalshi price into normal odds so you can compare. The small line underneath is what you'd get if you just tapped buy instead, fee included.</p>
+      <p><b>Vs your book</b> is how much more (or less) you'd win on Kalshi with a limit order, for every $100 you bet, compared with the better sportsbook.</p>
+      <p><b>Never pay more than</b> is your ceiling. At any Kalshi price above it, the sportsbook pays better, so skip Kalshi.</p>
+    </div>
+    <p class="note">Prices move. Check the live price in the Kalshi app before you place an order, cancel unfilled orders before inactives (about 90 minutes before kickoff), and assume no maker fee unless Kalshi shows one on the order screen. This page compares prices; it doesn't predict winners.</p>
+  </section>
+</div>
+
+<script>
+// ---- odds math (same formulas as fetch_lines.py; the board's numbers come precomputed from lines.json) ----
+const amToProb = a => a < 0 ? (-a)/(-a+100) : 100/(a+100);
+const probToAm = p => p >= 0.5 ? -Math.round(100*p/(1-p)) : Math.round(100*(1-p)/p);
+const fmtAm = a => a == null ? "—" : (a > 0 ? "+" : "") + a;
+const takerFee = p => 0.07*p*(1-p);
+const profitPer100Book = a => a > 0 ? a : 10000/(-a);
+const profitPer100Price = c => (1-c)/c*100;
+const money = x => (x < 0 ? "−$" : "$") + Math.abs(x).toFixed(2);
+function parseAm(s){
+  const v = Number(String(s).replace(/[^\d+\-.]/g,""));
+  if (!isFinite(v) || Math.abs(v) < 100) return null;
+  return Math.round(v);
+}
+const beatsUnder = a => Math.ceil(+(amToProb(a)*100).toFixed(9)) - 1;
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+// ---- calculator (offline, from typed numbers) ----
+function calc(){
+  const cents = Number($("c-price").value);
+  const book = parseAm($("c-book").value);
+  const out = $("c-out"), v = $("c-verdict");
+  if (!(cents >= 1 && cents <= 99) || book === null){
+    out.innerHTML = "";
+    v.className = "verdict warn";
+    v.textContent = "Enter a Kalshi price from 1 to 99 cents and sportsbook odds like -142 or +120.";
+    return;
+  }
+  const p = cents/100;
+  const cost = $("c-mode").value === "now" ? p + takerFee(p) : p;
+  const kWin = profitPer100Price(cost), bWin = profitPer100Book(book);
+  out.innerHTML =
+    `<div class="stat"><span class="k">Kalshi as odds</span><span class="v">${fmtAm(probToAm(cost))}</span></div>
+     <div class="stat"><span class="k">Kalshi wins per $100</span><span class="v">${money(kWin)}</span></div>
+     <div class="stat"><span class="k">Book wins per $100</span><span class="v">${money(bWin)}</span></div>
+     <div class="stat"><span class="k">Never pay more than</span><span class="v">${beatsUnder(book)}¢</span></div>`;
+  const diff = kWin - bWin;
+  v.className = "verdict " + (diff > 0.005 ? "good" : "warn");
+  v.textContent = diff > 0.005
+    ? `Kalshi pays ${money(diff)} more per $100 than the book.`
+    : `The book pays ${money(-diff)} more per $100. Lower your Kalshi price to ${beatsUnder(book)}¢ or less.`;
+}
+["c-price","c-mode","c-book"].forEach(id => $(id).addEventListener("input", calc));
+
+// ---- board ----
+let DATA = null;
+const CACHE_KEY = "lineshop-last";
+
+function bookCell(t, b, label){
+  const v = t[b];
+  if (v == null) return `<td class="num notbest" data-k="${label}">—</td>`;
+  const cls = v === t.best ? "best" : "notbest";
+  return `<td class="num ${cls}" data-k="${label}">${fmtAm(v)}</td>`;
+}
+function teamRow(t, books){
+  let vs = '<span class="chip">No Kalshi price</span>';
+  if (t.best == null) vs = '<span class="chip warn">No book line</span>';
+  else if (t.vs_book != null) vs = t.beats
+      ? `<span class="chip good">+${money(t.vs_book)} per $100</span>`
+      : `<span class="chip warn">Book pays ${money(-t.vs_book)} more</span>`;
+  const fair = t.fair_am != null ? `<span class="sub">fair ${fmtAm(t.fair_am)} · ${t.fair_pct}%</span>` : "";
+  const limit = t.limit_am != null ? `<b>${t.bid_c}¢</b>` : "—";
+  const like = t.limit_am != null ? fmtAm(t.limit_am) : "—";
+  const tap = t.tap_am != null ? `<span class="sub">tap buy: ${fmtAm(t.tap_am)} at ${t.ask_c}¢</span>` : "";
+  return `<tr>
+    <td class="team">${esc(t.name)}${fair}</td>
+    ${books.map(([b,l]) => bookCell(t, b, l)).join("")}
+    <td class="num limit" data-k="Set limit at">${limit}</td>
+    <td class="num" data-k="That's like">${like}${tap}</td>
+    <td class="vs">${vs}</td>
+    <td class="num never" data-k="Never pay more than">${t.never_pay != null ? t.never_pay + "¢" : "—"}</td>
+  </tr>`;
+}
+function render(){
+  if (!DATA) return;
+  const now = Date.now();
+  $("eyebrow").textContent = `NFL ${DATA.week ? "Week " + DATA.week : ""} · moneylines`;
+  const live = DATA.games.filter(g => Date.parse(g.kickoff) > now);
+  const cons = DATA.books_source !== "sharpapi";
+  $("srcnote").textContent = cons
+    ? "Books: nflverse consensus line (FanDuel/DraftKings unavailable this run)."
+    : "Books: FanDuel + DraftKings via SharpAPI. Kalshi: live bid/ask.";
+  $("notes").textContent = (DATA.notes || []).join(" ");
+  if (!live.length){
+    $("games").innerHTML = `<div class="game empty muted">No upcoming games on the board right now.</div>`;
+    return;
+  }
+  $("games").innerHTML = live.map(g => {
+    const books = g.source === "consensus" ? [["Consensus","Consensus"]] : [["FD","FanDuel"],["DK","DraftKings"]];
+    return `<article class="game">
+      <div class="ghead"><span class="matchup">${esc(g.away.name)} at ${esc(g.home.name)}</span><span class="when">${esc(g.when)} ET${g.source === "consensus" && !cons ? " · consensus line" : ""}</span></div>
+      <table>
+        <thead><tr><th>Team</th>${books.map(b => `<th>${b[1]}</th>`).join("")}<th>Set limit at</th><th>That's like</th><th>Vs your book</th><th>Never pay more than</th></tr></thead>
+        <tbody>${teamRow(g.away, books)}${teamRow(g.home, books)}</tbody>
+      </table>
+    </article>`;
+  }).join("");
+}
+function tickAge(){
+  const el = $("age");
+  if (!DATA){ return; }
+  const mins = Math.max(0, Math.round((Date.now() - Date.parse(DATA.updated)) / 60000));
+  const txt = mins < 1 ? "just now" : mins < 60 ? `${mins} min ago` : `${Math.floor(mins/60)} h ${mins%60} min ago`;
+  el.textContent = `Updated ${txt}` + (DATA._cached ? " (offline copy)" : "");
+  el.className = "chip " + (mins > 60 ? "warn" : "good");
+  el.title = new Date(DATA.updated).toLocaleString();
+}
+async function load(){
+  try {
+    const r = await fetch("lines.json?t=" + Date.now(), {cache: "no-store"});
+    if (!r.ok) throw new Error(r.status);
+    DATA = await r.json();
+    try { localStorage.setItem(CACHE_KEY, JSON.stringify(DATA)); } catch(e){}
+  } catch(e) {
+    let c = null;
+    try { c = JSON.parse(localStorage.getItem(CACHE_KEY) || "null"); } catch(_){}
+    if (c){ DATA = c; DATA._cached = true; }
+    else { $("age").textContent = "Couldn't load lines.json"; $("age").className = "chip warn"; return; }
+  }
+  render(); tickAge();
+}
+$("reload").addEventListener("click", load);
+document.addEventListener("visibilitychange", () => { if (!document.hidden) load(); });
+setInterval(tickAge, 30000);
+setInterval(() => { render(); }, 60000);     // drop games as they kick off
+setInterval(load, 5 * 60000);
+calc(); load();
+</script>
+</body>
+</html>
