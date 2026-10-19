@@ -1,10 +1,10 @@
 {
- "updated": "2026-10-19T15:50:39+00:00",
+ "updated": "2026-10-19T16:20:46+00:00",
  "season": 2026,
  "week": 6,
  "books_source": "sharpapi",
  "totals_source": "sharpapi",
- "sharp_updated": "2026-10-19T15:50:41.449482398Z",
+ "sharp_updated": "2026-10-19T16:20:49.169654137Z",
  "notes": [],
  "games": [
   {
@@ -24,9 +24,9 @@
     "fair_am": 332,
     "bid_c": 21,
     "ask_c": 22,
-    "volume": 1691920,
+    "volume": 1791389,
     "ticker": "KXNFLGAME-26OCT19WASSF-WAS",
-    "bid_size": 679586,
+    "bid_size": 722451,
     "limit_am": 376,
     "tap_am": 331,
     "tap_vs_book": 11.01,
@@ -56,7 +56,7 @@
       "name": "activity",
       "bucket": "busy",
       "label": "Busy market",
-      "detail": "1337k traded in 24 h",
+      "detail": "1516k traded in 24 h",
       "effect": 0.64,
       "holding": true,
       "status": "holding"
@@ -89,9 +89,9 @@
     "fair_am": -332,
     "bid_c": 78,
     "ask_c": 79,
-    "volume": 1432773,
+    "volume": 1488891,
     "ticker": "KXNFLGAME-26OCT19WASSF-SF",
-    "bid_size": 245401,
+    "bid_size": 220615,
     "limit_am": -355,
     "tap_am": -404,
     "tap_vs_book": -0.57,
@@ -121,7 +121,7 @@
       "name": "activity",
       "bucket": "busy",
       "label": "Busy market",
-      "detail": "1130k traded in 24 h",
+      "detail": "1144k traded in 24 h",
       "effect": 0.64,
       "holding": true,
       "status": "holding"
@@ -158,7 +158,7 @@
      "fair_am": -103,
      "bid_c": 50,
      "ask_c": 51,
-     "volume": 65474,
+     "volume": 71310,
      "ticker": "KXNFLTOTAL-26OCT19WASSF-52",
      "bid_size": 0,
      "limit_am": -100,
@@ -170,11 +170,11 @@
      "gates": [
       {
        "name": "direction",
-       "bucket": "flat",
-       "label": "Price steady",
-       "detail": "+0\u00a2 in 12 h",
-       "effect": 0.0,
-       "holding": false,
+       "bucket": "fell",
+       "label": "Price falling",
+       "detail": "-1\u00a2 in 12 h",
+       "effect": -0.45,
+       "holding": true,
        "status": "holding"
       },
       {
@@ -190,7 +190,7 @@
        "name": "activity",
        "bucket": "busy",
        "label": "Busy market",
-       "detail": "43k traded in 24 h",
+       "detail": "62k traded in 24 h",
        "effect": 0.72,
        "holding": true,
        "status": "holding"
@@ -205,11 +205,11 @@
        "holding": false
       }
      ],
-     "worth": -0.97,
-     "worth_later": -0.97,
+     "worth": -1.42,
+     "worth_later": -1.42,
      "book_now": -4.41,
-     "verdict": "post",
-     "why": "Gates are clear: post the limit at the bid.",
+     "verdict": "wait",
+     "why": "Price is falling: fills now tend to come just before it drops further.",
      "fill_chance": 32.3
     },
     "under": {
@@ -223,7 +223,7 @@
      "fair_am": 103,
      "bid_c": 49,
      "ask_c": 50,
-     "volume": 65474,
+     "volume": 71310,
      "ticker": "KXNFLTOTAL-26OCT19WASSF-52",
      "bid_size": 0,
      "limit_am": 104,
@@ -235,11 +235,11 @@
      "gates": [
       {
        "name": "direction",
-       "bucket": "flat",
-       "label": "Price steady",
-       "detail": "+0\u00a2 in 12 h",
-       "effect": 0.0,
-       "holding": false,
+       "bucket": "rose",
+       "label": "Price rising",
+       "detail": "+1\u00a2 in 12 h",
+       "effect": 0.54,
+       "holding": true,
        "status": "holding"
       },
       {
@@ -255,7 +255,7 @@
        "name": "activity",
        "bucket": "busy",
        "label": "Busy market",
-       "detail": "43k traded in 24 h",
+       "detail": "62k traded in 24 h",
        "effect": 0.72,
        "holding": true,
        "status": "holding"
@@ -270,8 +270,8 @@
        "holding": false
       }
      ],
-     "worth": -0.97,
-     "worth_later": -0.97,
+     "worth": -0.43,
+     "worth_later": -0.43,
      "book_now": -3.36,
      "verdict": "post",
      "why": "Gates are clear: post the limit at the bid.",
