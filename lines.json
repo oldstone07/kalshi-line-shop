@@ -1,10 +1,10 @@
 {
- "updated": "2026-10-19T22:35:07+00:00",
+ "updated": "2026-10-19T23:05:34+00:00",
  "season": 2026,
  "week": 6,
  "books_source": "sharpapi",
  "totals_source": "sharpapi",
- "sharp_updated": "2026-10-19T22:35:06.295523541Z",
+ "sharp_updated": "2026-10-19T23:05:37.549319664Z",
  "notes": [],
  "games": [
   {
@@ -17,16 +17,15 @@
     "code": "WAS",
     "name": "Commanders",
     "FD": 330,
-    "DK": 320,
     "best_book": "FD",
     "best": 330,
-    "fair_pct": 22.6,
-    "fair_am": 342,
+    "fair_pct": 22.4,
+    "fair_am": 347,
     "bid_c": 23,
     "ask_c": 24,
-    "volume": 4135899,
+    "volume": 4966222,
     "ticker": "KXNFLGAME-26OCT19WASSF-WAS",
-    "bid_size": 399673,
+    "bid_size": 344511,
     "limit_am": 335,
     "tap_am": 296,
     "tap_vs_book": -34.38,
@@ -36,18 +35,18 @@
     "gates": [
      {
       "name": "direction",
-      "bucket": "flat",
-      "label": "Price steady",
-      "detail": "+0\u00a2 in 12 h",
-      "effect": 0.0,
-      "holding": false,
+      "bucket": "rose",
+      "label": "Price rising",
+      "detail": "+2\u00a2 in 12 h",
+      "effect": 0.24,
+      "holding": true,
       "status": "holding"
      },
      {
       "name": "timing",
       "bucket": "near",
       "label": "Under 24 h to kickoff",
-      "detail": "2 h out",
+      "detail": "1 h out",
       "effect": 0.52,
       "holding": true,
       "status": "holding"
@@ -56,7 +55,7 @@
       "name": "activity",
       "bucket": "busy",
       "label": "Busy market",
-      "detail": "3354k traded in 24 h",
+      "detail": "4555k traded in 24 h",
       "effect": 0.64,
       "holding": true,
       "status": "holding"
@@ -71,48 +70,47 @@
       "holding": true
      }
     ],
-    "worth": 0.1,
-    "worth_later": 0.1,
+    "worth": 0.34,
+    "worth_later": 0.34,
     "book_now": 1.05,
-    "verdict": "book",
-    "why": "The book is paying more than Kalshi's fair price right now. Rests on the unproven book gate.",
+    "verdict": "late",
+    "why": "Too late for a limit: cancel unfilled orders before inactives.",
     "fill_chance": 23.7
    },
    "home": {
     "code": "SF",
     "name": "49ers",
     "FD": -420,
-    "DK": -410,
-    "best_book": "DK",
-    "best": -410,
-    "fair_pct": 77.4,
-    "fair_am": -342,
+    "best_book": "FD",
+    "best": -420,
+    "fair_pct": 77.6,
+    "fair_am": -347,
     "bid_c": 76,
     "ask_c": 77,
-    "volume": 2951228,
+    "volume": 3167005,
     "ticker": "KXNFLGAME-26OCT19WASSF-SF",
-    "bid_size": 552464,
+    "bid_size": 377870,
     "limit_am": -317,
     "tap_am": -360,
-    "tap_vs_book": 3.42,
-    "vs_book": 7.19,
+    "tap_vs_book": 4.0,
+    "vs_book": 7.77,
     "beats": true,
     "never_pay": 80,
     "gates": [
      {
       "name": "direction",
-      "bucket": "flat",
-      "label": "Price steady",
-      "detail": "+0\u00a2 in 12 h",
-      "effect": 0.0,
-      "holding": false,
+      "bucket": "fell",
+      "label": "Price falling",
+      "detail": "-2\u00a2 in 12 h",
+      "effect": -0.16,
+      "holding": true,
       "status": "holding"
      },
      {
       "name": "timing",
       "bucket": "near",
       "label": "Under 24 h to kickoff",
-      "detail": "2 h out",
+      "detail": "1 h out",
       "effect": 0.52,
       "holding": true,
       "status": "holding"
@@ -121,7 +119,7 @@
       "name": "activity",
       "bucket": "busy",
       "label": "Busy market",
-      "detail": "1974k traded in 24 h",
+      "detail": "2739k traded in 24 h",
       "effect": 0.64,
       "holding": true,
       "status": "holding"
@@ -131,16 +129,16 @@
       "bucket": "no",
       "status": "unproven",
       "label": "Book isn't soft",
-      "detail": "book worth -4.84 per $100 at Kalshi's mid",
+      "detail": "book worth -5.29 per $100 at Kalshi's mid",
       "effect": null,
       "holding": false
      }
     ],
-    "worth": 0.1,
-    "worth_later": 0.1,
-    "book_now": -4.84,
-    "verdict": "post",
-    "why": "Gates are clear: post the limit at the bid.",
+    "worth": -0.06,
+    "worth_later": -0.06,
+    "book_now": -5.29,
+    "verdict": "late",
+    "why": "Too late for a limit: cancel unfilled orders before inactives.",
     "fill_chance": 23.7
    },
    "total": {
@@ -157,7 +155,7 @@
      "fair_am": -102,
      "bid_c": 50,
      "ask_c": 51,
-     "volume": 320719,
+     "volume": 435795,
      "ticker": "KXNFLTOTAL-26OCT19WASSF-52",
      "bid_size": 0,
      "limit_am": -100,
@@ -166,7 +164,7 @@
      "vs_book": 10.71,
      "beats": true,
      "never_pay": 52,
-     "DK": -105,
+     "DK": -110,
      "DK_line": 52.5,
      "gates": [
       {
@@ -182,7 +180,7 @@
        "name": "timing",
        "bucket": "near",
        "label": "Under 24 h to kickoff",
-       "detail": "2 h out",
+       "detail": "1 h out",
        "effect": 0.0,
        "holding": false,
        "status": "not holding"
@@ -191,7 +189,7 @@
        "name": "activity",
        "bucket": "busy",
        "label": "Busy market",
-       "detail": "259k traded in 24 h",
+       "detail": "421k traded in 24 h",
        "effect": 0.72,
        "holding": true,
        "status": "holding"
@@ -209,8 +207,8 @@
      "worth": -1.42,
      "worth_later": -1.42,
      "book_now": -4.41,
-     "verdict": "wait",
-     "why": "Price is falling: fills now tend to come just before it drops further.",
+     "verdict": "late",
+     "why": "Too late for a limit: cancel unfilled orders before inactives.",
      "fill_chance": 32.3
     },
     "under": {
@@ -223,7 +221,7 @@
      "fair_am": 102,
      "bid_c": 49,
      "ask_c": 50,
-     "volume": 320719,
+     "volume": 435795,
      "ticker": "KXNFLTOTAL-26OCT19WASSF-52",
      "bid_size": 0,
      "limit_am": 104,
@@ -248,7 +246,7 @@
        "name": "timing",
        "bucket": "near",
        "label": "Under 24 h to kickoff",
-       "detail": "2 h out",
+       "detail": "1 h out",
        "effect": 0.0,
        "holding": false,
        "status": "not holding"
@@ -257,7 +255,7 @@
        "name": "activity",
        "bucket": "busy",
        "label": "Busy market",
-       "detail": "259k traded in 24 h",
+       "detail": "421k traded in 24 h",
        "effect": 0.72,
        "holding": true,
        "status": "holding"
@@ -275,8 +273,8 @@
      "worth": -0.43,
      "worth_later": -0.43,
      "book_now": -4.67,
-     "verdict": "post",
-     "why": "Gates are clear: post the limit at the bid.",
+     "verdict": "late",
+     "why": "Too late for a limit: cancel unfilled orders before inactives.",
      "fill_chance": 32.3
     }
    }
