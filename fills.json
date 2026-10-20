@@ -1,11 +1,11 @@
 {
- "updated": "2026-10-15T21:01:03+00:00",
+ "updated": "2026-10-20T18:26:49+00:00",
  "method": {
   "lookback_h": 96,
   "step_h": 3,
   "cancel_min": 90,
-  "queue": 69000,
-  "queue_source": "Week 6 board, 15 Oct",
+  "queue": 94442,
+  "queue_source": "board snapshots",
   "judge": "Kalshi mid at kickoff",
   "book": "nflverse consensus moneyline"
  },
@@ -14,255 +14,256 @@
   2,
   3,
   4,
-  5
+  5,
+  6
  ],
  "all": {
-  "n_orders": 4966,
-  "n_games": 79,
+  "n_orders": 5845,
+  "n_games": 93,
   "conservative": {
-   "fill_rate": 33.9,
-   "ev_if_filled": -1.48,
+   "fill_rate": 34.4,
+   "ev_if_filled": -1.37,
    "ev_if_filled_ci": [
-    -2.15,
-    -0.84
+    -2.06,
+    -0.76
    ],
-   "ev_per_order": -0.5,
-   "actual_per_100": -5.18,
-   "n_filled": 1681
+   "ev_per_order": -0.47,
+   "actual_per_100": -4.48,
+   "n_filled": 2013
   },
   "queue": {
-   "fill_rate": 38.5,
-   "ev_if_filled": -1.06,
+   "fill_rate": 36.9,
+   "ev_if_filled": -1.09,
    "ev_if_filled_ci": [
-    -1.73,
-    -0.45
+    -1.77,
+    -0.44
    ],
-   "ev_per_order": -0.41,
-   "actual_per_100": 0.26,
-   "n_filled": 1912
+   "ev_per_order": -0.4,
+   "actual_per_100": -2.86,
+   "n_filled": 2156
   },
   "optimistic": {
    "fill_rate": 99.6,
-   "ev_if_filled": 1.51,
+   "ev_if_filled": 1.62,
    "ev_if_filled_ci": [
-    1.22,
-    1.85
+    1.34,
+    1.93
    ],
-   "ev_per_order": 1.51,
-   "actual_per_100": 3.69,
-   "n_filled": 4946
+   "ev_per_order": 1.61,
+   "actual_per_100": 6.66,
+   "n_filled": 5820
   },
-  "ev_if_all_filled": 1.53,
-  "ev_tap": -4.23,
+  "ev_if_all_filled": 1.65,
+  "ev_tap": -4.13,
   "ev_book": -4.59
  },
  "by_when": [
   {
    "label": "Over 48 h before",
-   "n_orders": 2442,
-   "n_games": 79,
+   "n_orders": 2874,
+   "n_games": 93,
    "conservative": {
-    "fill_rate": 42.7,
-    "ev_if_filled": -1.62,
+    "fill_rate": 43.1,
+    "ev_if_filled": -1.52,
     "ev_if_filled_ci": [
-     -2.45,
-     -0.83
+     -2.35,
+     -0.76
     ],
-    "ev_per_order": -0.69,
-    "actual_per_100": -7.88,
-    "n_filled": 1043
+    "ev_per_order": -0.66,
+    "actual_per_100": -6.43,
+    "n_filled": 1238
    },
    "queue": {
-    "fill_rate": 46.4,
-    "ev_if_filled": -1.31,
+    "fill_rate": 44.8,
+    "ev_if_filled": -1.37,
     "ev_if_filled_ci": [
-     -2.17,
-     -0.53
+     -2.18,
+     -0.62
     ],
     "ev_per_order": -0.61,
-    "actual_per_100": -3.23,
-    "n_filled": 1133
+    "actual_per_100": -4.88,
+    "n_filled": 1287
    },
    "optimistic": {
-    "fill_rate": 99.4,
-    "ev_if_filled": 1.52,
+    "fill_rate": 99.3,
+    "ev_if_filled": 1.64,
     "ev_if_filled_ci": [
-     1.15,
-     1.9
+     1.29,
+     2.0
     ],
-    "ev_per_order": 1.51,
-    "actual_per_100": 4.08,
-    "n_filled": 2427
+    "ev_per_order": 1.63,
+    "actual_per_100": 7.16,
+    "n_filled": 2855
    },
-   "ev_if_all_filled": 1.55,
-   "ev_tap": -4.25,
+   "ev_if_all_filled": 1.69,
+   "ev_tap": -4.13,
    "ev_book": -4.59
   },
   {
    "label": "12\u201348 h before",
-   "n_orders": 1892,
-   "n_games": 79,
+   "n_orders": 2227,
+   "n_games": 93,
    "conservative": {
-    "fill_rate": 28.4,
-    "ev_if_filled": -1.26,
+    "fill_rate": 29.3,
+    "ev_if_filled": -1.12,
     "ev_if_filled_ci": [
-     -1.84,
-     -0.7
+     -1.7,
+     -0.59
     ],
-    "ev_per_order": -0.36,
-    "actual_per_100": -2.82,
-    "n_filled": 538
+    "ev_per_order": -0.33,
+    "actual_per_100": -2.69,
+    "n_filled": 652
    },
    "queue": {
-    "fill_rate": 34.8,
-    "ev_if_filled": -0.72,
+    "fill_rate": 32.9,
+    "ev_if_filled": -0.64,
     "ev_if_filled_ci": [
-     -1.37,
-     -0.08
+     -1.3,
+     -0.02
     ],
-    "ev_per_order": -0.25,
-    "actual_per_100": 4.57,
-    "n_filled": 659
-   },
-   "optimistic": {
-    "fill_rate": 99.8,
-    "ev_if_filled": 1.48,
-    "ev_if_filled_ci": [
-     1.2,
-     1.8
-    ],
-    "ev_per_order": 1.48,
-    "actual_per_100": 3.24,
-    "n_filled": 1888
-   },
-   "ev_if_all_filled": 1.49,
-   "ev_tap": -4.22,
-   "ev_book": -4.59
-  },
-  {
-   "label": "Last 12 h",
-   "n_orders": 632,
-   "n_games": 79,
-   "conservative": {
-    "fill_rate": 15.8,
-    "ev_if_filled": -1.14,
-    "ev_if_filled_ci": [
-     -1.85,
-     -0.44
-    ],
-    "ev_per_order": -0.18,
-    "actual_per_100": 10.22,
-    "n_filled": 100
-   },
-   "queue": {
-    "fill_rate": 19.0,
-    "ev_if_filled": -0.56,
-    "ev_if_filled_ci": [
-     -1.38,
-     0.18
-    ],
-    "ev_per_order": -0.11,
-    "actual_per_100": 9.59,
-    "n_filled": 120
+    "ev_per_order": -0.21,
+    "actual_per_100": -1.24,
+    "n_filled": 733
    },
    "optimistic": {
     "fill_rate": 99.8,
     "ev_if_filled": 1.58,
     "ev_if_filled_ci": [
-     1.33,
-     1.87
+     1.31,
+     1.9
     ],
-    "ev_per_order": 1.57,
-    "actual_per_100": 3.52,
-    "n_filled": 631
+    "ev_per_order": 1.58,
+    "actual_per_100": 6.07,
+    "n_filled": 2222
    },
-   "ev_if_all_filled": 1.58,
+   "ev_if_all_filled": 1.59,
    "ev_tap": -4.14,
+   "ev_book": -4.59
+  },
+  {
+   "label": "Last 12 h",
+   "n_orders": 744,
+   "n_games": 93,
+   "conservative": {
+    "fill_rate": 16.5,
+    "ev_if_filled": -1.21,
+    "ev_if_filled_ci": [
+     -1.81,
+     -0.59
+    ],
+    "ev_per_order": -0.2,
+    "actual_per_100": 5.7,
+    "n_filled": 123
+   },
+   "queue": {
+    "fill_rate": 18.3,
+    "ev_if_filled": -0.76,
+    "ev_if_filled_ci": [
+     -1.49,
+     -0.04
+    ],
+    "ev_per_order": -0.14,
+    "actual_per_100": 7.43,
+    "n_filled": 136
+   },
+   "optimistic": {
+    "fill_rate": 99.9,
+    "ev_if_filled": 1.64,
+    "ev_if_filled_ci": [
+     1.4,
+     1.93
+    ],
+    "ev_per_order": 1.64,
+    "actual_per_100": 6.45,
+    "n_filled": 743
+   },
+   "ev_if_all_filled": 1.64,
+   "ev_tap": -4.1,
    "ev_book": -4.59
   }
  ],
  "by_side": [
   {
    "label": "Favourites (50\u00a2+)",
-   "n_orders": 2483,
-   "n_games": 79,
+   "n_orders": 2921,
+   "n_games": 93,
    "conservative": {
-    "fill_rate": 34.1,
-    "ev_if_filled": -1.94,
+    "fill_rate": 37.2,
+    "ev_if_filled": -2.05,
     "ev_if_filled_ci": [
-     -2.66,
-     -1.19
+     -2.73,
+     -1.35
     ],
-    "ev_per_order": -0.66,
-    "actual_per_100": -9.86,
-    "n_filled": 846
+    "ev_per_order": -0.76,
+    "actual_per_100": -3.97,
+    "n_filled": 1086
    },
    "queue": {
-    "fill_rate": 37.7,
-    "ev_if_filled": -1.66,
+    "fill_rate": 39.4,
+    "ev_if_filled": -1.87,
     "ev_if_filled_ci": [
-     -2.4,
-     -0.89
+     -2.52,
+     -1.2
     ],
-    "ev_per_order": -0.63,
-    "actual_per_100": -16.2,
-    "n_filled": 936
+    "ev_per_order": -0.74,
+    "actual_per_100": -9.14,
+    "n_filled": 1151
    },
    "optimistic": {
     "fill_rate": 99.7,
-    "ev_if_filled": 0.35,
+    "ev_if_filled": 0.15,
     "ev_if_filled_ci": [
-     -0.22,
-     0.93
+     -0.38,
+     0.66
     ],
-    "ev_per_order": 0.35,
-    "actual_per_100": -4.3,
-    "n_filled": 2476
+    "ev_per_order": 0.15,
+    "actual_per_100": -3.97,
+    "n_filled": 2913
    },
-   "ev_if_all_filled": 0.36,
-   "ev_tap": -3.49,
-   "ev_book": -3.56
+   "ev_if_all_filled": 0.17,
+   "ev_tap": -3.68,
+   "ev_book": -3.58
   },
   {
    "label": "Underdogs",
-   "n_orders": 2483,
-   "n_games": 79,
+   "n_orders": 2924,
+   "n_games": 93,
    "conservative": {
-    "fill_rate": 33.6,
-    "ev_if_filled": -1.01,
+    "fill_rate": 31.7,
+    "ev_if_filled": -0.58,
     "ev_if_filled_ci": [
-     -2.24,
-     0.35
+     -1.93,
+     0.75
     ],
-    "ev_per_order": -0.34,
-    "actual_per_100": -0.44,
-    "n_filled": 835
+    "ev_per_order": -0.18,
+    "actual_per_100": -5.06,
+    "n_filled": 927
    },
    "queue": {
-    "fill_rate": 39.3,
-    "ev_if_filled": -0.49,
+    "fill_rate": 34.4,
+    "ev_if_filled": -0.18,
     "ev_if_filled_ci": [
-     -1.71,
-     0.89
+     -1.58,
+     1.22
     ],
-    "ev_per_order": -0.19,
-    "actual_per_100": 16.05,
-    "n_filled": 976
+    "ev_per_order": -0.06,
+    "actual_per_100": 4.32,
+    "n_filled": 1005
    },
    "optimistic": {
-    "fill_rate": 99.5,
-    "ev_if_filled": 2.67,
+    "fill_rate": 99.4,
+    "ev_if_filled": 3.09,
     "ev_if_filled_ci": [
-     1.62,
-     3.77
+     2.13,
+     4.07
     ],
-    "ev_per_order": 2.66,
-    "actual_per_100": 11.7,
-    "n_filled": 2470
+    "ev_per_order": 3.07,
+    "actual_per_100": 17.31,
+    "n_filled": 2907
    },
-   "ev_if_all_filled": 2.7,
-   "ev_tap": -4.96,
-   "ev_book": -5.62
+   "ev_if_all_filled": 3.13,
+   "ev_tap": -4.57,
+   "ev_book": -5.6
   }
  ],
  "by_week": [
@@ -282,15 +283,15 @@
     "n_filled": 293
    },
    "queue": {
-    "fill_rate": 35.0,
-    "ev_if_filled": -2.1,
+    "fill_rate": 30.7,
+    "ev_if_filled": -2.42,
     "ev_if_filled_ci": [
-     -4.34,
-     -0.41
+     -4.59,
+     -0.54
     ],
     "ev_per_order": -0.74,
-    "actual_per_100": -18.42,
-    "n_filled": 351
+    "actual_per_100": -42.24,
+    "n_filled": 308
    },
    "optimistic": {
     "fill_rate": 99.7,
@@ -323,15 +324,15 @@
     "n_filled": 318
    },
    "queue": {
-    "fill_rate": 34.0,
-    "ev_if_filled": -0.5,
+    "fill_rate": 33.0,
+    "ev_if_filled": -0.43,
     "ev_if_filled_ci": [
-     -1.77,
-     0.71
+     -1.75,
+     0.83
     ],
-    "ev_per_order": -0.17,
-    "actual_per_100": 43.51,
-    "n_filled": 341
+    "ev_per_order": -0.14,
+    "actual_per_100": 42.55,
+    "n_filled": 331
    },
    "optimistic": {
     "fill_rate": 99.8,
@@ -364,15 +365,15 @@
     "n_filled": 288
    },
    "queue": {
-    "fill_rate": 30.3,
-    "ev_if_filled": -2.92,
+    "fill_rate": 29.5,
+    "ev_if_filled": -3.24,
     "ev_if_filled_ci": [
-     -4.51,
-     -1.39
+     -4.67,
+     -1.93
     ],
-    "ev_per_order": -0.88,
-    "actual_per_100": 6.45,
-    "n_filled": 305
+    "ev_per_order": -0.96,
+    "actual_per_100": 9.32,
+    "n_filled": 297
    },
    "optimistic": {
     "fill_rate": 99.4,
@@ -405,15 +406,15 @@
     "n_filled": 424
    },
    "queue": {
-    "fill_rate": 45.1,
-    "ev_if_filled": -1.13,
+    "fill_rate": 42.5,
+    "ev_if_filled": -1.17,
     "ev_if_filled_ci": [
-     -2.01,
-     -0.21
+     -2.1,
+     -0.2
     ],
-    "ev_per_order": -0.51,
-    "actual_per_100": -9.07,
-    "n_filled": 454
+    "ev_per_order": -0.5,
+    "actual_per_100": -12.45,
+    "n_filled": 428
    },
    "optimistic": {
     "fill_rate": 99.4,
@@ -446,15 +447,15 @@
     "n_filled": 358
    },
    "queue": {
-    "fill_rate": 48.8,
-    "ev_if_filled": 0.62,
+    "fill_rate": 47.0,
+    "ev_if_filled": 0.57,
     "ev_if_filled_ci": [
-     -0.2,
-     1.41
+     -0.26,
+     1.4
     ],
-    "ev_per_order": 0.3,
-    "actual_per_100": -12.41,
-    "n_filled": 461
+    "ev_per_order": 0.27,
+    "actual_per_100": -9.95,
+    "n_filled": 444
    },
    "optimistic": {
     "fill_rate": 99.7,
@@ -470,14 +471,62 @@
    "ev_if_all_filled": 1.7,
    "ev_tap": -4.01,
    "ev_book": -4.05
+  },
+  {
+   "label": "Week 6",
+   "n_orders": 879,
+   "n_games": 14,
+   "conservative": {
+    "fill_rate": 37.8,
+    "ev_if_filled": -0.84,
+    "ev_if_filled_ci": [
+     -3.07,
+     0.92
+    ],
+    "ev_per_order": -0.32,
+    "actual_per_100": -0.91,
+    "n_filled": 332
+   },
+   "queue": {
+    "fill_rate": 39.6,
+    "ev_if_filled": -0.69,
+    "ev_if_filled_ci": [
+     -2.9,
+     1.06
+    ],
+    "ev_per_order": -0.27,
+    "actual_per_100": -0.79,
+    "n_filled": 348
+   },
+   "optimistic": {
+    "fill_rate": 99.4,
+    "ev_if_filled": 2.22,
+    "ev_if_filled_ci": [
+     1.5,
+     3.05
+    ],
+    "ev_per_order": 2.21,
+    "actual_per_100": 23.43,
+    "n_filled": 874
+   },
+   "ev_if_all_filled": 2.3,
+   "ev_tap": -3.58,
+   "ev_book": -4.57
   }
  ],
- "board": null,
+ "board": {
+  "n_orders": 1866,
+  "n_games": 14,
+  "fill_rate": 40.1,
+  "ev_if_filled": -0.49,
+  "ev_book": -3.1,
+  "claimed_vs_book": 17.73
+ },
  "gates": {
-  "base": -1.06,
+  "base": -1.09,
   "vol_cuts": [
-   23897,
-   63933
+   24576,
+   65891
   ],
   "split": {
    "early": [
@@ -487,32 +536,33 @@
    ],
    "late": [
     4,
-    5
+    5,
+    6
    ]
   },
   "direction": {
    "status": "holding",
    "buckets": {
     "fell": {
-     "n_games": 72,
-     "early": -1.9,
-     "late": -0.16,
-     "fill_rate": 45.3,
-     "effect": -0.16
+     "n_games": 83,
+     "early": -1.95,
+     "late": -0.23,
+     "fill_rate": 46.7,
+     "effect": -0.23
     },
     "flat": {
-     "n_games": 79,
-     "early": 0.14,
-     "late": -0.02,
-     "fill_rate": 36.3,
-     "effect": 0.0
+     "n_games": 93,
+     "early": 0.11,
+     "late": 0.08,
+     "fill_rate": 34.4,
+     "effect": 0.08
     },
     "rose": {
-     "n_games": 71,
-     "early": 1.45,
-     "late": 0.24,
-     "fill_rate": 47.3,
-     "effect": 0.24
+     "n_games": 82,
+     "early": 1.7,
+     "late": -0.14,
+     "fill_rate": 44.4,
+     "effect": 0.0
     }
    }
   },
@@ -520,25 +570,25 @@
    "status": "holding",
    "buckets": {
     "far": {
-     "n_games": 79,
-     "early": -0.3,
+     "n_games": 93,
+     "early": -0.37,
      "late": -0.24,
-     "fill_rate": 46.4,
+     "fill_rate": 44.8,
      "effect": -0.24
     },
     "mid": {
-     "n_games": 79,
-     "early": 0.26,
-     "late": 0.3,
-     "fill_rate": 38.0,
-     "effect": 0.26
+     "n_games": 93,
+     "early": 0.35,
+     "late": 0.48,
+     "fill_rate": 36.0,
+     "effect": 0.35
     },
     "near": {
-     "n_games": 79,
-     "early": 0.63,
-     "late": 0.52,
-     "fill_rate": 23.7,
-     "effect": 0.52
+     "n_games": 93,
+     "early": 0.79,
+     "late": 0.17,
+     "fill_rate": 22.5,
+     "effect": 0.17
     }
    }
   },
@@ -546,25 +596,25 @@
    "status": "holding",
    "buckets": {
     "quiet": {
-     "n_games": 69,
-     "early": -2.0,
-     "late": -0.64,
-     "fill_rate": 39.2,
-     "effect": -0.64
+     "n_games": 83,
+     "early": -1.81,
+     "late": -0.58,
+     "fill_rate": 40.2,
+     "effect": -0.58
     },
     "mid": {
-     "n_games": 79,
-     "early": 0.03,
-     "late": 0.3,
-     "fill_rate": 37.1,
-     "effect": 0.03
+     "n_games": 93,
+     "early": -0.02,
+     "late": 0.75,
+     "fill_rate": 36.0,
+     "effect": 0.0
     },
     "busy": {
-     "n_games": 79,
-     "early": 1.34,
-     "late": 0.64,
-     "fill_rate": 39.2,
-     "effect": 0.64
+     "n_games": 93,
+     "early": 1.44,
+     "late": 0.07,
+     "fill_rate": 34.4,
+     "effect": 0.07
     }
    }
   }
@@ -580,126 +630,127 @@
    2,
    3,
    4,
-   5
+   5,
+   6
   ],
   "all": {
-   "n_orders": 4720,
-   "n_games": 76,
+   "n_orders": 5530,
+   "n_games": 89,
    "conservative": {
-    "fill_rate": 47.3,
-    "ev_if_filled": -1.88,
+    "fill_rate": 47.2,
+    "ev_if_filled": -2.0,
     "ev_if_filled_ci": [
-     -2.53,
-     -1.3
+     -2.63,
+     -1.51
     ],
-    "ev_per_order": -0.89,
-    "actual_per_100": -11.15,
-    "n_filled": 2233
+    "ev_per_order": -0.94,
+    "actual_per_100": -9.77,
+    "n_filled": 2609
    },
    "queue": {
-    "fill_rate": 49.1,
-    "ev_if_filled": -1.69,
+    "fill_rate": 49.0,
+    "ev_if_filled": -1.8,
     "ev_if_filled_ci": [
-     -2.31,
-     -1.11
+     -2.42,
+     -1.31
     ],
-    "ev_per_order": -0.83,
-    "actual_per_100": -10.0,
-    "n_filled": 2316
+    "ev_per_order": -0.88,
+    "actual_per_100": -8.08,
+    "n_filled": 2710
    },
    "optimistic": {
-    "fill_rate": 94.9,
-    "ev_if_filled": 0.85,
+    "fill_rate": 95.0,
+    "ev_if_filled": 0.84,
     "ev_if_filled_ci": [
-     0.68,
-     1.0
+     0.67,
+     0.99
     ],
-    "ev_per_order": 0.81,
-    "actual_per_100": 0.77,
-    "n_filled": 4478
+    "ev_per_order": 0.8,
+    "actual_per_100": 0.39,
+    "n_filled": 5251
    },
    "ev_if_all_filled": 1.37,
-   "ev_tap": -4.19,
+   "ev_tap": -4.18,
    "ev_book": -4.5
   },
   "by_when": [
    {
     "label": "Over 48 h before",
-    "n_orders": 2292,
-    "n_games": 76,
+    "n_orders": 2686,
+    "n_games": 89,
     "conservative": {
-     "fill_rate": 56.8,
-     "ev_if_filled": -1.9,
+     "fill_rate": 56.6,
+     "ev_if_filled": -2.04,
      "ev_if_filled_ci": [
-      -2.63,
-      -1.25
+      -2.75,
+      -1.44
      ],
-     "ev_per_order": -1.08,
-     "actual_per_100": -7.72,
-     "n_filled": 1301
+     "ev_per_order": -1.16,
+     "actual_per_100": -7.35,
+     "n_filled": 1520
     },
     "queue": {
-     "fill_rate": 58.4,
-     "ev_if_filled": -1.71,
+     "fill_rate": 58.1,
+     "ev_if_filled": -1.87,
      "ev_if_filled_ci": [
-      -2.43,
-      -1.07
+      -2.57,
+      -1.29
      ],
-     "ev_per_order": -1.0,
-     "actual_per_100": -6.56,
-     "n_filled": 1338
+     "ev_per_order": -1.09,
+     "actual_per_100": -6.08,
+     "n_filled": 1561
     },
     "optimistic": {
-     "fill_rate": 92.3,
-     "ev_if_filled": 0.65,
+     "fill_rate": 92.2,
+     "ev_if_filled": 0.61,
      "ev_if_filled_ci": [
-      0.28,
-      0.93
+      0.24,
+      0.92
      ],
-     "ev_per_order": 0.6,
-     "actual_per_100": 0.31,
-     "n_filled": 2115
+     "ev_per_order": 0.57,
+     "actual_per_100": -0.44,
+     "n_filled": 2476
     },
-    "ev_if_all_filled": 1.53,
-    "ev_tap": -4.16,
+    "ev_if_all_filled": 1.54,
+    "ev_tap": -4.15,
     "ev_book": -4.5
    },
    {
     "label": "12\u201348 h before",
-    "n_orders": 1820,
-    "n_games": 76,
+    "n_orders": 2132,
+    "n_games": 89,
     "conservative": {
-     "fill_rate": 43.1,
-     "ev_if_filled": -1.74,
+     "fill_rate": 43.2,
+     "ev_if_filled": -1.81,
      "ev_if_filled_ci": [
-      -2.36,
-      -1.07
+      -2.47,
+      -1.29
      ],
-     "ev_per_order": -0.75,
-     "actual_per_100": -15.76,
-     "n_filled": 785
+     "ev_per_order": -0.78,
+     "actual_per_100": -13.97,
+     "n_filled": 920
     },
     "queue": {
-     "fill_rate": 45.2,
-     "ev_if_filled": -1.54,
+     "fill_rate": 45.4,
+     "ev_if_filled": -1.61,
      "ev_if_filled_ci": [
-      -2.16,
-      -0.92
+      -2.27,
+      -1.09
      ],
-     "ev_per_order": -0.7,
-     "actual_per_100": -14.37,
-     "n_filled": 822
+     "ev_per_order": -0.73,
+     "actual_per_100": -11.52,
+     "n_filled": 968
     },
     "optimistic": {
-     "fill_rate": 96.9,
-     "ev_if_filled": 1.04,
+     "fill_rate": 97.2,
+     "ev_if_filled": 1.06,
      "ev_if_filled_ci": [
-      0.94,
-      1.14
+      0.97,
+      1.16
      ],
-     "ev_per_order": 1.01,
-     "actual_per_100": 1.03,
-     "n_filled": 1763
+     "ev_per_order": 1.03,
+     "actual_per_100": 0.88,
+     "n_filled": 2073
     },
     "ev_if_all_filled": 1.25,
     "ev_tap": -4.21,
@@ -707,128 +758,128 @@
    },
    {
     "label": "Last 12 h",
-    "n_orders": 608,
-    "n_games": 76,
+    "n_orders": 712,
+    "n_games": 89,
     "conservative": {
-     "fill_rate": 24.2,
-     "ev_if_filled": -2.5,
+     "fill_rate": 23.7,
+     "ev_if_filled": -2.58,
      "ev_if_filled_ci": [
-      -3.31,
-      -1.69
+      -3.42,
+      -1.89
      ],
      "ev_per_order": -0.61,
-     "actual_per_100": -16.84,
-     "n_filled": 147
+     "actual_per_100": -8.7,
+     "n_filled": 169
     },
     "queue": {
-     "fill_rate": 25.7,
-     "ev_if_filled": -2.22,
+     "fill_rate": 25.4,
+     "ev_if_filled": -2.27,
      "ev_if_filled_ci": [
-      -3.05,
-      -1.43
+      -3.16,
+      -1.59
      ],
-     "ev_per_order": -0.57,
-     "actual_per_100": -16.43,
-     "n_filled": 156
+     "ev_per_order": -0.58,
+     "actual_per_100": -6.88,
+     "n_filled": 181
     },
     "optimistic": {
-     "fill_rate": 98.7,
-     "ev_if_filled": 1.01,
+     "fill_rate": 98.6,
+     "ev_if_filled": 1.0,
      "ev_if_filled_ci": [
-      0.93,
-      1.08
+      0.91,
+      1.06
      ],
-     "ev_per_order": 1.0,
-     "actual_per_100": 1.62,
-     "n_filled": 600
+     "ev_per_order": 0.99,
+     "actual_per_100": 1.83,
+     "n_filled": 702
     },
     "ev_if_all_filled": 1.13,
-    "ev_tap": -4.22,
+    "ev_tap": -4.23,
     "ev_book": -4.5
    }
   ],
   "by_side": [
    {
     "label": "Overs",
-    "n_orders": 2360,
-    "n_games": 76,
+    "n_orders": 2765,
+    "n_games": 89,
     "conservative": {
-     "fill_rate": 45.1,
-     "ev_if_filled": -2.21,
+     "fill_rate": 47.4,
+     "ev_if_filled": -2.58,
      "ev_if_filled_ci": [
-      -3.22,
-      -1.18
+      -3.52,
+      -1.68
      ],
-     "ev_per_order": -1.0,
-     "actual_per_100": -8.7,
-     "n_filled": 1065
+     "ev_per_order": -1.22,
+     "actual_per_100": -6.16,
+     "n_filled": 1310
     },
     "queue": {
-     "fill_rate": 46.9,
-     "ev_if_filled": -1.96,
+     "fill_rate": 48.9,
+     "ev_if_filled": -2.36,
      "ev_if_filled_ci": [
-      -3.01,
-      -0.85
+      -3.3,
+      -1.4
      ],
-     "ev_per_order": -0.92,
-     "actual_per_100": -7.57,
-     "n_filled": 1106
+     "ev_per_order": -1.15,
+     "actual_per_100": -5.31,
+     "n_filled": 1351
     },
     "optimistic": {
-     "fill_rate": 94.5,
-     "ev_if_filled": 0.85,
+     "fill_rate": 95.3,
+     "ev_if_filled": 0.56,
      "ev_if_filled_ci": [
-      -0.15,
-      1.86
+      -0.36,
+      1.48
      ],
-     "ev_per_order": 0.81,
-     "actual_per_100": 3.27,
-     "n_filled": 2231
+     "ev_per_order": 0.53,
+     "actual_per_100": 1.6,
+     "n_filled": 2635
     },
-    "ev_if_all_filled": 1.33,
-    "ev_tap": -4.25,
-    "ev_book": -4.88
+    "ev_if_all_filled": 0.98,
+    "ev_tap": -4.56,
+    "ev_book": -4.95
    },
    {
     "label": "Unders",
-    "n_orders": 2360,
-    "n_games": 76,
+    "n_orders": 2765,
+    "n_games": 89,
     "conservative": {
-     "fill_rate": 49.5,
-     "ev_if_filled": -1.59,
+     "fill_rate": 47.0,
+     "ev_if_filled": -1.41,
      "ev_if_filled_ci": [
-      -2.63,
-      -0.48
+      -2.41,
+      -0.41
      ],
-     "ev_per_order": -0.78,
-     "actual_per_100": -13.37,
-     "n_filled": 1168
+     "ev_per_order": -0.66,
+     "actual_per_100": -13.41,
+     "n_filled": 1299
     },
     "queue": {
-     "fill_rate": 51.3,
-     "ev_if_filled": -1.44,
+     "fill_rate": 49.2,
+     "ev_if_filled": -1.25,
      "ev_if_filled_ci": [
-      -2.52,
-      -0.39
+      -2.24,
+      -0.27
      ],
-     "ev_per_order": -0.74,
-     "actual_per_100": -12.22,
-     "n_filled": 1210
+     "ev_per_order": -0.61,
+     "actual_per_100": -10.82,
+     "n_filled": 1359
     },
     "optimistic": {
-     "fill_rate": 95.2,
-     "ev_if_filled": 0.85,
+     "fill_rate": 94.6,
+     "ev_if_filled": 1.13,
      "ev_if_filled_ci": [
-      -0.09,
-      1.82
+      0.23,
+      2.04
      ],
-     "ev_per_order": 0.81,
-     "actual_per_100": -1.71,
-     "n_filled": 2247
+     "ev_per_order": 1.06,
+     "actual_per_100": -0.84,
+     "n_filled": 2616
     },
-    "ev_if_all_filled": 1.41,
-    "ev_tap": -4.13,
-    "ev_book": -4.12
+    "ev_if_all_filled": 1.77,
+    "ev_tap": -3.81,
+    "ev_book": -4.06
    }
   ],
   "by_week": [
@@ -1036,13 +1087,54 @@
     "ev_if_all_filled": 1.67,
     "ev_tap": -3.97,
     "ev_book": -4.49
+   },
+   {
+    "label": "Week 6",
+    "n_orders": 810,
+    "n_games": 13,
+    "conservative": {
+     "fill_rate": 46.4,
+     "ev_if_filled": -2.67,
+     "ev_if_filled_ci": [
+      -3.94,
+      -1.61
+     ],
+     "ev_per_order": -1.24,
+     "actual_per_100": -1.6,
+     "n_filled": 376
+    },
+    "queue": {
+     "fill_rate": 48.6,
+     "ev_if_filled": -2.5,
+     "ev_if_filled_ci": [
+      -3.79,
+      -1.46
+     ],
+     "ev_per_order": -1.22,
+     "actual_per_100": 3.22,
+     "n_filled": 394
+    },
+    "optimistic": {
+     "fill_rate": 95.4,
+     "ev_if_filled": 0.78,
+     "ev_if_filled_ci": [
+      0.13,
+      1.18
+     ],
+     "ev_per_order": 0.74,
+     "actual_per_100": -1.83,
+     "n_filled": 773
+    },
+    "ev_if_all_filled": 1.4,
+    "ev_tap": -4.15,
+    "ev_book": -4.53
    }
   ],
   "gates": {
-   "base": -1.69,
+   "base": -1.8,
    "vol_cuts": [
-    929,
-    3777
+    924,
+    3873
    ],
    "split": {
     "early": [
@@ -1052,56 +1144,57 @@
     ],
     "late": [
      4,
-     5
+     5,
+     6
     ]
    },
    "direction": {
     "status": "holding",
     "buckets": {
      "fell": {
-      "n_games": 76,
+      "n_games": 89,
       "early": -0.86,
-      "late": -0.45,
-      "fill_rate": 47.1,
-      "effect": -0.45
+      "late": -0.22,
+      "fill_rate": 48.2,
+      "effect": -0.22
      },
      "flat": {
-      "n_games": 76,
+      "n_games": 89,
       "early": 0.09,
-      "late": -0.1,
-      "fill_rate": 48.6,
+      "late": -0.03,
+      "fill_rate": 48.2,
       "effect": 0.0
      },
      "rose": {
-      "n_games": 76,
+      "n_games": 89,
       "early": 0.54,
-      "late": 0.72,
-      "fill_rate": 52.5,
-      "effect": 0.54
+      "late": 0.38,
+      "fill_rate": 52.3,
+      "effect": 0.38
      }
     }
    },
    "timing": {
-    "status": "not holding",
+    "status": "holding",
     "buckets": {
      "far": {
-      "n_games": 76,
+      "n_games": 89,
       "early": -0.37,
-      "late": 0.43,
-      "fill_rate": 58.4,
+      "late": 0.22,
+      "fill_rate": 58.1,
       "effect": 0.0
      },
      "mid": {
-      "n_games": 76,
+      "n_games": 89,
       "early": 0.62,
-      "late": -0.17,
-      "fill_rate": 48.3,
-      "effect": 0.0
+      "late": 0.01,
+      "fill_rate": 48.5,
+      "effect": 0.01
      },
      "near": {
-      "n_games": 76,
+      "n_games": 89,
       "early": 0.31,
-      "late": -1.29,
+      "late": -0.78,
       "fill_rate": 32.3,
       "effect": 0.0
      }
@@ -1111,25 +1204,25 @@
     "status": "holding",
     "buckets": {
      "quiet": {
-      "n_games": 64,
+      "n_games": 74,
       "early": -1.29,
-      "late": -1.0,
+      "late": -0.94,
       "fill_rate": 56.2,
-      "effect": -1.0
+      "effect": -0.94
      },
      "mid": {
-      "n_games": 70,
-      "early": 0.67,
-      "late": 0.72,
-      "fill_rate": 46.9,
-      "effect": 0.67
+      "n_games": 84,
+      "early": 0.68,
+      "late": 0.61,
+      "fill_rate": 47.8,
+      "effect": 0.61
      },
      "busy": {
-      "n_games": 72,
-      "early": 0.76,
-      "late": 0.72,
-      "fill_rate": 44.1,
-      "effect": 0.72
+      "n_games": 85,
+      "early": 0.75,
+      "late": 0.69,
+      "fill_rate": 43.0,
+      "effect": 0.69
      }
     }
    }
